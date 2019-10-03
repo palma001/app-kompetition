@@ -1,5 +1,6 @@
 function validateAll (to, from, next) {
   const appModule = to.path.split('/')[1]
+  next()
   console.log(appModule)
 }
 const routes = [
