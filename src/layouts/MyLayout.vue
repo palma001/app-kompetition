@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHH Lpr lFf">
+  <q-layout view="hHh Lpr lff">
     <q-header class="bg-primary" reveal>
       <q-toolbar>
         <img src="~assets/spe.jpg">
@@ -8,14 +8,22 @@
         </q-toolbar-title>
         <q-space></q-space>
         <div>
-          <div class="row">
-            <div class="text-h5">Scorekeeper
-              <q-avatar color="purple-9"
+          <div class="row" @click="logout">
+            <div class="text-h5">
+              {{
+                this['login/dataUser']['rols']
+              }}
+              <q-avatar
+                color="purple-9"
                 text-color="blue-grey-2">
                 <q-tooltip self="center middle"
                   content-class="bg-purple-1 text-black">
                   chucenam
-                </q-tooltip>M</q-avatar>
+                </q-tooltip>
+                    {{
+                      this['login/dataUser']['name'].charAt(0).toUpperCase()
+                    }}
+                </q-avatar>
             </div>
           </div>
           <div class="row justify-end">
@@ -46,11 +54,11 @@
         </div>
         <div class="row bg-primary text-grey-1 text-h6 text-center"
           style="height: 40px">
-          <div class="col-6">A-Team: UDO 25</div>
-          <div class="col-6">B-Team: LUZ 34</div>
+          <div class="col-6">A-Team: UDO</div>
+          <div class="col-6">B-Team: IUTA</div>
         </div>
         <q-table class="my-sticky-header-table"
-          :data="data"
+          :data="this['score/questionRoundGetter']"
           :columns="columns"
           row-key="name"
           color="info" />
@@ -65,7 +73,7 @@
 
 <script>
 import { openURL } from 'quasar'
-
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'MyLayout',
   data () {
@@ -75,11 +83,9 @@ export default {
       columns: [
         {
           name: 'QID',
-          required: true,
           label: 'QID',
           align: 'center',
-          field: row => row.name,
-          format: val => `${val}`,
+          field: 'QID',
           sortable: true
         },
         { name: 'QT', align: 'center', label: 'QT', field: 'QT', sortable: true },
@@ -88,58 +94,24 @@ export default {
         { name: 'Edit', align: 'center', label: 'Edit', field: 'Edit' },
         { name: 'Record', align: 'center', label: 'Record', field: 'Record' },
         { name: 'NEdit', align: 'center', label: 'N° Edit', field: 'NEdit', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
-      ],
-      data: [
-        {
-          name: 1,
-          QT: 'TU',
-          A: 10,
-          B: 0,
-          Edit: 4.0,
-          Record: 87,
-          NEdit: '0'
-        },
-        {
-          name: 2,
-          QT: 'B',
-          A: 50,
-          B: 0,
-          Edit: 4.3,
-          Record: 129,
-          NEdit: '0'
-        },
-        {
-          name: 3,
-          QT: 'TU',
-          A: 0,
-          B: 0,
-          Edit: 0,
-          Record: 'X',
-          NEdit: 0
-        },
-        {
-          name: 4,
-          QT: 'TU',
-          A: 0,
-          B: 10,
-          Edit: 4.3,
-          Record: 413,
-          NEdit: '1'
-        },
-        {
-          name: 5,
-          QT: 'B',
-          A: 0,
-          B: 25,
-          Edit: 0,
-          Record: 0,
-          NEdit: '0'
-        }
       ]
     }
   },
+  computed: {
+    ...mapGetters(['score/questionRoundGetter', 'login/dataUser'])
+  },
   methods: {
-    openURL
+    openURL,
+    /**
+     * Login in the app
+     */
+    logout () {
+      this['login/logout']()
+        .then(res => {
+          this.$router.push({ path: '/login' })
+        })
+    },
+    ...mapActions(['login/logout'])
   }
 }
 </script>

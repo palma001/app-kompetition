@@ -14,14 +14,14 @@
             label="Usuario"
             name="user"
             lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something']" />
+            :rules="[ val => val && val.length > 0 || 'El campo usuario no puede estar vacio']" />
           <q-input
             v-model="credentials.password"
             ref="password"
             filled
             label="Contraseña"
             name="password"
-            :rules="[ val => val && val.length > 0 || 'Please type something']"
+            :rules="[ val => val && val.length > 0 || 'El campo contraseña no puede estar vacio']"
             :type="isPwd ? 'password' : 'text'">
             <template v-slot:append>
               <q-icon
@@ -85,6 +85,9 @@ export default {
     errorValidation (field) {
       return this.errors.has(field) ? 'is-danger' : null
     },
+    /**
+     * Login app
+     */
     login () {
       this.$refs.user.validate()
       this.$refs.password.validate()

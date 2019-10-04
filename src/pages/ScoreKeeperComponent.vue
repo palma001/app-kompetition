@@ -8,17 +8,17 @@
             size="30px"
             color="green"
             label="Toss Up"
-            v-if="dataPints['question']['type'] === 'tossUp'"/>
+            v-if="dataPoints['question']['type'] === 'tossUp'"/>
           <q-btn
             class="buttonQ"
             size="30px"
             color="negative"
             label="Bonus"
-            v-if="dataPints['question']['type'] === 'bonus'"/>
+            v-if="dataPoints['question']['type'] === 'bonus'"/>
         </div>
         <div class="q-ml-sm col-lg-10 col-md-10 col-sm-8 col-xs-8 self-center">
           <div class="title">
-            QID# {{ dataPints['question'].questionId }}: {{ dataPints['question'].question }}
+            QID# {{ dataPoints['question'].questionId }}: {{ dataPoints['question'].question }}
           </div>
         </div>
       </div>
@@ -57,7 +57,7 @@
           <div class="row q-pa-md justify-center">
             <div
               class="col-lg-6 col-md-7"
-              v-if="dataPints['question']['type'] === 'tossUp'">
+              v-if="dataPoints['question']['type'] === 'tossUp'">
               <q-btn
                 color="positive"
                 class="buttonF"
@@ -87,7 +87,7 @@
                 placeholder="Bonus"
                 v-model="value.bonus1"
                 color="primary"
-                v-if="dataPints['question']['type'] === 'bonus'"
+                v-if="dataPoints['question']['type'] === 'bonus'"
                 :disabled="disabled.bonus1"/>
             </div>
           </div>
@@ -125,7 +125,7 @@
           </div>
           <div class="row q-pa-md justify-center">
             <div class="col-lg-6 col-md-7"
-              v-if="dataPints['question']['type'] === 'tossUp'">
+              v-if="dataPoints['question']['type'] === 'tossUp'">
               <q-btn
                 color="positive"
                 class="buttonF"
@@ -156,7 +156,7 @@
                 placeholder="Bonus"
                 v-model="value.bonus2"
                 color="primary"
-                v-if="dataPints['question']['type'] === 'bonus'"
+                v-if="dataPoints['question']['type'] === 'bonus'"
                 :disabled="disabled.bonus2"/>
             </div>
           </div>
@@ -168,11 +168,15 @@
           <q-btn color="positive"
             class="buttonG"
             size="30px"
+            :loading="submitting"
             @click="saveRecords">
             <q-icon left
               size="50px"
               name="save"/>
               <span>Record</span>
+              <template v-slot:loading>
+                Cargando...
+              </template>
           </q-btn>
         </div>
       </div>
@@ -198,10 +202,20 @@
 </style>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'ScoreKeeperComponent',
   data () {
     return {
+      /**
+       * Loading status
+       * @type {Boolean}
+       */
+      submitting: false,
+      /**
+       * Status of buttons
+       * @type {Object}
+       */
       disabled: {
         add1: false,
         add2: false,
@@ -210,57 +224,75 @@ export default {
         bonus1: false,
         bonus2: false
       },
+      /**
+       * Value if input bonus
+       * @type {Object}
+       */
       value: {
         bonus1: 0,
         bonus2: 0
       },
-      getConfrontations: [],
+      /**
+       * Teams in the confrontations
+       * @type {Array}
+       */
       teams: [
         {
           teamId: 1,
           name: 'UDO',
-          score: 0
+          score: 0,
+          id: 'A'
         },
         {
           teamId: 2,
           name: 'IUTA',
-          score: 0
+          score: 0,
+          id: 'B'
         }
       ],
-      dataPints: {
+      /**
+       * Data os points teams
+       * @type {Object}
+       */
+      dataPoints: {
         id: null,
-        points: 0,
+        A: 0,
+        B: 0,
         question: null
       },
+      /**
+       * Listo questions
+       * @type {Array}
+       */
       question: [
         {
           questionId: 1,
-          question: '¿Como estas?',
+          question: 'name 4 types of drilling fluids?',
           type: 'bonus'
         },
         {
           questionId: 2,
-          question: 'What color is the sky?',
+          question: 'name 3 features of packers:',
           type: 'bonus'
         },
         {
           questionId: 3,
-          question: '¿Te gusta el pan?',
+          question: 'name 3 benchmark crudes:',
           type: 'bonus'
         },
         {
           questionId: 4,
-          question: '¿Tienes hambre?',
+          question: 'Which two phase pressure gradient correlation can be used for any pipe inclination and flow direction?',
           type: 'tossUp'
         },
         {
           questionId: 5,
-          question: '¿Que ladilla?',
+          question: 'what is the concept of gas lift?',
           type: 'tossUp'
         },
         {
           questionId: 6,
-          question: '¿Te gusta pasticho?',
+          question: 'What mathematical tool is used in production engineering to assess well perfornance by plotting the well production rate against the bottom hole pressure?',
           type: 'tossUp'
         }
       ]
@@ -270,46 +302,68 @@ export default {
     this.questionRandom()
   },
   methods: {
+    /**
+     * Sets poins teams
+     * @param  {Number} point questions
+     * @param  {Number} id teams
+     * @param  {String} btn name button
+     */
     point (point, id, btn) {
       for (let disabled in this.disabled) {
         if (disabled !== btn && !this.disabled[btn]) {
           this.disabled[disabled] = !this.disabled[disabled]
           this.teams.forEach((element) => {
             if (element['teamId'] === id) {
-              if (this.dataPints['points'] === 0) {
-                this.dataPints['points'] = point
-                this.dataPints['id'] = id
+              if (this.dataPoints[element['id']] === 0) {
+                this.dataPoints[element['id']] = point
+                this.dataPoints['id'] = id
               } else {
-                this.dataPints['points'] = 0
+                this.dataPoints[element['id']] = 0
               }
             }
           })
         }
       }
     },
+    /**
+     * Save points temas
+     */
     saveRecords () {
-      this.teams.map(element => {
-        if (element['teamId'] === this.dataPints['id']) {
-          element.score += this.dataPints['points']
-          this.dataPints['id'] = 0
-          this.dataPints['points'] = 0
-          this.questionRandom()
-          for (let disabled in this.disabled) {
-            this.disabled[disabled] = false
+      this.submitting = true
+      setTimeout(() => {
+        this.teams.map(element => {
+          if (element['teamId'] === this.dataPoints['id']) {
+            this['score/addQuestionRound'](this.dataPoints)
+            element.score += this.dataPoints[element['id']]
+            this.dataPoints['id'] = 0
+            this.dataPoints[element['id']] = 0
+            for (let disabled in this.disabled) {
+              this.disabled[disabled] = false
+            }
           }
+        })
+        if (this.dataPoints['question']['type'] === 'bonus') {
+          this.teams[0]['score'] += Number(this.value['bonus1'])
+          this.teams[1]['score'] += Number(this.value['bonus2'])
+          this.dataPoints['A'] = this.value['bonus1']
+          this.dataPoints['B'] = this.value['bonus2']
+          this['score/addQuestionRound'](this.dataPoints)
+          this.value['bonus2'] = 0
+          this.value['bonus1'] = 0
+          this.dataPoints['A'] = 0
+          this.dataPoints['B'] = 0
         }
-      })
-      if (this.dataPints['question']['type'] === 'bonus') {
-        this.teams[0]['score'] += Number(this.value['bonus1'])
-        this.teams[1]['score'] += Number(this.value['bonus2'])
-        this.value['bonus2'] = 0
-        this.value['bonus1'] = 0
         this.questionRandom()
-      }
+        this.submitting = false
+      }, 1000)
     },
+    /**
+     * Gets questions random
+     */
     questionRandom () {
-      this.dataPints['question'] = this.question[Math.floor(Math.random() * 6)]
-    }
+      this.dataPoints['question'] = this.question[Math.floor(Math.random() * 6)]
+    },
+    ...mapActions(['score/addQuestionRound'])
   }
 }
 </script>

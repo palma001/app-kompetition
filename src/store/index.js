@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import login from './module-login'
+import score from './module-score'
 Vue.use(Vuex)
 
 /*
@@ -12,7 +13,8 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      login
+      login,
+      score
     },
 
     // enable strict mode (adds overhead!)

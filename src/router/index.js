@@ -10,7 +10,7 @@ Vue.use(VueRouter)
  * directly export the Router instantiation
  */
 
-export default function (/* { store, ssrContext } */) {
+export default function ({ store, ssrContext }) {
   const Router = new VueRouter({
     scrollBehavior: () => ({ x: 0, y: 0 }),
     routes,
@@ -21,6 +21,20 @@ export default function (/* { store, ssrContext } */) {
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
   })
-
+  /**
+   * Verifyc if one user is login
+   */
+  Router.beforeEach((to, from, next) => {
+    let autorization = to.matched.some(record => record.meta.authenticate)
+    let usuario = store.state.login.token
+    if (autorization && !usuario) {
+      next('login')
+    } else if (!autorization && usuario) {
+      console.log('hola')
+      next('scoreKeeper')
+    } else {
+      next()
+    }
+  })
   return Router
 }

@@ -1,8 +1,3 @@
-function validateAll (to, from, next) {
-  const appModule = to.path.split('/')[1]
-  next()
-  console.log(appModule)
-}
 const routes = [
   {
     path: '/login',
@@ -13,12 +8,16 @@ const routes = [
   },
   {
     path: '/scoreKeeper',
+    name: 'scoreKeeper',
     component: () => import('layouts/MyLayout.vue'),
     children: [
       {
         path: '',
         component: () => import('pages/ScoreKeeperComponent.vue'),
-        beforeEnter: validateAll
+        meta: {
+          authenticate: true,
+          rols: 'scoreKeeper'
+        }
       }
     ]
   },
@@ -37,7 +36,6 @@ const routes = [
     ]
   }
 ]
-
 // Always leave this as last one
 if (process.env.MODE !== 'ssr') {
   routes.push({
