@@ -6,12 +6,12 @@
         <div class="row q-pa-md q-pb-xl justify-around">
           <div class="col-5">
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
-              Team-A: Nombre equipo A
+              Team-A: {{this['confrontations/confrontationsdGetter'][0].teamA}}
             </q-toolbar-title>
           </div>
           <div class="col-5">
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
-              Team-B: Nombre equipo B
+              Team-B: {{this['confrontations/confrontationsdGetter'][0].teamB}}
             </q-toolbar-title>
           </div>
         </div>
@@ -121,6 +121,7 @@
 </style>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'PageIndex',
   data () {
@@ -129,12 +130,12 @@ export default {
        * minutes confrontation
        * @type {Number}
        */
-      minutesRound: 9,
+      minutesRound: 10,
       /**
        * secons confrontation
        * @type {Number}
        */
-      secondsRound: 60,
+      secondsRound: 0,
       /**
        * secons question
        * @type {Number}
@@ -162,6 +163,13 @@ export default {
       setIntervalQuestion: null
     }
   },
+  created () {
+    this['confrontations/getConfrontations']({ eventId: 1, phaseId: 1, vm: this })
+    console.log(this['confrontations/confrontationsdGetter'])
+  },
+  computed: {
+    ...mapGetters(['confrontations/confrontationsdGetter'])
+  },
   methods: {
     /**
      * Temporizator
@@ -170,7 +178,7 @@ export default {
       this.secondsRound -= 1
       if (this.secondsRound <= 0 && this.minutesRound !== 0) {
         this.minutesRound -= 1
-        this.secondsRound = 60
+        this.secondsRound = 59
       }
       if (this.minutesRound === 0) {
         this.minutesRound = 9
@@ -222,7 +230,8 @@ export default {
         this.stopQuestion = false
         clearInterval(this.setIntervalQuestion)
       }
-    }
+    },
+    ...mapActions(['confrontations/getConfrontations'])
   }
 }
 </script>

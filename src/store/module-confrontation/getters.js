@@ -4,6 +4,6 @@
  * @return {Array} table data
  */
 export function confrontationsdGetter (state) {
-  const table = []
-  return table
+  let confrontations = state['confrontations']
+  return confrontations
 }
