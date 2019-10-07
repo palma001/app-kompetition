@@ -47,7 +47,7 @@
       :width="800"
       :breakpoint="500"
       :mini-width="20">
-      <div>
+      <div v-if="route === '/scoreKeeper'">
         <div class="row bg-primary text-white text-h6 text-center"
           style="height: 30px">
           <div class="col">Regular round #1</div>
@@ -62,6 +62,61 @@
           :columns="columns"
           row-key="name"
           color="info" />
+      </div>
+      <div v-if="route === '/timeKeeper'">
+        <div>
+          <div class="row bg-primary text-white text-h5 text-center"
+            style="height: 30px">
+            <div class="col">Regular round #2</div>
+          </div>
+          <div class="row bg-primary text-grey-1 text-h5 text-center"
+            style="height: 40px">
+            <div class="col-6">A-Team: UDO 25</div>
+            <div class="col-6">B-Team: LUZ 34</div>
+          </div>
+          <div class="row q-pa-md">
+            <div class="col-2">
+              <div class="title2 text-h5 text-bold text-left text-center">
+                Start time:
+              </div>
+            </div>
+            <div class="col-3">
+              <q-input outlined
+                v-model="text"
+                style="font-size: 25px"
+                placeholder="9:00 am"
+                disable/>
+            </div>
+          </div>
+          <div class="row q-pa-md">
+            <div class="col-2">
+              <q-toolbar-title class="title2 text-h5 text-bold text-left text-center">
+                Stop time:
+              </q-toolbar-title>
+            </div>
+            <div class="col-3">
+              <q-input outlined
+                v-model="text"
+                style="font-size: 25px"
+                placeholder="9:00 am"
+                disable/>
+            </div>
+          </div>
+          <div class="row q-pa-md">
+            <div class="col-2">
+              <q-toolbar-title class="title2 text-h5 text-bold text-left text-center">
+                Duration:
+              </q-toolbar-title>
+            </div>
+            <div class="col-3">
+              <q-input outlined
+                v-model="text"
+                style="font-size: 25px"
+                placeholder="30:30:15"
+                disable/>
+            </div>
+          </div>
+        </div>
       </div>
     </q-drawer>
 
@@ -80,6 +135,7 @@ export default {
     return {
       drawer: false,
       miniState: false,
+      route: this.$route.path,
       columns: [
         {
           name: 'QID',
@@ -90,10 +146,10 @@ export default {
         },
         { name: 'QT', align: 'center', label: 'QT', field: 'QT', sortable: true },
         { name: 'A', align: 'center', label: 'A', field: 'A', sortable: true },
-        { name: 'B', align: 'center', label: 'B', field: 'B' },
-        { name: 'Edit', align: 'center', label: 'Edit', field: 'Edit' },
-        { name: 'Record', align: 'center', label: 'Record', field: 'Record' },
-        { name: 'NEdit', align: 'center', label: 'N° Edit', field: 'NEdit', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+        { name: 'B', align: 'center', label: 'B', field: 'B' }
+        // { name: 'Edit', align: 'center', label: 'Edit', field: 'Edit' },
+        // { name: 'Record', align: 'center', label: 'Record', field: 'Record' },
+        // { name: 'NEdit', align: 'center', label: 'N° Edit', field: 'NEdit', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
       ]
     }
   },
@@ -120,5 +176,8 @@ export default {
 .my-sticky-header-table .q-table__top {
   background-color: rgb(13, 76, 146);
   color: white;
+}
+.title2 {
+  margin-top: 20px;
 }
 </style>

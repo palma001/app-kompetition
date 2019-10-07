@@ -30,8 +30,7 @@ export default function ({ store, ssrContext }) {
     if (autorization && !usuario) {
       next('login')
     } else if (!autorization && usuario) {
-      console.log('hola')
-      next('scoreKeeper')
+      next()
     } else {
       next()
     }

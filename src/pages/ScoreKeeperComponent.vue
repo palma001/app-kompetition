@@ -300,6 +300,7 @@ export default {
   },
   created () {
     this.questionRandom()
+    this['confrontations/getConfrontations']({ eventId: 1, phaseId: 1, vm: this })
   },
   methods: {
     /**
@@ -363,7 +364,7 @@ export default {
     questionRandom () {
       this.dataPoints['question'] = this.question[Math.floor(Math.random() * 6)]
     },
-    ...mapActions(['score/addQuestionRound'])
+    ...mapActions(['score/addQuestionRound', 'confrontations/getConfrontations'])
   }
 }
 </script>

@@ -1,8 +1,8 @@
 /**
- * Sets data of table
+ * Sets data of confrontations
  * @param  {Object} state
  * @param  {Object} payload
  */
-export function mutationsQuestionRound (state, payload) {
-  state.tableRound = [...state.tableRound, payload]
+export function updateStateConfrontation (state, payload) {
+  state.confrontations = payload
 }
