@@ -30,20 +30,22 @@
             style="font-size: 35px"
             align="center"
             color="positive"
-            label="Start" />
+            label="Start"
+            @click="startTimer"/>
           <q-space></q-space>
           <q-btn size="35px"
             class="q-px-xl q-py-xs"
             align="center"
             outline
             disable
-            label="10:10" />
+            :label="`${minutesRound}:${secondsRound}`" />
           <q-space></q-space>
           <q-btn class="q-px-xl q-py-xs"
             style="font-size: 35px"
             align="center"
             color="negative"
-            label="Stop" />
+            label="Stop"
+            @click="stopTimer"/>
           <q-space></q-space>
         </q-toolbar>
         <!-- time adicional -->
@@ -61,14 +63,15 @@
             style="font-size: 30px"
             align="center"
             color="accent"
-            label="restart" />
+            label="restart"
+            @click="restartQuestion" />
           <q-space></q-space>
           <q-btn size="35px"
             class="q-px-xl q-py-xs"
             align="center"
             outline
             disable
-            label="05"/>
+            :label="secondsQuestion"/>
           <!-- <q-input outlined
             v-model="text"
             size="35px"
@@ -78,7 +81,8 @@
             style="font-size: 30px"
             align="center"
             color="accent"
-            label="Start" />
+            label="Start"
+            @click="startQuestion"/>
           <q-space></q-space>
         </q-toolbar>
       </div>
@@ -118,6 +122,107 @@
 
 <script>
 export default {
-  name: 'PageIndex'
+  name: 'PageIndex',
+  data () {
+    return {
+      /**
+       * minutes confrontation
+       * @type {Number}
+       */
+      minutesRound: 9,
+      /**
+       * secons confrontation
+       * @type {Number}
+       */
+      secondsRound: 60,
+      /**
+       * secons question
+       * @type {Number}
+       */
+      secondsQuestion: 5,
+      /**
+       * id interval
+       * @type {Number}
+       */
+      setInterval: null,
+      /**
+       * Status timer
+       * @type {Boolean}
+       */
+      stop: false,
+      /**
+       * status temporizator
+       * @type {Boolean}
+       */
+      stopQuestion: false,
+      /**
+       * id interval question
+       * @type {Number}
+       */
+      setIntervalQuestion: null
+    }
+  },
+  methods: {
+    /**
+     * Temporizator
+     */
+    updateCounter () {
+      this.secondsRound -= 1
+      if (this.secondsRound <= 0 && this.minutesRound !== 0) {
+        this.minutesRound -= 1
+        this.secondsRound = 60
+      }
+      if (this.minutesRound === 0) {
+        this.minutesRound = 9
+        this.stopTimer()
+      }
+    },
+    /**
+     * Stop Temporizator
+     */
+    stopTimer () {
+      if (this.stop) {
+        this.stop = false
+        clearInterval(this.setInterval)
+      }
+    },
+    /**
+     * S Temporizator
+     */
+    startTimer () {
+      if (!this.stop) {
+        this.stop = true
+        this.setInterval = setInterval(this.updateCounter, 1000)
+      }
+    },
+    /**
+     * Tempirizator question
+     */
+    updateQuestion () {
+      this.secondsQuestion -= 1
+      if (this.secondsQuestion <= 0) {
+        this.restartQuestion()
+      }
+    },
+    /**
+     * Start question
+     */
+    startQuestion () {
+      if (!this.stopQuestion) {
+        this.stopQuestion = true
+        this.setIntervalQuestion = setInterval(this.updateQuestion, 1000)
+      }
+    },
+    /**
+     * restart question
+     */
+    restartQuestion () {
+      this.secondsQuestion = 5
+      if (this.stopQuestion) {
+        this.stopQuestion = false
+        clearInterval(this.setIntervalQuestion)
+      }
+    }
+  }
 }
 </script>

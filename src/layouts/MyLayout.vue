@@ -2,7 +2,7 @@
   <q-layout view="hHh Lpr lff">
     <q-header class="bg-primary" reveal>
       <q-toolbar>
-        <img src="~assets/spe.jpg">
+        <img src="~assets/petro.svg">
         <q-toolbar-title class="text-h2">
           PetroBowl
         </q-toolbar-title>
@@ -44,7 +44,7 @@
       overlay
       aria-placeholder="20px"
       content-class="bg-blue-1 q-pa-lg"
-      :width="800"
+      :width="600"
       :breakpoint="500"
       :mini-width="20">
       <div v-if="route === '/scoreKeeper'">
@@ -74,45 +74,92 @@
             <div class="col-6">A-Team: UDO 25</div>
             <div class="col-6">B-Team: LUZ 34</div>
           </div>
-          <div class="row q-pa-md">
-            <div class="col-2">
+          <div class="row q-pa-md justify-center">
+            <div class="col-3">
               <div class="title2 text-h5 text-bold text-left text-center">
                 Start time:
               </div>
             </div>
-            <div class="col-3">
+            <div class="col-6">
               <q-input outlined
-                v-model="text"
                 style="font-size: 25px"
                 placeholder="9:00 am"
                 disable/>
             </div>
           </div>
-          <div class="row q-pa-md">
-            <div class="col-2">
+          <div class="row q-pa-md justify-center">
+            <div class="col-3">
               <q-toolbar-title class="title2 text-h5 text-bold text-left text-center">
                 Stop time:
               </q-toolbar-title>
             </div>
-            <div class="col-3">
+            <div class="col-6">
               <q-input outlined
-                v-model="text"
                 style="font-size: 25px"
                 placeholder="9:00 am"
                 disable/>
             </div>
           </div>
-          <div class="row q-pa-md">
-            <div class="col-2">
+          <div class="row q-pa-md justify-center">
+            <div class="col-3">
               <q-toolbar-title class="title2 text-h5 text-bold text-left text-center">
                 Duration:
               </q-toolbar-title>
             </div>
-            <div class="col-3">
+            <div class="col-6">
               <q-input outlined
-                v-model="text"
                 style="font-size: 25px"
                 placeholder="30:30:15"
+                disable/>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="row bg-primary text-white text-h5 text-center"
+            style="height: 30px">
+            <div class="col">Regular round #2</div>
+          </div>
+          <div class="row bg-primary text-grey-1 text-h5 text-center"
+            style="height: 40px">
+            <div class="col-6">A-Team: UCV 57</div>
+            <div class="col-6">B-Team: UDO 10</div>
+          </div>
+          <div class="row q-pa-md justify-center">
+            <div class="col-3">
+              <div class="title2 text-h5 text-bold text-left text-center">
+                Start time:
+              </div>
+            </div>
+            <div class="col-6">
+              <q-input outlined
+                style="font-size: 25px"
+                placeholder="9:30 am"
+                disable/>
+            </div>
+          </div>
+          <div class="row q-pa-md justify-center">
+            <div class="col-3">
+              <q-toolbar-title class="title2 text-bold text-h5 text-left text-center">
+                Stop time:
+              </q-toolbar-title>
+            </div>
+            <div class="col-6">
+              <q-input outlined
+                style="font-size: 25px"
+                placeholder="10:15 am"
+                disable/>
+            </div>
+          </div>
+          <div class="row q-pa-md justify-center">
+            <div class="col-3">
+              <q-toolbar-title class="title2 text-bold text-h5 text-left text-center">
+                Duration:
+              </q-toolbar-title>
+            </div>
+            <div class="col-6">
+              <q-input outlined
+                style="font-size: 25px"
+                placeholder="45:05:54"
                 disable/>
             </div>
           </div>
