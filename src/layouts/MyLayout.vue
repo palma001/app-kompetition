@@ -66,65 +66,15 @@
           color="info" />
       </div>
       <div v-if="route === '/timeKeeper'">
-        <div>
+        <div v-for="(confrontation, index) in this['confrontations/confrontationsdGetter']" :key="confrontation.id">
           <div class="row bg-primary text-white text-h5 text-center"
             style="height: 30px">
-            <div class="col">Regular round #2</div>
+            <div class="col">Regular round {{index + 1}}</div>
           </div>
           <div class="row bg-primary text-grey-1 text-h5 text-center"
             style="height: 40px">
-            <div class="col-6">A-Team: UDO 25</div>
-            <div class="col-6">B-Team: LUZ 34</div>
-          </div>
-          <div class="row q-pa-md justify-center">
-            <div class="col-3">
-              <div class="title2 text-h5 text-bold text-left text-center">
-                Start time:
-              </div>
-            </div>
-            <div class="col-6">
-              <q-input outlined
-                style="font-size: 25px"
-                placeholder="9:00 am"
-                disable/>
-            </div>
-          </div>
-          <div class="row q-pa-md justify-center">
-            <div class="col-3">
-              <q-toolbar-title class="title2 text-h5 text-bold text-left text-center">
-                Stop time:
-              </q-toolbar-title>
-            </div>
-            <div class="col-6">
-              <q-input outlined
-                style="font-size: 25px"
-                placeholder="9:00 am"
-                disable/>
-            </div>
-          </div>
-          <div class="row q-pa-md justify-center">
-            <div class="col-3">
-              <q-toolbar-title class="title2 text-h5 text-bold text-left text-center">
-                Duration:
-              </q-toolbar-title>
-            </div>
-            <div class="col-6">
-              <q-input outlined
-                style="font-size: 25px"
-                placeholder="30:30:15"
-                disable/>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="row bg-primary text-white text-h5 text-center"
-            style="height: 30px">
-            <div class="col">Regular round #2</div>
-          </div>
-          <div class="row bg-primary text-grey-1 text-h5 text-center"
-            style="height: 40px">
-            <div class="col-6">A-Team: UCV 57</div>
-            <div class="col-6">B-Team: UDO 10</div>
+            <div class="col-6">A-Team: {{ confrontation.teamA }}</div>
+            <div class="col-6">B-Team: {{ confrontation.teamB }}</div>
           </div>
           <div class="row q-pa-md justify-center">
             <div class="col-3">
@@ -202,8 +152,11 @@ export default {
       ]
     }
   },
+  created () {
+    this['confrontations/getConfrontations']({ eventId: 1, phaseId: 1, vm: this })
+  },
   computed: {
-    ...mapGetters(['score/questionRoundGetter', 'login/dataUser'])
+    ...mapGetters(['score/questionRoundGetter', 'login/dataUser', 'confrontations/confrontationsdGetter'])
   },
   methods: {
     openURL,
@@ -216,7 +169,7 @@ export default {
           this.$router.push({ path: '/login' })
         })
     },
-    ...mapActions(['login/logout'])
+    ...mapActions(['login/logout', 'confrontations/getConfrontations'])
   }
 }
 </script>

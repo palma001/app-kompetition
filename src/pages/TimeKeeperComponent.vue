@@ -164,7 +164,7 @@ export default {
     }
   },
   created () {
-    this['confrontations/getConfrontations']({ eventId: 1, phaseId: 1, vm: this })
+    // this['confrontations/getConfrontations']({ eventId: 1, phaseId: 1, vm: this })
     console.log(this['confrontations/confrontationsdGetter'])
   },
   computed: {

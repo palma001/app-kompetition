@@ -32,7 +32,7 @@ const routes = [
     path: '/moderator',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/ScoreKeeperComponent.vue') }
+      { path: '', component: () => import('pages/ModeratorComponent.vue') }
     ]
   },
   {

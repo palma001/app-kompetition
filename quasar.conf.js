@@ -64,7 +64,11 @@ module.exports = function (ctx) {
         'QBadge',
         'QIcon',
         'QInput',
-        'QBtnToggle'
+        'QBtnToggle',
+        'QCard',
+        'QCardSection',
+        'QCardActions',
+        'QSeparator'
       ],
 
       directives: [
