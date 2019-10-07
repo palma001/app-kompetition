@@ -2,8 +2,8 @@
   <q-layout view="hHh Lpr lff">
     <q-header class="bg-primary" reveal>
       <q-toolbar>
-        <img src="~assets/spe.jpg">
-        <q-toolbar-title class="text-h2">
+        <img src="~assets/petro.svg">
+        <q-toolbar-title class="text-h2 text-bold">
           PetroBowl
         </q-toolbar-title>
         <q-space></q-space>
@@ -18,7 +18,9 @@
                 text-color="blue-grey-2">
                 <q-tooltip self="center middle"
                   content-class="bg-purple-1 text-black">
-                  chucenam
+                  {{
+                    this['login/dataUser']['name'] }} {{ this['login/dataUser']['lastname']
+                  }}
                 </q-tooltip>
                     {{
                       this['login/dataUser']['name'].charAt(0).toUpperCase()
@@ -93,7 +95,7 @@ export default {
         { name: 'B', align: 'center', label: 'B', field: 'B' },
         { name: 'Edit', align: 'center', label: 'Edit', field: 'Edit' },
         { name: 'Record', align: 'center', label: 'Record', field: 'Record' },
-        { name: 'NEdit', align: 'center', label: 'N° Edit', field: 'NEdit', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+        { name: 'NEdit', align: 'center', label: 'N° Edit', field: 'NEdit' }
       ]
     }
   },

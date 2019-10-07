@@ -6,13 +6,13 @@
           <q-btn
             class="buttonQ"
             size="30px"
-            color="green"
+            color="red-10"
             label="Toss Up"
             v-if="dataPoints['question']['type'] === 'tossUp'"/>
           <q-btn
             class="buttonQ"
             size="30px"
-            color="negative"
+            color="green"
             label="Bonus"
             v-if="dataPoints['question']['type'] === 'bonus'"/>
         </div>
@@ -97,19 +97,19 @@
           <!-- title - Team name -->
           <div class="row q-pa-md">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
-              <q-toolbar-title class="text-h4 text-white text-center bg-accent">
+              <q-toolbar-title class="text-h4 text-white text-center bg-secondary">
                 A-Team:
               </q-toolbar-title>
             </div>
             <div class="col-lg-9 col-md-8 col-sm-8 col-xs-8">
-              <q-toolbar-title class="text-h4 text-left bg-accent text-white text-bold">
+              <q-toolbar-title class="text-h4 text-left bg-secondary text-white text-bold">
                 {{teams[1].name}}
               </q-toolbar-title>
             </div>
           </div>
           <div class="row q-pa-md justify-center">
             <div class="col-12">
-              <q-toolbar-title class="title1 text-h3 text-center text-primary text-bold">
+              <q-toolbar-title class="title1 text-h3 text-center text-secondary text-bold">
                 Score
               </q-toolbar-title>
             </div>
@@ -118,7 +118,7 @@
                 class="score q-px-xl q-py-xs"
                 align="center"
                 outline
-                text-color="primary">
+                text-color="secondary">
                 {{teams[1].score}}
               </q-btn>
             </div>
@@ -162,16 +162,16 @@
           </div>
         </div>
       </div>
-      <div class="row q-pa-md justify-center">
+      <div class="row q-mt-lg justify-center">
         <div class="col-auto">
           <!-- Save -->
-          <q-btn color="positive"
-            class="buttonG"
-            size="30px"
+          <q-btn
+            color="positive"
             :loading="submitting"
             @click="saveRecords">
-            <q-icon left
-              size="50px"
+            <q-icon
+              left
+              size="60px"
               name="save"/>
               <span>Record</span>
               <template v-slot:loading>
@@ -181,6 +181,11 @@
         </div>
       </div>
     </div>
+    <q-toolbar>
+      <img src="~assets/speTrans.png"
+        style="height: 150px">
+      <q-space></q-space>
+    </q-toolbar>
   </q-page>
 </template>
 
