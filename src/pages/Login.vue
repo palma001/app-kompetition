@@ -14,6 +14,7 @@
             label="Usuario"
             name="user"
             lazy-rules
+            @keyup.enter.native="login"
             :rules="[ val => val && val.length > 0 || 'El campo usuario no puede estar vacio']" />
           <q-input
             v-model="credentials.password"
@@ -22,7 +23,8 @@
             label="Contraseña"
             name="password"
             :rules="[ val => val && val.length > 0 || 'El campo contraseña no puede estar vacio']"
-            :type="isPwd ? 'password' : 'text'">
+            :type="isPwd ? 'password' : 'text'"
+            @keyup.enter.native="login">
             <template v-slot:append>
               <q-icon
                 class="cursor-pointer"

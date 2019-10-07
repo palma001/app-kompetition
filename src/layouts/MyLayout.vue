@@ -3,7 +3,7 @@
     <q-header class="bg-primary" reveal>
       <q-toolbar>
         <img src="~assets/petro.svg">
-        <q-toolbar-title class="text-h2">
+        <q-toolbar-title class="text-h2 text-bold">
           PetroBowl
         </q-toolbar-title>
         <q-space></q-space>
@@ -18,7 +18,9 @@
                 text-color="blue-grey-2">
                 <q-tooltip self="center middle"
                   content-class="bg-purple-1 text-black">
-                  chucenam
+                  {{
+                    this['login/dataUser']['name'] }} {{ this['login/dataUser']['lastname']
+                  }}
                 </q-tooltip>
                     {{
                       this['login/dataUser']['name'].charAt(0).toUpperCase()
