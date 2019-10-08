@@ -6,12 +6,14 @@
         <div class="row q-pa-md q-pb-xl justify-around">
           <div class="col-5">
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
-              {{translateLabel('timekeeper', 'teamA')}}: {{this['confrontations/confrontationsdGetter'][0]['teamA']}}
+              {{translateLabel('timekeeper', 'teamA')}}
+              {{ this['confrontations/confrontationsdGetter'][0]['TeamA']['name'] }}
             </q-toolbar-title>
           </div>
           <div class="col-5">
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
-              {{translateLabel('timekeeper', 'teamB') }}: {{this['confrontations/confrontationsdGetter'][0]['teamB']}}
+              {{translateLabel('timekeeper', 'teamB') }}
+              {{ this['confrontations/confrontationsdGetter'][0]['TeamA']['name'] }}
             </q-toolbar-title>
           </div>
         </div>

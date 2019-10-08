@@ -56,8 +56,8 @@
         </div>
         <div class="row bg-primary text-grey-1 text-h6 text-center"
           style="height: 40px">
-          <div class="col-6">A-Team: UDO</div>
-          <div class="col-6">B-Team: IUTA</div>
+          <div class="col-6">{{translateLabel('timekeeper', 'teamA')}}: {{ this['confrontations/confrontationsdGetter'][0]['TeamA']['name'] }}</div>
+          <div class="col-6">{{translateLabel('timekeeper', 'teamB')}}: {{ this['confrontations/confrontationsdGetter'][0]['TeamB']['name'] }}</div>
         </div>
         <q-table class="my-sticky-header-table"
           :data="this['score/questionRoundGetter']"
@@ -73,8 +73,8 @@
           </div>
           <div class="row bg-primary text-grey-1 text-h5 text-center"
             style="height: 40px">
-            <div class="col-6">A-Team: {{ confrontation.teamA }}</div>
-            <div class="col-6">B-Team: {{ confrontation.teamB }}</div>
+            <div class="col-6">{{translateLabel('timekeeper', 'teamA')}}: {{ confrontation['TeamA']['name'] }}</div>
+            <div class="col-6">{{translateLabel('timekeeper', 'teamB')}}: {{ confrontation['TeamB']['name'] }}</div>
           </div>
           <div class="row q-pa-md justify-center">
             <div class="col-3">
@@ -149,11 +149,16 @@ export default {
         // { name: 'Edit', align: 'center', label: 'Edit', field: 'Edit' },
         // { name: 'Record', align: 'center', label: 'Record', field: 'Record' },
         // { name: 'NEdit', align: 'center', label: 'N° Edit', field: 'NEdit', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
-      ]
+      ],
+      params: {
+        eventId: 1,
+        phaseId: 1,
+        status: 'playing'
+      }
     }
   },
   created () {
-    this['confrontations/getConfrontations']({ eventId: 1, phaseId: 1, vm: this })
+    this['confrontations/getConfrontations']({ params: this.params, vm: this })
   },
   computed: {
     ...mapGetters(['score/questionRoundGetter', 'login/dataUser', 'confrontations/confrontationsdGetter'])
@@ -168,6 +173,13 @@ export default {
         .then(res => {
           this.$router.push({ path: '/login' })
         })
+    },
+    /**
+     * Translates the tags in template
+     * @param {String} message tag to translate
+     */
+    translateLabel (entity, message) {
+      return this.$i18n.t(`template.${entity}.${message}.label`)
     },
     ...mapActions(['login/logout', 'confrontations/getConfrontations'])
   }

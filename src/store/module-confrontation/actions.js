@@ -4,10 +4,16 @@
  * @param {Object} payload data of table
  */
 export function getConfrontations ({ commit }, payload) {
-  const { eventId, phaseId, vm } = payload
-  vm.$services.getData(['events', eventId, phaseId, 'confrontation'])
+  const { params, vm } = payload
+  // vm.$services.getData(['events', eventId, 'phase'], status)
+  //   .then(res => {
+  vm.$services.getData(
+    ['events', params.eventId, params.phaseId, 'confrontation'],
+    params.status
+  )
     .then(res => {
       console.log(res)
       commit('updateStateConfrontation', res.response.data)
     })
+    // })
 }

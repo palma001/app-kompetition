@@ -29,12 +29,12 @@
           <div class="row q-pa-md">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
               <q-toolbar-title class="text-h4 text-white text-center bg-accent">
-                A-Team:
+                {{translateLabel('timekeeper', 'teamA')}}:
               </q-toolbar-title>
             </div>
             <div class="col-lg-9 col-md-8 col-sm-8 col-xs-8">
               <q-toolbar-title class="text-h4 text-left bg-accent text-white text-bold">
-                {{teams[0].name}}
+                {{ this['confrontations/confrontationsdGetter'][0]['TeamA']['name'] }}
               </q-toolbar-title>
             </div>
           </div>
@@ -98,12 +98,12 @@
           <div class="row q-pa-md">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
               <q-toolbar-title class="text-h4 text-white text-center bg-secondary">
-                A-Team:
+                {{translateLabel('timekeeper', 'teamB')}}:
               </q-toolbar-title>
             </div>
             <div class="col-lg-9 col-md-8 col-sm-8 col-xs-8">
               <q-toolbar-title class="text-h4 text-left bg-secondary text-white text-bold">
-                {{teams[1].name}}
+                {{ this['confrontations/confrontationsdGetter'][0]['TeamA']['name'] }}
               </q-toolbar-title>
             </div>
           </div>
@@ -207,7 +207,7 @@
 </style>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'ScoreKeeperComponent',
   data () {
@@ -305,7 +305,9 @@ export default {
   },
   created () {
     this.questionRandom()
-    this['confrontations/getConfrontations']({ eventId: 1, phaseId: 1, vm: this })
+  },
+  computed: {
+    ...mapGetters(['confrontations/confrontationsdGetter'])
   },
   methods: {
     /**
@@ -368,6 +370,13 @@ export default {
      */
     questionRandom () {
       this.dataPoints['question'] = this.question[Math.floor(Math.random() * 6)]
+    },
+    /**
+     * Translates the tags in template
+     * @param {String} message tag to translate
+     */
+    translateLabel (entity, message) {
+      return this.$i18n.t(`template.${entity}.${message}.label`)
     },
     ...mapActions(['score/addQuestionRound', 'confrontations/getConfrontations'])
   }
