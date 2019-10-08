@@ -9,11 +9,11 @@ export function getConfrontations ({ commit }, payload) {
   //   .then(res => {
   vm.$services.getData(
     ['events', params.eventId, params.phaseId, 'confrontation'],
-    params.status
+    (params.query) ? params.query : {}
   )
     .then(res => {
-      console.log(res)
       commit('updateStateConfrontation', res.response.data)
+      return res.response.data
     })
     // })
 }

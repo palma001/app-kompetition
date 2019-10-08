@@ -34,7 +34,7 @@
             </div>
             <div class="col-lg-9 col-md-8 col-sm-8 col-xs-8">
               <q-toolbar-title class="text-h4 text-left bg-accent text-white text-bold">
-                {{ this['confrontations/confrontationsdGetter'][0]['TeamA']['name'] }}
+                {{ this['confrontations/confrontationsdGetter']['TeamA']['name'] }}
               </q-toolbar-title>
             </div>
           </div>
@@ -103,7 +103,7 @@
             </div>
             <div class="col-lg-9 col-md-8 col-sm-8 col-xs-8">
               <q-toolbar-title class="text-h4 text-left bg-secondary text-white text-bold">
-                {{ this['confrontations/confrontationsdGetter'][0]['TeamA']['name'] }}
+                {{ this['confrontations/confrontationsdGetter']['TeamA']['name'] }}
               </q-toolbar-title>
             </div>
           </div>
@@ -305,6 +305,7 @@ export default {
   },
   created () {
     this.questionRandom()
+    console.log(this['confrontations/confrontationsdGetter'])
   },
   computed: {
     ...mapGetters(['confrontations/confrontationsdGetter'])
@@ -317,6 +318,7 @@ export default {
      * @param  {String} btn name button
      */
     point (point, id, btn) {
+      console.log(this['confrontations/confrontationsdGetter'])
       for (let disabled in this.disabled) {
         if (disabled !== btn && !this.disabled[btn]) {
           this.disabled[disabled] = !this.disabled[disabled]

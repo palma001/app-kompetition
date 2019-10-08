@@ -5,5 +5,6 @@
  */
 export function addQuestionRound ({ commit }, payload) {
   const newPayload = { ...payload }
+  console.log(payload)
   commit('mutationsQuestionRound', newPayload)
 }

@@ -3,5 +3,5 @@ export default {
    * table data
    * @type {Array}
    */
-  confrontations: []
+  confrontations: null
 }

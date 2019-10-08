@@ -56,8 +56,8 @@
         </div>
         <div class="row bg-primary text-grey-1 text-h6 text-center"
           style="height: 40px">
-          <div class="col-6">{{translateLabel('timekeeper', 'teamA')}}: {{ this['confrontations/confrontationsdGetter'][0]['TeamA']['name'] }}</div>
-          <div class="col-6">{{translateLabel('timekeeper', 'teamB')}}: {{ this['confrontations/confrontationsdGetter'][0]['TeamB']['name'] }}</div>
+          <div class="col-6">{{translateLabel('timekeeper', 'teamA')}}: {{ this['confrontations/confrontationsdGetter']['TeamA']['name'] }}</div>
+          <div class="col-6">{{translateLabel('timekeeper', 'teamB')}}: {{ this['confrontations/confrontationsdGetter']['TeamB']['name'] }}</div>
         </div>
         <q-table class="my-sticky-header-table"
           :data="this['score/questionRoundGetter']"
@@ -153,12 +153,15 @@ export default {
       params: {
         eventId: 1,
         phaseId: 1,
-        status: 'playing'
+        query: {
+          status: 'playing'
+        }
       }
     }
   },
   created () {
     this['confrontations/getConfrontations']({ params: this.params, vm: this })
+    this.getAllConfrontations()
   },
   computed: {
     ...mapGetters(['score/questionRoundGetter', 'login/dataUser', 'confrontations/confrontationsdGetter'])
@@ -173,6 +176,14 @@ export default {
         .then(res => {
           this.$router.push({ path: '/login' })
         })
+    },
+    async getAllConfrontations () {
+      let params = {
+        eventId: 1,
+        phaseId: 1
+      }
+      let confrontations = await this['confrontations/getConfrontations']({ params: params, vm: this })
+      console.log(confrontations)
     },
     /**
      * Translates the tags in template

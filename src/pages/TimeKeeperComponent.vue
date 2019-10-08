@@ -7,13 +7,13 @@
           <div class="col-5">
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
               {{translateLabel('timekeeper', 'teamA')}}
-              {{ this['confrontations/confrontationsdGetter'][0]['TeamA']['name'] }}
+              {{ this['confrontations/confrontationsdGetter']['TeamA']['name'] }}
             </q-toolbar-title>
           </div>
           <div class="col-5">
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
               {{translateLabel('timekeeper', 'teamB') }}
-              {{ this['confrontations/confrontationsdGetter'][0]['TeamA']['name'] }}
+              {{ this['confrontations/confrontationsdGetter']['TeamA']['name'] }}
             </q-toolbar-title>
           </div>
         </div>
