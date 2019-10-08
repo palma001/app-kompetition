@@ -6,12 +6,12 @@
         <div class="row q-pa-md q-pb-xl justify-around">
           <div class="col-5">
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
-              Team-A: {{this['confrontations/confrontationsdGetter'][0].teamA}}
+              {{translateLabel('timekeeper', 'teamA')}}: {{this['confrontations/confrontationsdGetter'][0]['teamA']}}
             </q-toolbar-title>
           </div>
           <div class="col-5">
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
-              Team-B: {{this['confrontations/confrontationsdGetter'][0].teamB}}
+              {{translateLabel('timekeeper', 'teamB') }}: {{this['confrontations/confrontationsdGetter'][0]['teamB']}}
             </q-toolbar-title>
           </div>
         </div>
@@ -72,10 +72,6 @@
             outline
             disable
             :label="secondsQuestion"/>
-          <!-- <q-input outlined
-            v-model="text"
-            size="35px"
-            style="height:100px"/> -->
           <q-space></q-space>
           <q-btn class="q-px-xl q-py-xs"
             style="font-size: 30px"
@@ -123,7 +119,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: 'PageIndex',
+  name: 'TimeKeeper',
   data () {
     return {
       /**
@@ -162,10 +158,6 @@ export default {
        */
       setIntervalQuestion: null
     }
-  },
-  created () {
-    // this['confrontations/getConfrontations']({ eventId: 1, phaseId: 1, vm: this })
-    console.log(this['confrontations/confrontationsdGetter'])
   },
   computed: {
     ...mapGetters(['confrontations/confrontationsdGetter'])
@@ -230,6 +222,13 @@ export default {
         this.stopQuestion = false
         clearInterval(this.setIntervalQuestion)
       }
+    },
+    /**
+     * Translates the tags in template
+     * @param {String} message tag to translate
+     */
+    translateLabel (entity, message) {
+      return this.$i18n.t(`template.${entity}.${message}.label`)
     },
     ...mapActions(['confrontations/getConfrontations'])
   }
