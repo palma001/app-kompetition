@@ -113,7 +113,7 @@
             <div class="col-6">
               <q-input outlined
                 style="font-size: 25px"
-                placeholder="9:30 am"
+                :placeholder="time"
                 disable/>
             </div>
           </div>
@@ -139,7 +139,7 @@
             <div class="col-6">
               <q-input outlined
                 style="font-size: 25px"
-                placeholder="45:05:54"
+                placeholder=""
                 disable/>
             </div>
           </div>
@@ -224,7 +224,7 @@ export default {
       let params = {
         eventId: 1,
         phaseId: 1,
-        status: 'played'
+        status: 'toPlay'
       }
       this['confrontations/getAllConfrontations'](
         {

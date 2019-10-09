@@ -18,7 +18,7 @@
         </div>
         <div class="q-ml-sm col-lg-10 col-md-10 col-sm-8 col-xs-8 self-center">
           <div class="title">
-            QID# {{ dataPoints['question'].questionId }}: {{ dataPoints['question'].question }}
+            QID#
           </div>
         </div>
       </div>
@@ -29,7 +29,9 @@
           <div class="row q-pa-md">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
               <q-toolbar-title class="text-h4 text-white text-center bg-accent">
-                {{translateLabel('timekeeper', 'teamA')}}:
+                {{
+                  translateLabel('timekeeper', 'teamA')
+                }}:
               </q-toolbar-title>
             </div>
             <div class="col-lg-9 col-md-8 col-sm-8 col-xs-8">
@@ -305,10 +307,14 @@ export default {
   },
   created () {
     this.questionRandom()
-    console.log(this['confrontations/confrontationsdGetter'])
   },
   computed: {
-    ...mapGetters(['confrontations/confrontationsdGetter'])
+    ...mapGetters(
+      [
+        'confrontations/confrontationsdGetter',
+        'question/getRamdomQuestionGetter'
+      ]
+    )
   },
   methods: {
     /**

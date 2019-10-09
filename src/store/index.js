@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import login from './module-login'
 import score from './module-score'
+import question from './module-question'
 import confrontations from './module-confrontation/'
 Vue.use(Vuex)
 
@@ -16,7 +17,8 @@ export default function (/* { ssrContext } */) {
     modules: {
       login,
       score,
-      confrontations
+      confrontations,
+      question
     },
 
     // enable strict mode (adds overhead!)
