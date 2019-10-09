@@ -1,7 +1,12 @@
 export default {
   /**
-   * table data
+   * Confrontations playing
    * @type {Array}
    */
-  confrontations: null
+  confrontations: null,
+  /**
+   *  All Confrontations
+   *  @type {Array}
+   */
+  allConfrontations: []
 }

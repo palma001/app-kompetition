@@ -175,7 +175,8 @@ export default {
         this.secondsRound = 59
       }
       if (this.minutesRound === 0) {
-        this.minutesRound = 9
+        this.minutesRound = 10
+        this.secondsRound = 0
         this.stopTimer()
       }
     },
@@ -189,12 +190,25 @@ export default {
       }
     },
     /**
-     * S Temporizator
+     * Start Temporizator
      */
     startTimer () {
       if (!this.stop) {
         this.stop = true
         this.setInterval = setInterval(this.updateCounter, 1000)
+        if (this.minutesRound === 10) {
+          this['confrontations/addStartTime'](
+            {
+              vm: this,
+              params: {
+                request: {
+                  startTime: new Date(),
+                  stopTime: null
+                }
+              }
+            }
+          )
+        }
       }
     },
     /**
@@ -232,7 +246,12 @@ export default {
     translateLabel (entity, message) {
       return this.$i18n.t(`template.${entity}.${message}.label`)
     },
-    ...mapActions(['confrontations/getConfrontations'])
+    ...mapActions(
+      [
+        'confrontations/getConfrontations',
+        'confrontations/addStartTime'
+      ]
+    )
   }
 }
 </script>

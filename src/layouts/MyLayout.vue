@@ -56,8 +56,22 @@
         </div>
         <div class="row bg-primary text-grey-1 text-h6 text-center"
           style="height: 40px">
-          <div class="col-6">{{translateLabel('timekeeper', 'teamA')}}: {{ this['confrontations/confrontationsdGetter']['TeamA']['name'] }}</div>
-          <div class="col-6">{{translateLabel('timekeeper', 'teamB')}}: {{ this['confrontations/confrontationsdGetter']['TeamB']['name'] }}</div>
+          <div class="col-6">
+            {{
+              translateLabel('timekeeper', 'teamA')
+            }}:
+            {{
+              this['confrontations/confrontationsdGetter']['TeamA']['name']
+            }}
+          </div>
+          <div class="col-6">
+            {{
+              translateLabel('timekeeper', 'teamB')
+            }}:
+            {{
+              this['confrontations/confrontationsdGetter']['TeamB']['name']
+            }}
+          </div>
         </div>
         <q-table class="my-sticky-header-table"
           :data="this['score/questionRoundGetter']"
@@ -66,15 +80,29 @@
           color="info" />
       </div>
       <div v-if="route === '/timeKeeper'">
-        <div v-for="(confrontation, index) in this['confrontations/confrontationsdGetter']" :key="confrontation.id">
+        <div v-for="(confrontation, index) in this['confrontations/allConfrontationsdGetter']" :key="confrontation.id">
           <div class="row bg-primary text-white text-h5 text-center"
             style="height: 30px">
             <div class="col">Regular round {{index + 1}}</div>
           </div>
           <div class="row bg-primary text-grey-1 text-h5 text-center"
             style="height: 40px">
-            <div class="col-6">{{translateLabel('timekeeper', 'teamA')}}: {{ confrontation['TeamA']['name'] }}</div>
-            <div class="col-6">{{translateLabel('timekeeper', 'teamB')}}: {{ confrontation['TeamB']['name'] }}</div>
+            <div class="col-6">
+              {{
+                translateLabel('timekeeper', 'teamA')
+              }}:
+              {{
+                confrontation['TeamA']['name']
+              }}
+            </div>
+            <div class="col-6">
+              {{
+                translateLabel('timekeeper', 'teamB')
+              }}:
+              {{
+                confrontation['TeamB']['name']
+              }}
+            </div>
           </div>
           <div class="row q-pa-md justify-center">
             <div class="col-3">
@@ -118,7 +146,6 @@
         </div>
       </div>
     </q-drawer>
-
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -160,11 +187,23 @@ export default {
     }
   },
   created () {
-    this['confrontations/getConfrontations']({ params: this.params, vm: this })
+    this['confrontations/getConfrontations'](
+      {
+        params: this.params,
+        vm: this
+      }
+    )
     this.getAllConfrontations()
   },
   computed: {
-    ...mapGetters(['score/questionRoundGetter', 'login/dataUser', 'confrontations/confrontationsdGetter'])
+    ...mapGetters(
+      [
+        'score/questionRoundGetter',
+        'login/dataUser',
+        'confrontations/confrontationsdGetter',
+        'confrontations/allConfrontationsdGetter'
+      ]
+    )
   },
   methods: {
     openURL,
@@ -177,13 +216,22 @@ export default {
           this.$router.push({ path: '/login' })
         })
     },
-    async getAllConfrontations () {
+    /**
+     * [getAllConfrontations description]
+     * @return {[type]} [description]
+     */
+    getAllConfrontations () {
       let params = {
         eventId: 1,
-        phaseId: 1
+        phaseId: 1,
+        status: 'played'
       }
-      let confrontations = await this['confrontations/getConfrontations']({ params: params, vm: this })
-      console.log(confrontations)
+      this['confrontations/getAllConfrontations'](
+        {
+          params: params,
+          vm: this
+        }
+      )
     },
     /**
      * Translates the tags in template
@@ -192,7 +240,13 @@ export default {
     translateLabel (entity, message) {
       return this.$i18n.t(`template.${entity}.${message}.label`)
     },
-    ...mapActions(['login/logout', 'confrontations/getConfrontations'])
+    ...mapActions(
+      [
+        'login/logout',
+        'confrontations/getConfrontations',
+        'confrontations/getAllConfrontations'
+      ]
+    )
   }
 }
 </script>

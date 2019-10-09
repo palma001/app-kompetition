@@ -17,3 +17,29 @@ export function getConfrontations ({ commit }, payload) {
     })
     // })
 }
+
+export function getAllConfrontations ({ commit }, payload) {
+  const { params, vm } = payload
+  vm.$services.getData(
+    [
+      'events',
+      params.eventId,
+      params.phaseId,
+      'confrontation'
+    ],
+    {
+      status: params.status
+    }
+  )
+    .then(res => {
+      commit('updateStateAllConfrontation', res.response.data)
+    })
+}
+
+export function addStartTime ({ commit }, payload) {
+  const { vm, params } = payload
+  vm.$services.postData([''], params.request)
+    .then(res => {
+      console.log(res)
+    })
+}
