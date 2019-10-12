@@ -1,19 +1,5 @@
 <template>
   <q-page class="bg-blue-grey-1">
-    <!-- question section -->
-    <!-- <div class="row q-pa-md justify-center">
-      <div class="col-11">
-        <b-field type="is-info">
-          <b-select placeholder="Seleccionar round"
-            size="is-medium"
-            expanded
-            color="red">
-            <option value="flint">Regular round 1: UDO 25 - LUZ 34</option>
-            <option value="silver">Regular round 2: UCV 57 - UDO 10</option>
-          </b-select>
-        </b-field>
-      </div>
-    </div> -->
     <div class="row q-pa-md justify-center text-primary">
       <div class="col-auto q-mt-md">
         <q-toolbar-title class="text-h4 text-left">
@@ -23,7 +9,7 @@
       <div class="col-3">
         <q-input outlined
           style="font-size: 25px"
-          placeholder="Nombre de equipo A "
+          :placeholder="(confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'] : ''"
           disable/>
       </div>
       <div class="col-auto q-mt-md q-ml-xl">
@@ -34,41 +20,62 @@
       <div class="col-3">
         <q-input outlined
           style="font-size: 25px"
-          placeholder="Nombre de equipo B"
+          :placeholder="(confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'] : ''"
           disable/>
       </div>
     </div>
     <!-- question section -->
-    <div class="row q-pa-md justify-center">
-      <div class="col-11">
-        <q-card dark
-          bordered
-          class="bg-primary my-card">
-          <q-card-section>
-            <div class="text-h5 text-grey-1 text-bold">QID #001:</div>
-          </q-card-section>
-          <q-separator info
-            inset />
-          <q-card-section class="text-h4 text-grey-1">
-            What color is the sky?
-          </q-card-section>
-        </q-card>
+    <div v-if="question.typeQuestion === 'tossup'">
+      <div class="row q-pa-md justify-center">
+        <div class="col-11">
+          <q-card dark
+            bordered
+            class="bg-primary my-card">
+            <q-card-section>
+              <div class="text-h5 text-grey-1 text-bold">QID #{{ question.id }}:</div>
+            </q-card-section>
+            <q-separator info
+              inset />
+            <q-card-section class="text-h4 text-grey-1">
+              {{ question.question }}
+            </q-card-section>
+          </q-card>
+        </div>
+      </div>
+      <div class="row q-pa-md q-mt-xl justify-center">
+        <div class="col-11">
+          <q-card dark
+            bordered
+            class="bg-secondary my-card">
+            <q-card-section>
+              <div class="text-h5 text-grey-1 text-bold">Answer:</div>
+            </q-card-section>
+            <q-separator info
+              inset />
+            <q-card-section class="text-h4 text-grey-1">
+              {{ question.reply }}
+            </q-card-section>
+          </q-card>
+        </div>
       </div>
     </div>
-    <div class="row q-pa-md q-mt-xl justify-center">
-      <div class="col-11">
-        <q-card dark
-          bordered
-          class="bg-secondary my-card">
-          <q-card-section>
-            <div class="text-h5 text-grey-1 text-bold">Answer:</div>
-          </q-card-section>
-          <q-separator info
-            inset />
-          <q-card-section class="text-h4 text-grey-1">
-            Blue
-          </q-card-section>
-        </q-card>
+    <div v-else>
+      <div class="row q-pa-md justify-center">
+        <div class="col-11">
+          <q-card dark
+            bordered
+            class="bg-secondary my-card" style="height: 300px">
+            <q-card-section>
+              <div class="text-h5 text-grey-1 text-bold">BQ ID # {{ question.id }}:</div>
+            </q-card-section>
+
+            <q-separator info
+              inset />
+            <q-card-section class="text-h4 text-grey-1">
+              {{ question.question }}
+            </q-card-section>
+          </q-card>
+        </div>
       </div>
     </div>
     <q-toolbar class="row q-pa-md q-mt-lg justify-center">
@@ -77,14 +84,16 @@
         style="font-size: 25px"
         align="center"
         color="accent"
-        label="Bonus" />
+        label="Bonus"
+        :disabled="statusButton"
+        @click="getRandomQuestions('bonus')"/>
       <q-space></q-space>
       <q-btn class="q-px-xl q-py-xs"
         style="font-size: 25px"
         align="center"
         color="accent"
-        Disabled
-        label="next" />
+        label="next"
+        @click="getRandomQuestions('tossup')"/>
       <q-space></q-space>
     </q-toolbar>
     <q-toolbar class="spe">
@@ -125,6 +134,66 @@
 
 <script>
 export default {
-  name: 'PageIndex'
+  name: 'PageIndex',
+  data () {
+    return {
+      /**
+       * [question description]
+       * @type {[type]}
+       */
+      question: [],
+      /**
+       * [confrontationPlaying description]
+       * @type {Object}
+       */
+      confrontationPlaying: {},
+      /**
+       * Status button bonus
+       * @type {Boolean}
+       */
+      statusButton: true
+    }
+  },
+  sockets: {
+    /**
+     * Capture event the socket
+     * @param  {Array} question question
+     */
+    getQuestions (question) {
+      this.question = question
+    },
+    /**
+     * Sets Confrontations
+     * @param  {Array} confrontation
+     */
+    confrontationsPlaying (confrontation) {
+      this.confrontationPlaying = confrontation[0]
+    },
+    /**
+     * Status button bonus
+     * @param {Boolean}
+     */
+    disabledBonus (status) {
+      this.statusButton = status
+    }
+  },
+  created () {
+    this.getRandomQuestions('tossup')
+  },
+  methods: {
+    /**
+     * Set question
+     * @return {[type]} [description]
+     */
+    async getRandomQuestions (typeQuestion) {
+      let params = {
+        typeQuestion: typeQuestion,
+        status: 'toPlay',
+        random: true
+      }
+      let { response } = await this.$services.getData(['questions'], params)
+      this.$socket.emit('getQuestion', response.data[0])
+    }
+  }
 }
 </script>

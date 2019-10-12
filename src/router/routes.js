@@ -41,6 +41,13 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/TimeKeeperComponent.vue') }
     ]
+  },
+  {
+    path: '/generalScreen',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/GeneralScreenComponent.vue') }
+    ]
   }
 ]
 // Always leave this as last one
