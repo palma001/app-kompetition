@@ -10,7 +10,8 @@ module.exports = function (ctx) {
       'axios',
       'kui-library',
       'kservices',
-      'auth'
+      'auth',
+      'socket'
     ],
 
     css: [
