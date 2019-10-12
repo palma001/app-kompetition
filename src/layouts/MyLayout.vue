@@ -34,7 +34,8 @@
               round
               @click="drawer = !drawer"
               icon="menu"
-              aria-label="Menu" />
+              aria-label="Menu"
+              v-if="route !== '/moderator' && route !== '/generalScreen'"/>
           </div>
         </div>
       </q-toolbar>
@@ -57,19 +58,15 @@
         <div class="row bg-primary text-grey-1 text-h6 text-center"
           style="height: 40px">
           <div class="col-6">
+            {{ translateLabel('timekeeper', 'teamA')}}:
             {{
-              translateLabel('timekeeper', 'teamA')
-            }}:
-            {{
-              this['confrontations/confrontationsdGetter']['TeamA']['name']
+              (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'] : ''
             }}
           </div>
           <div class="col-6">
+            {{ translateLabel('timekeeper', 'teamB') }}:
             {{
-              translateLabel('timekeeper', 'teamB')
-            }}:
-            {{
-              this['confrontations/confrontationsdGetter']['TeamB']['name']
+              (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'] : ''
             }}
           </div>
         </div>
@@ -80,7 +77,7 @@
           color="info" />
       </div>
       <div v-if="route === '/timeKeeper'">
-        <div v-for="(confrontation, index) in this['confrontations/allConfrontationsdGetter']" :key="confrontation.id">
+        <div v-for="(confrontation, index) in confrontations" :key="confrontation.id">
           <div class="row bg-primary text-white text-h5 text-center"
             style="height: 30px">
             <div class="col">Regular round {{index + 1}}</div>
@@ -88,20 +85,12 @@
           <div class="row bg-primary text-grey-1 text-h5 text-center"
             style="height: 40px">
             <div class="col-6">
-              {{
-                translateLabel('timekeeper', 'teamA')
-              }}:
-              {{
-                confrontation['TeamA']['name']
-              }}
+                {{translateLabel('timekeeper', 'teamA')}}:
+                {{ confrontation['TeamA']['name'] }}
             </div>
             <div class="col-6">
-              {{
-                translateLabel('timekeeper', 'teamB')
-              }}:
-              {{
-                confrontation['TeamB']['name']
-              }}
+                {{translateLabel('timekeeper', 'teamB')}}:
+                {{ confrontation['TeamB']['name'] }}
             </div>
           </div>
           <div class="row q-pa-md justify-center">
@@ -113,7 +102,7 @@
             <div class="col-6">
               <q-input outlined
                 style="font-size: 25px"
-                :placeholder="time"
+                :placeholder="dateFormat(confrontation['TimeDurationId']['timeStart'])"
                 disable/>
             </div>
           </div>
@@ -126,7 +115,7 @@
             <div class="col-6">
               <q-input outlined
                 style="font-size: 25px"
-                placeholder="10:15 am"
+                :placeholder="dateFormat(confrontation['TimeDurationId']['timeStop'])"
                 disable/>
             </div>
           </div>
@@ -183,16 +172,29 @@ export default {
         query: {
           status: 'playing'
         }
-      }
+      },
+      confrontations: [],
+      confrontationPlaying: []
+    }
+  },
+  sockets: {
+    confrontations (confrontations) {
+      this['confrontations/getConfrontationsPlaying']({ params: this.params, vm: this })
+      this.confrontations = confrontations
+    },
+    confrontationsPlaying (confrontation) {
+      this.confrontationPlaying = confrontation[0]
+    },
+    /**
+     * Last confrontation
+     * @type{Array}
+     */
+    lastConfrontation (confrontation) {
+      this.confrontationPlaying = confrontation[0]
     }
   },
   created () {
-    this['confrontations/getConfrontations'](
-      {
-        params: this.params,
-        vm: this
-      }
-    )
+    this.$socket.emit('lastConfrontation')
     this.getAllConfrontations()
   },
   computed: {
@@ -217,8 +219,7 @@ export default {
         })
     },
     /**
-     * [getAllConfrontations description]
-     * @return {[type]} [description]
+     * Gets all Confrontations
      */
     getAllConfrontations () {
       let params = {
@@ -226,12 +227,7 @@ export default {
         phaseId: 1,
         status: 'toPlay'
       }
-      this['confrontations/getAllConfrontations'](
-        {
-          params: params,
-          vm: this
-        }
-      )
+      this['confrontations/getConfrontations']({ params: params, vm: this })
     },
     /**
      * Translates the tags in template
@@ -240,11 +236,20 @@ export default {
     translateLabel (entity, message) {
       return this.$i18n.t(`template.${entity}.${message}.label`)
     },
+    /**
+     * Date Format
+     * @param {String} date formating
+     */
+    dateFormat (date) {
+      date = new Date(date)
+      date = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+      return date
+    },
     ...mapActions(
       [
         'login/logout',
         'confrontations/getConfrontations',
-        'confrontations/getAllConfrontations'
+        'confrontations/getConfrontationsPlaying'
       ]
     )
   }

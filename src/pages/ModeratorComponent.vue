@@ -15,7 +15,7 @@
         <q-input
           outlined
           style="font-size: 25px"
-          :placeholder="this['confrontations/confrontationsdGetter']['TeamA']['name']"
+          :placeholder="(confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'] : ''"
           disable/>
       </div>
       <div
@@ -30,31 +30,24 @@
         <q-input
           outlined
           style="font-size: 25px"
-          :placeholder="this['confrontations/confrontationsdGetter']['TeamB']['name']"
+          :placeholder="(confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'] : ''"
           disable/>
       </div>
     </div>
     <!-- question section -->
-    <div
-      v-if="typeQuestion === 'tossUp'">
+    <div v-if="question.typeQuestion === 'tossup'">
       <div class="row q-pa-md justify-center">
         <div class="col-11">
           <q-card dark
             bordered
             class="bg-primary my-card">
             <q-card-section>
-              <div class="text-h5 text-grey-1 text-bold">
-                QID #{{
-                  this['question/getRamdomQuestionGetter']['id']
-                }}:
-              </div>
+              <div class="text-h5 text-grey-1 text-bold">QID #{{ question.id }}:</div>
             </q-card-section>
             <q-separator info
               inset />
             <q-card-section class="text-h4 text-grey-1">
-              {{
-                this['question/getRamdomQuestionGetter']['question']
-              }}
+              {{ question.question }}
             </q-card-section>
           </q-card>
         </div>
@@ -70,43 +63,29 @@
             <q-separator info
               inset />
             <q-card-section class="text-h4 text-grey-1">
-              {{
-                this['question/getRamdomQuestionGetter']['reply']
-              }}
+              {{ question.reply }}
             </q-card-section>
           </q-card>
         </div>
       </div>
     </div>
-    <div
-      class="row q-pa-md justify-center"
-      v-else>
-      <div
-        class="col-11">
-        <q-card
-          dark
-          bordered
-          class="bg-negative my-card"
-          style="height: 300px">
-          <q-card-section>
-            <div
-              class="text-h5 text-grey-1 text-bold">
-              BQ ID #{{
-                this['question/getRamdomQuestionGetter']['id']
-              }}
-            </div>
-          </q-card-section>
+    <div v-else>
+      <div class="row q-pa-md justify-center">
+        <div class="col-11">
+          <q-card dark
+            bordered
+            class="bg-secondary my-card" style="height: 300px">
+            <q-card-section>
+              <div class="text-h5 text-grey-1 text-bold">BQ ID # {{ question.id }}:</div>
+            </q-card-section>
 
-          <q-separator
-            info
-            inset />
-          <q-card-section
-            class="text-h4 text-grey-1">
-            {{
-              this['question/getRamdomQuestionGetter']['question']
-            }}
-          </q-card-section>
-        </q-card>
+            <q-separator info
+              inset />
+            <q-card-section class="text-h4 text-grey-1">
+              {{ question.question }}
+            </q-card-section>
+          </q-card>
+        </div>
       </div>
     </div>
     <q-toolbar
@@ -118,16 +97,16 @@
         align="center"
         color="accent"
         label="Bonus"
-        @click="getBonusRandom"/>
+        :disabled="statusButton"
+        @click="getRandomQuestions('bonus')"/>
       <q-space></q-space>
       <q-btn
         class="q-px-xl q-py-xs"
         style="font-size: 25px"
         align="center"
         color="accent"
-        :disabled="disabledNext"
         label="next"
-        @click="questionRandom"/>
+        @click="getRandomQuestions('tossup')"/>
       <q-space></q-space>
     </q-toolbar>
     <q-toolbar
@@ -171,56 +150,66 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: 'Moderator',
+  name: 'PageIndex',
   data () {
     return {
-      typeQuestion: 'tossUp',
-      disabledNext: true
+      /**
+       * [question description]
+       * @type {[type]}
+       */
+      question: [],
+      /**
+       * [confrontationPlaying description]
+       * @type {Object}
+       */
+      confrontationPlaying: {},
+      /**
+       * Status button bonus
+       * @type {Boolean}
+       */
+      statusButton: true
+    }
+  },
+  sockets: {
+    /**
+     * Capture event the socket
+     * @param  {Array} question question
+     */
+    getQuestions (question) {
+      this.question = question
+    },
+    /**
+     * Sets Confrontations
+     * @param  {Array} confrontation
+     */
+    confrontationsPlaying (confrontation) {
+      this.confrontationPlaying = confrontation[0]
+    },
+    /**
+     * Status button bonus
+     * @param {Boolean}
+     */
+    disabledBonus (status) {
+      this.statusButton = status
     }
   },
   created () {
-    this.questionRandom()
-  },
-  computed: {
-    ...mapGetters(
-      [
-        'confrontations/confrontationsdGetter',
-        'question/getRamdomQuestionGetter'
-      ]
-    )
+    this.getRandomQuestions('tossup')
   },
   methods: {
     /**
-     *
+     * Set question
+     * @return {[type]} [description]
      */
-    questionRandom () {
-      this.typeQuestion = 'tossUp'
-      this.disabledNext = true
-      let payload = {
-        vm: this,
-        params: {
-          random: true,
-          typeQuestion: 'tossup'
-        }
+    async getRandomQuestions (typeQuestion) {
+      let params = {
+        typeQuestion: typeQuestion,
+        status: 'toPlay',
+        random: true
       }
-      this['question/getRamdomQuestion'](payload)
-    },
-    /**
-     *
-     */
-    getBonusRandom () {
-      this.typeQuestion = 'bonus'
-      this.disabledNext = false
-      let payload = {
-        vm: this,
-        params: {
-          random: true,
-          typeQuestion: 'bonus'
-        }
-      }
-      this['question/getRamdomQuestion'](payload)
-    },
-    ...mapActions(['question/getRamdomQuestion'])
+      let { response } = await this.$services.getData(['questions'], params)
+      this.$socket.emit('getQuestion', response.data[0])
+    }
   }
 }
 </script>

@@ -7,13 +7,17 @@
           <div class="col-5">
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
               {{translateLabel('timekeeper', 'teamA')}}
-              {{ this['confrontations/confrontationsdGetter']['TeamA']['name'] }}
+              {{
+                (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'] : ''
+              }}
             </q-toolbar-title>
           </div>
           <div class="col-5">
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
               {{translateLabel('timekeeper', 'teamB') }}
-              {{ this['confrontations/confrontationsdGetter']['TeamA']['name'] }}
+              {{
+                (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'] : ''
+              }}
             </q-toolbar-title>
           </div>
         </div>
@@ -158,11 +162,29 @@ export default {
        * id interval question
        * @type {Number}
        */
-      setIntervalQuestion: null
+      setIntervalQuestion: null,
+      confrontationPlaying: {}
     }
   },
   computed: {
     ...mapGetters(['confrontations/confrontationsdGetter'])
+  },
+  sockets: {
+    time (time) {
+      this.secondsRound = time.secondsRound
+      this.minutesRound = time.minutesRound
+    },
+    timeQuestion (secondsQuestion) {
+      this.secondsQuestion = secondsQuestion
+    },
+    /**
+     * [confrontationsPlaying description]
+     * @param  {[type]} confrontation [description]
+     * @return {[type]}               [description]
+     */
+    confrontationsPlaying (confrontation) {
+      this.confrontationPlaying = confrontation[0]
+    }
   },
   methods: {
     /**
@@ -179,6 +201,10 @@ export default {
         this.secondsRound = 0
         this.stopTimer()
       }
+      this.$socket.emit('temporizator', {
+        secondsRound: this.secondsRound,
+        minutesRound: this.minutesRound
+      })
     },
     /**
      * Stop Temporizator
@@ -219,6 +245,7 @@ export default {
       if (this.secondsQuestion <= 0) {
         this.restartQuestion()
       }
+      this.$socket.emit('temporizatorQuestion', this.secondsQuestion)
     },
     /**
      * Start question

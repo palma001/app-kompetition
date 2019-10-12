@@ -8,17 +8,17 @@
             size="30px"
             color="red-10"
             label="Toss Up"
-            v-if="dataPoints['question']['type'] === 'tossUp'"/>
+            v-if="question.typeQuestion === 'tossup'"/>
           <q-btn
             class="buttonQ"
             size="30px"
             color="green"
             label="Bonus"
-            v-if="dataPoints['question']['type'] === 'bonus'"/>
+            v-if="question.typeQuestion === 'bonus'"/>
         </div>
         <div class="q-ml-sm col-lg-10 col-md-10 col-sm-8 col-xs-8 self-center">
           <div class="title">
-            QID#
+            QID# {{ question.id }}: {{ question.question }}
           </div>
         </div>
       </div>
@@ -29,14 +29,14 @@
           <div class="row q-pa-md">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
               <q-toolbar-title class="text-h4 text-white text-center bg-accent">
-                {{
-                  translateLabel('timekeeper', 'teamA')
-                }}:
+                {{ translateLabel('timekeeper', 'teamA') }}:
               </q-toolbar-title>
             </div>
             <div class="col-lg-9 col-md-8 col-sm-8 col-xs-8">
               <q-toolbar-title class="text-h4 text-left bg-accent text-white text-bold">
-                {{ this['confrontations/confrontationsdGetter']['TeamA']['name'] }}
+                {{
+                  (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'] : ''
+                }}
               </q-toolbar-title>
             </div>
           </div>
@@ -52,14 +52,14 @@
                 align="center"
                 outline
                 text-color="primary">
-                {{teams[0].score}}
+                {{ pointData.team1 }}
               </q-btn>
             </div>
           </div>
           <div class="row q-pa-md justify-center">
             <div
               class="col-lg-6 col-md-7"
-              v-if="dataPoints['question']['type'] === 'tossUp'">
+              v-if="question.typeQuestion === 'tossup'">
               <q-btn
                 color="positive"
                 class="buttonF"
@@ -68,7 +68,7 @@
                 <q-icon center
                   size="50px"
                   name="check"
-                  @click="point(10, teams[0].teamId, 'add1')"/>
+                  @click="point(10, confrontationPlaying['TeamA']['id'], 'add1')"/>
               </q-btn>
               <q-btn
                 color="negative"
@@ -79,7 +79,7 @@
                   center
                   size="50px"
                   name="close"
-                  @click="point(-5, teams[0].teamId, 'sub1')"/>
+                  @click="point(-5, confrontationPlaying['TeamA']['id'], 'sub1')"/>
               </q-btn>
             </div>
             <div class="col-lg-6 col-md-5 col-sm-8 col-xs-8">
@@ -89,7 +89,7 @@
                 placeholder="Bonus"
                 v-model="value.bonus1"
                 color="primary"
-                v-if="dataPoints['question']['type'] === 'bonus'"
+                v-if="question.typeQuestion === 'bonus'"
                 :disabled="disabled.bonus1"/>
             </div>
           </div>
@@ -105,7 +105,9 @@
             </div>
             <div class="col-lg-9 col-md-8 col-sm-8 col-xs-8">
               <q-toolbar-title class="text-h4 text-left bg-secondary text-white text-bold">
-                {{ this['confrontations/confrontationsdGetter']['TeamA']['name'] }}
+                {{
+                  (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'] : ''
+                }}
               </q-toolbar-title>
             </div>
           </div>
@@ -121,13 +123,13 @@
                 align="center"
                 outline
                 text-color="secondary">
-                {{teams[1].score}}
+                {{ pointData.team2 }}
               </q-btn>
             </div>
           </div>
           <div class="row q-pa-md justify-center">
             <div class="col-lg-6 col-md-7"
-              v-if="dataPoints['question']['type'] === 'tossUp'">
+              v-if="question.typeQuestion === 'tossup'">
               <q-btn
                 color="positive"
                 class="buttonF"
@@ -136,7 +138,7 @@
                 <q-icon center
                   size="50px"
                   name="check"
-                  @click="point(10, teams[1].teamId, 'add2')"/>
+                  @click="point(10, confrontationPlaying['TeamB']['id'], 'add2')"/>
               </q-btn>
               <q-btn
                 color="negative"
@@ -147,7 +149,7 @@
                   center
                   size="50px"
                   name="close"
-                  @click="point(-5, teams[1].teamId, 'sub2')"/>
+                  @click="point(-5, confrontationPlaying['TeamB']['id'], 'sub2')"/>
               </q-btn>
             </div>
             <div class="col-lg-6 col-md-5 col-sm-8 col-xs-8">
@@ -158,7 +160,7 @@
                 placeholder="Bonus"
                 v-model="value.bonus2"
                 color="primary"
-                v-if="dataPoints['question']['type'] === 'bonus'"
+                v-if="question.typeQuestion === 'bonus'"
                 :disabled="disabled.bonus2"/>
             </div>
           </div>
@@ -243,20 +245,10 @@ export default {
        * Teams in the confrontations
        * @type {Array}
        */
-      teams: [
-        {
-          teamId: 1,
-          name: 'UDO',
-          score: 0,
-          id: 'A'
-        },
-        {
-          teamId: 2,
-          name: 'IUTA',
-          score: 0,
-          id: 'B'
-        }
-      ],
+      pointData: {
+        team1: 0,
+        team2: 0
+      },
       /**
        * Data os points teams
        * @type {Object}
@@ -271,42 +263,44 @@ export default {
        * Listo questions
        * @type {Array}
        */
-      question: [
-        {
-          questionId: 1,
-          question: 'name 4 types of drilling fluids?',
-          type: 'bonus'
-        },
-        {
-          questionId: 2,
-          question: 'name 3 features of packers:',
-          type: 'bonus'
-        },
-        {
-          questionId: 3,
-          question: 'name 3 benchmark crudes:',
-          type: 'bonus'
-        },
-        {
-          questionId: 4,
-          question: 'Which two phase pressure gradient correlation can be used for any pipe inclination and flow direction?',
-          type: 'tossUp'
-        },
-        {
-          questionId: 5,
-          question: 'what is the concept of gas lift?',
-          type: 'tossUp'
-        },
-        {
-          questionId: 6,
-          question: 'What mathematical tool is used in production engineering to assess well perfornance by plotting the well production rate against the bottom hole pressure?',
-          type: 'tossUp'
-        }
-      ]
+      question: {},
+      /**
+       * Data confrontations
+       * @param {Object}
+       */
+      confrontationPlaying: {}
     }
   },
-  created () {
-    this.questionRandom()
+  sockets: {
+    /**
+     * Capture event the socket
+     * @param  {Array} question question
+     */
+    getQuestions (question) {
+      this.question = question
+    },
+    /**
+     * Sets confrontations
+     * @param  {Array} confrontation
+     */
+    confrontationsPlaying (confrontation) {
+      this.confrontationPlaying = confrontation[0]
+    },
+    /**
+     * [lastQuestion description]
+     * @param  {[type]} question [description]
+     * @return {[type]}          [description]
+     */
+    lastQuestion (question) {
+      this.question = question
+    },
+    /**
+     * Last confrontation
+     * @type{Array}
+     */
+    lastConfrontation (confrontation) {
+      this.confrontationPlaying = confrontation[0]
+    }
   },
   computed: {
     ...mapGetters(
@@ -316,6 +310,11 @@ export default {
       ]
     )
   },
+  created () {
+    this.$socket.emit('lastQuestion')
+    this.$socket.emit('lastConfrontation')
+    this.getScoreTeam()
+  },
   methods: {
     /**
      * Sets poins teams
@@ -324,54 +323,100 @@ export default {
      * @param  {String} btn name button
      */
     point (point, id, btn) {
-      console.log(this['confrontations/confrontationsdGetter'])
+      // let question = {
+      //   'confrontationId': 2,
+      //   'questionId': 51,
+      //   'teamA': 1,
+      //   'teamB': 2,
+      //   'scoreA': '200',
+      //   'scoreB': '200',
+      //   'created_by': 'string',
+      //   'updated_by': 'string'
+      // }
       for (let disabled in this.disabled) {
         if (disabled !== btn && !this.disabled[btn]) {
           this.disabled[disabled] = !this.disabled[disabled]
-          this.teams.forEach((element) => {
-            if (element['teamId'] === id) {
-              if (this.dataPoints[element['id']] === 0) {
-                this.dataPoints[element['id']] = point
-                this.dataPoints['id'] = id
-              } else {
-                this.dataPoints[element['id']] = 0
+          for (let confrontation in this.confrontationPlaying) {
+            if (typeof this.confrontationPlaying[confrontation] === 'object') {
+              if (this.confrontationPlaying[confrontation]['id'] === id) {
+                console.log(this.confrontationPlaying[confrontation])
               }
             }
-          })
+          }
+          // this.teams.forEach((element) => {
+          //   if (element['teamId'] === id) {
+          //     if (this.dataPoints[element['id']] === 0) {
+          //       this.dataPoints[element['id']] = point
+          //       this.dataPoints['id'] = id
+          //     } else {
+          //       this.dataPoints[element['id']] = 0
+          //     }
+          //   }
+          // })
         }
       }
     },
     /**
      * Save points temas
      */
-    saveRecords () {
-      this.submitting = true
-      setTimeout(() => {
-        this.teams.map(element => {
-          if (element['teamId'] === this.dataPoints['id']) {
-            this['score/addQuestionRound'](this.dataPoints)
-            element.score += this.dataPoints[element['id']]
-            this.dataPoints['id'] = 0
-            this.dataPoints[element['id']] = 0
-            for (let disabled in this.disabled) {
-              this.disabled[disabled] = false
-            }
-          }
-        })
-        if (this.dataPoints['question']['type'] === 'bonus') {
-          this.teams[0]['score'] += Number(this.value['bonus1'])
-          this.teams[1]['score'] += Number(this.value['bonus2'])
-          this.dataPoints['A'] = this.value['bonus1']
-          this.dataPoints['B'] = this.value['bonus2']
-          this['score/addQuestionRound'](this.dataPoints)
-          this.value['bonus2'] = 0
-          this.value['bonus1'] = 0
-          this.dataPoints['A'] = 0
-          this.dataPoints['B'] = 0
-        }
-        this.questionRandom()
-        this.submitting = false
-      }, 1000)
+    // saveRecords () {
+    //   this.submitting = true
+    //   setTimeout(() => {
+    //     this.teams.map(element => {
+    //       if (element['teamId'] === this.dataPoints['id']) {
+    //         this['score/addQuestionRound'](this.dataPoints)
+    //         element.score += this.dataPoints[element['id']]
+    //         this.dataPoints['id'] = 0
+    //         this.dataPoints[element['id']] = 0
+    //         for (let disabled in this.disabled) {
+    //           this.disabled[disabled] = false
+    //         }
+    //       }
+    //     })
+    //     if (this.dataPoints['question']['type'] === 'bonus') {
+    //       this.teams[0]['score'] += Number(this.value['bonus1'])
+    //       this.teams[1]['score'] += Number(this.value['bonus2'])
+    //       this.dataPoints['A'] = this.value['bonus1']
+    //       this.dataPoints['B'] = this.value['bonus2']
+    //       this['score/addQuestionRound'](this.dataPoints)
+    //       this.value['bonus2'] = 0
+    //       this.value['bonus1'] = 0
+    //       this.dataPoints['A'] = 0
+    //       this.dataPoints['B'] = 0
+    //     }
+    //     this.questionRandom()
+    //     this.submitting = false
+    //   }, 1000)
+    // }
+    async saveRecords () {
+      this.$socket.emit('disabledBonus', false)
+      this.getScoreTeam()
+    },
+    /**
+     * [getScoreTeam description]
+     * @return {[type]} [description]
+     */
+    async getScoreTeam () {
+      console.log('hola')
+      let { response } = await this.$services.getData(['confrontation', this.confrontationPlaying['id'], 'question-round'])
+      if (response.status === 200) {
+        this.scoreData(response.data)
+      }
+    },
+    /**
+     * [scoreData description]
+     * @param  {[type]} data [description]
+     * @return {[type]}      [description]
+     */
+    scoreData (data) {
+      for (let score in this.pointData) {
+        this.pointData[score] = 0
+      }
+      data.forEach((element, index) => {
+        this.pointData['team1'] += Number(element['scoreA'])
+        this.pointData['team2'] += Number(element['scoreB'])
+      })
+      console.log(this.pointData)
     },
     /**
      * Gets questions random
