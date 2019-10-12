@@ -22,9 +22,9 @@
                     this['login/dataUser']['name'] }} {{ this['login/dataUser']['lastname']
                   }}
                 </q-tooltip>
-                    {{
-                      this['login/dataUser']['name'].charAt(0).toUpperCase()
-                    }}
+                  {{
+                    this['login/dataUser']['name'].charAt(0).toUpperCase()
+                  }}
                 </q-avatar>
             </div>
           </div>
