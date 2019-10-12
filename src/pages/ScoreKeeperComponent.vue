@@ -260,15 +260,29 @@ export default {
         question: null
       },
       /**
-       * Listo questions
-       * @type {Array}
-       */
-      question: {},
-      /**
        * Data confrontations
        * @param {Object}
        */
-      confrontationPlaying: {}
+      confrontationPlaying: {},
+      /**
+       * Questions
+       * @type {Object}
+       */
+      question: null,
+      /**
+       * [question description]
+       * @type {Object}
+       */
+      pointQuestion: {
+        confrontationId: 2,
+        questionId: 51,
+        teamA: 1,
+        teamB: 2,
+        scoreA: 0,
+        scoreB: 0,
+        created_by: 'ss',
+        updated_by: 'sss'
+      }
     }
   },
   sockets: {
@@ -318,36 +332,14 @@ export default {
      * @param  {String} btn name button
      */
     point (point, id, btn) {
-      // let question = {
-      //   'confrontationId': 2,
-      //   'questionId': 51,
-      //   'teamA': 1,
-      //   'teamB': 2,
-      //   'scoreA': '200',
-      //   'scoreB': '200',
-      //   'created_by': 'string',
-      //   'updated_by': 'string'
-      // }
       for (let disabled in this.disabled) {
         if (disabled !== btn && !this.disabled[btn]) {
           this.disabled[disabled] = !this.disabled[disabled]
-          for (let confrontation in this.confrontationPlaying) {
-            if (typeof this.confrontationPlaying[confrontation] === 'object') {
-              if (this.confrontationPlaying[confrontation]['id'] === id) {
-                console.log(this.confrontationPlaying[confrontation])
-              }
-            }
+          if ((btn === 'add1' || btn === 'sub1') && this.disabled[disabled]) {
+            this.pointQuestion.scoreA = point
+          } else if (this.disabled[disabled]) {
+            this.pointQuestion.scoreB = point
           }
-          // this.teams.forEach((element) => {
-          //   if (element['teamId'] === id) {
-          //     if (this.dataPoints[element['id']] === 0) {
-          //       this.dataPoints[element['id']] = point
-          //       this.dataPoints['id'] = id
-          //     } else {
-          //       this.dataPoints[element['id']] = 0
-          //     }
-          //   }
-          // })
         }
       }
     },
@@ -384,6 +376,15 @@ export default {
     //   }, 1000)
     // }
     async saveRecords () {
+      this.pointQuestion['confrontationId'] = this.confrontationPlaying['id']
+      console.log(this.pointQuestion)
+      let question = await this.$services.postData(
+        [
+          'confrontation',
+          this.pointQuestion['confrontationId'],
+          'question-round'
+        ], this.pointQuestion)
+      console.log(question)
       this.$socket.emit('disabledBonus', false)
       this.getScoreTeam()
     },
