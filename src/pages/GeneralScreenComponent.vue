@@ -65,7 +65,7 @@
                   align="center"
                   outline
                   disable
-                  label="175" />
+                  :label="(points) ? points.team1 : ''" />
               </div>
               <div class="col-12 q-mt-xs">
                 <q-toolbar-title class="text-h3 text-center text-primary text-bold">
@@ -82,7 +82,7 @@
                   align="center"
                   outline
                   disable
-                  label="150" />
+                  :label="(points) ? points.team2 : ''" />
               </div>
               <div class="col-12 q-mt-xs">
                 <q-toolbar-title class="text-h3 text-center text-primary text-bold">
@@ -125,8 +125,16 @@ export default {
        * Confrontations playing
        * @type {Object}
        */
-      confrontationPlaying: {}
+      confrontationPlaying: {},
+      /**
+       * Point teams
+       * @type {Object}
+       */
+      points: null
     }
+  },
+  created () {
+    this.$socket.emit('getPoints')
   },
   sockets: {
     /**
@@ -143,6 +151,13 @@ export default {
      */
     confrontationsPlaying (confrontation) {
       this.confrontationPlaying = confrontation[0]
+    },
+    /**
+     * Point teams
+     * @param  {Object} point teams
+     */
+    pointsTeams (point) {
+      this.points = point
     }
   }
 }
