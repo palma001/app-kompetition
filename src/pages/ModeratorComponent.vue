@@ -166,7 +166,8 @@ export default {
        * Status button bonus
        * @type {Boolean}
        */
-      statusButton: true
+      statusButton: true,
+      error: ''
     }
   },
   sockets: {
@@ -202,10 +203,10 @@ export default {
      */
     nextOrbonus (typeQuestion) {
       this.statusButton = true
-      this.updateQuestion(this.question['id'])
       setTimeout(() => {
         this.getRandomQuestions(typeQuestion)
       }, 100)
+      this.updateQuestion(this.question['id'])
     },
     /**
      * Set question
@@ -214,10 +215,16 @@ export default {
     async getRandomQuestions (typeQuestion) {
       let params = {
         typeQuestion: typeQuestion,
-        status: 'toPlay',
+        status: 'toplay',
         random: true
       }
       let { response } = await this.$services.getData(['questions'], params)
+      if (!response.data[0]) {
+        this.error = {
+          error: true,
+          message: 'No questions available'
+        }
+      }
       this.$socket.emit('getQuestion', response.data[0])
     },
     /**

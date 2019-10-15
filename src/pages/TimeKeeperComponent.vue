@@ -178,6 +178,10 @@ export default {
       if (this.minutesRound === 0) {
         this.minutesRound = 10
         this.secondsRound = 0
+        let data = {
+          timeStop: this.dateFormat(Date())
+        }
+        this.updateConfrontations(data)
         this.stopTimer()
       }
       this.$socket.emit('temporizator', {
@@ -202,19 +206,32 @@ export default {
         this.stop = true
         this.setInterval = setInterval(this.updateCounter, 1000)
         if (this.minutesRound === 10) {
-          this['confrontations/addStartTime'](
-            {
-              vm: this,
-              params: {
-                request: {
-                  startTime: new Date(),
-                  stopTime: null
-                }
-              }
-            }
-          )
+          let data = {
+            timeStart: this.dateFormat(Date())
+          }
+          this.updateConfrontations(data)
         }
       }
+    },
+    /**
+     * [updateConfrontations description]
+     * @param  {object} data request
+     */
+    async updateConfrontations (data) {
+      await this.$services.putData(['events', 1, 1, 'confrontation', this.confrontationPlaying['id']], data)
+    },
+    /**
+     * Date Format
+     * @param {String} date formating
+     */
+    dateFormat (date) {
+      if (date) {
+        date = new Date(date)
+        date = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+      } else {
+        date = ''
+      }
+      return date
     },
     /**
      * Tempirizator question
