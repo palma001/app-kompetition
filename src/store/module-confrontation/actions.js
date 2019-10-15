@@ -63,6 +63,6 @@ export function addStartTime ({ commit }, payload) {
   const { vm, params } = payload
   vm.$services.postData([''], params.request)
     .then(res => {
-      console.log(res)
+      return res.response.data
     })
 }

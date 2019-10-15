@@ -2,7 +2,7 @@
   <q-layout view="hHh Lpr lff">
     <q-header class="bg-primary" reveal>
       <q-toolbar>
-        <img src="~assets/petro.svg">
+        <img src="~assets/petro.svg" style="height: 100px">
         <q-toolbar-title class="text-h2 text-bold">
           PetroBowl
         </q-toolbar-title>
@@ -22,9 +22,9 @@
                     this['login/dataUser']['name'] }} {{ this['login/dataUser']['lastname']
                   }}
                 </q-tooltip>
-                    {{
-                      this['login/dataUser']['name'].charAt(0).toUpperCase()
-                    }}
+                  {{
+                    this['login/dataUser']['name'].charAt(0).toUpperCase()
+                  }}
                 </q-avatar>
             </div>
           </div>
@@ -60,21 +60,67 @@
           <div class="col-6">
             {{ translateLabel('timekeeper', 'teamA')}}:
             {{
-              (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'] : ''
+              (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'].toUpperCase() : ''
             }}
           </div>
           <div class="col-6">
             {{ translateLabel('timekeeper', 'teamB') }}:
             {{
-              (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'] : ''
+              (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'].toUpperCase() : ''
             }}
           </div>
         </div>
         <q-table class="my-sticky-header-table"
-          :data="this['score/questionRoundGetter']"
+          :data="data"
           :columns="columns"
           row-key="name"
-          color="info" />
+          color="info"
+          :visible-columns="visibleColumns">
+          <template v-slot:body="props">
+            <q-tr :props="props">
+              <q-td key="id" :props="props">
+                {{ props.row.id }}
+              </q-td>
+              <q-td key="questionId" :props="props">
+                {{ props.row.questionId }}
+              </q-td>
+              <q-td key="scoreA" :props="props">
+                {{ props.row.scoreA }}
+                <q-popup-edit v-model="props.row.scoreA">
+                  <q-input v-model="props.row.scoreA" type="text" dense autofocus counter/>
+                </q-popup-edit>
+              </q-td>
+              <q-td key="scoreB" :props="props">
+                {{ props.row.scoreB }}
+                <q-popup-edit v-model="props.row.scoreB">
+                  <q-input v-model="props.row.scoreB" type="text" dense autofocus counter/>
+                </q-popup-edit>
+              </q-td>
+              <q-td key="btn" :props="props">
+                <q-btn color="primary" icon="check" @click="editPoints(props.row)" />
+              </q-td>
+              <q-td key="numberUpdate" :props="props">
+                {{ props.row.numberUpdate }}
+              </q-td>
+            </q-tr>
+          </template>
+          <template v-slot:bottom-row>
+            <q-tr class="bg-primary text-white">
+              <q-td colspan="2">
+                Summary:
+              </q-td>
+              <q-td>
+                {{ points.team1 }}
+              </q-td>
+              <q-td colspan="2">
+                {{ points.team2 }}
+              </q-td>
+              <q-td>
+                {{ numberEdit }}
+              </q-td>
+            </q-tr>
+          </template>
+        </q-table>
       </div>
       <div v-if="route === '/timeKeeper'">
         <div v-for="(confrontation, index) in confrontations" :key="confrontation.id">
@@ -86,11 +132,11 @@
             style="height: 40px">
             <div class="col-6">
                 {{translateLabel('timekeeper', 'teamA')}}:
-                {{ confrontation['TeamA']['name'] }}
+                {{ (confrontation['TeamA']) ? confrontation['TeamA']['name'].toUpperCase() : '' }}
             </div>
             <div class="col-6">
                 {{translateLabel('timekeeper', 'teamB')}}:
-                {{ confrontation['TeamB']['name'] }}
+                {{ (confrontation['TeamA']) ? confrontation['TeamB']['name'].toUpperCase() : '' }}
             </div>
           </div>
           <div class="row q-pa-md justify-center">
@@ -148,24 +194,78 @@ export default {
   name: 'MyLayout',
   data () {
     return {
+      /**
+       * Total points
+       * @type {Object}
+       */
+      points: null,
+      /**
+       * Columns visible in table
+       * @type {Array}
+       */
+      visibleColumns: ['id', 'questionId', 'scoreA', 'scoreB', 'btn', 'numberUpdate'],
+      /**
+       * Drawer menu
+       * @type {Boolean}
+       */
       drawer: false,
-      miniState: false,
+      /**
+       * Name route
+       * @type {String}
+       */
       route: this.$route.path,
+      /**
+       * Date table
+       * @type {Array}
+       */
+      data: [],
+      /**
+       * Column table
+       * @type {Array}
+       */
       columns: [
         {
-          name: 'QID',
-          label: 'QID',
+          name: 'id',
+          label: 'id',
           align: 'center',
-          field: 'QID',
+          field: 'id',
           sortable: true
         },
-        { name: 'QT', align: 'center', label: 'QT', field: 'QT', sortable: true },
-        { name: 'A', align: 'center', label: 'A', field: 'A', sortable: true },
-        { name: 'B', align: 'center', label: 'B', field: 'B' }
-        // { name: 'Edit', align: 'center', label: 'Edit', field: 'Edit' },
-        // { name: 'Record', align: 'center', label: 'Record', field: 'Record' },
-        // { name: 'NEdit', align: 'center', label: 'N° Edit', field: 'NEdit', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+        {
+          name: 'questionId',
+          label: 'QID',
+          align: 'center',
+          field: 'questionId'
+        },
+        {
+          name: 'scoreA',
+          align: 'center',
+          label: 'Score team A',
+          field: 'scoreA'
+        },
+        {
+          name: 'scoreB',
+          align: 'center',
+          label: 'Score team B',
+          field: 'scoreB'
+        },
+        {
+          name: 'btn',
+          align: 'center',
+          label: 'Edit',
+          field: 'btn'
+        },
+        {
+          name: 'numberUpdate',
+          align: 'center',
+          label: 'Number Edit',
+          field: 'numberUpdate'
+        }
       ],
+      /**
+       * Params confrontation
+       * @type {Object}
+       */
       params: {
         eventId: 1,
         phaseId: 1,
@@ -173,15 +273,31 @@ export default {
           status: 'playing'
         }
       },
+      /**
+       * List confrontations
+       * @type {Array}
+       */
       confrontations: [],
+      /**
+       * Playing confrontation
+       * @type {Array}
+       */
       confrontationPlaying: []
     }
   },
   sockets: {
+    /**
+     * Sets Confrontations
+     * @param  {Array} confrontations
+     */
     confrontations (confrontations) {
       this['confrontations/getConfrontationsPlaying']({ params: this.params, vm: this })
       this.confrontations = confrontations
     },
+    /**
+     * Sets confrontation
+     * @param  {Array} confrontation
+     */
     confrontationsPlaying (confrontation) {
       this.confrontationPlaying = confrontation[0]
     },
@@ -191,23 +307,60 @@ export default {
      */
     lastConfrontation (confrontation) {
       this.confrontationPlaying = confrontation[0]
+    },
+    /**
+     * Disabled button
+     * @param  {boolean} data
+     */
+    disabledBonus (data) {
+      this.getScoreTeam()
+    },
+    /**
+     * Point teams
+     * @param  {Object} point teams
+     */
+    pointsTeams (point) {
+      this.points = point
     }
   },
   created () {
     this.$socket.emit('lastConfrontation')
     this.getAllConfrontations()
+    setTimeout(() => {
+      this.getScoreTeam()
+    }, 200)
   },
   computed: {
-    ...mapGetters(
-      [
-        'score/questionRoundGetter',
-        'login/dataUser',
-        'confrontations/confrontationsdGetter',
-        'confrontations/allConfrontationsdGetter'
-      ]
-    )
+    ...mapGetters(['login/dataUser']),
+    /**
+     * Number edit
+     * @return {Number} number edit
+     */
+    numberEdit () {
+      let numberEdit = 0
+      this.data.forEach((element, index) => {
+        numberEdit += Number(element['numberUpdate'])
+      })
+      return numberEdit
+    }
   },
   methods: {
+    /**
+     * Edit score
+     * @param  {Object} data
+     */
+    editPoints (data) {
+      data.numberUpdate += 1
+      this.$services.putData([
+        'confrontation',
+        this.confrontationPlaying['id'],
+        'question-round',
+        data.id
+      ], data)
+        .then(res => {
+          this.getScoreTeam()
+        })
+    },
     openURL,
     /**
      * Login in the app
@@ -230,6 +383,20 @@ export default {
       this['confrontations/getConfrontations']({ params: params, vm: this })
     },
     /**
+     * Gets Score team
+     */
+    async getScoreTeam () {
+      let params = {
+        sort: 'desc',
+        sorteField: 'id'
+      }
+      let { response } = await this.$services.getData(['confrontation', this.confrontationPlaying['id'], 'question-round'], params)
+      if (response.status === 200) {
+        this.data = response.data
+      }
+      this.$socket.emit('reloadPoint')
+    },
+    /**
      * Translates the tags in template
      * @param {String} message tag to translate
      */
@@ -241,8 +408,12 @@ export default {
      * @param {String} date formating
      */
     dateFormat (date) {
-      date = new Date(date)
-      date = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+      if (date) {
+        date = new Date(date)
+        date = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+      } else {
+        date = ''
+      }
       return date
     },
     ...mapActions(

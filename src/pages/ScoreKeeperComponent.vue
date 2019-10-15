@@ -8,17 +8,23 @@
             size="30px"
             color="red-10"
             label="Toss Up"
-            v-if="question.typeQuestion === 'tossup'"/>
+            v-if="question && question.typeQuestion === 'tossup'"/>
           <q-btn
             class="buttonQ"
             size="30px"
             color="green"
             label="Bonus"
-            v-if="question.typeQuestion === 'bonus'"/>
+            v-if="question && question.typeQuestion === 'bonus'"/>
         </div>
         <div class="q-ml-sm col-lg-10 col-md-10 col-sm-8 col-xs-8 self-center">
           <div class="title">
-            QID# {{ question.id }}: {{ question.question }}
+            QID#
+            {{
+              (question) ? question.id : ''
+            }}:
+            {{
+              (question) ? question.question : ''
+            }}
           </div>
         </div>
       </div>
@@ -35,7 +41,7 @@
             <div class="col-lg-9 col-md-8 col-sm-8 col-xs-8">
               <q-toolbar-title class="text-h4 text-left bg-accent text-white text-bold">
                 {{
-                  (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'] : ''
+                  (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'].toUpperCase() : ''
                 }}
               </q-toolbar-title>
             </div>
@@ -89,7 +95,7 @@
                 placeholder="Bonus"
                 v-model="value.bonus1"
                 color="primary"
-                v-if="question.typeQuestion === 'bonus'"
+                v-if="question && question.typeQuestion === 'bonus'"
                 :disabled="disabled.bonus1"/>
             </div>
           </div>
@@ -106,7 +112,7 @@
             <div class="col-lg-9 col-md-8 col-sm-8 col-xs-8">
               <q-toolbar-title class="text-h4 text-left bg-secondary text-white text-bold">
                 {{
-                  (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'] : ''
+                  (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'].toUpperCase() : ''
                 }}
               </q-toolbar-title>
             </div>
@@ -129,7 +135,7 @@
           </div>
           <div class="row q-pa-md justify-center">
             <div class="col-lg-6 col-md-7"
-              v-if="question.typeQuestion === 'tossup'">
+              v-if="question && question.typeQuestion === 'tossup'">
               <q-btn
                 color="positive"
                 class="buttonF"
@@ -160,7 +166,7 @@
                 placeholder="Bonus"
                 v-model="value.bonus2"
                 color="primary"
-                v-if="question.typeQuestion === 'bonus'"
+                v-if="question && question.typeQuestion === 'bonus'"
                 :disabled="disabled.bonus2"/>
             </div>
           </div>
@@ -211,7 +217,7 @@
 </style>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
   name: 'ScoreKeeperComponent',
   data () {
@@ -260,15 +266,30 @@ export default {
         question: null
       },
       /**
-       * Listo questions
-       * @type {Array}
-       */
-      question: {},
-      /**
        * Data confrontations
        * @param {Object}
        */
-      confrontationPlaying: {}
+      confrontationPlaying: {},
+      /**
+       * Questions
+       * @type {Object}
+       */
+      question: null,
+      /**
+       * [question description]
+       * @type {Object}
+       */
+      pointQuestion: {
+        confrontationId: 0,
+        questionId: 0,
+        teamA: 0,
+        teamB: 0,
+        scoreA: 0,
+        scoreB: 0,
+        numberUpdate: 0,
+        created_by: 'ss',
+        updated_by: 'sss'
+      }
     }
   },
   sockets: {
@@ -287,9 +308,8 @@ export default {
       this.confrontationPlaying = confrontation[0]
     },
     /**
-     * [lastQuestion description]
-     * @param  {[type]} question [description]
-     * @return {[type]}          [description]
+     * Last question
+     * @param  {Object} question
      */
     lastQuestion (question) {
       this.question = question
@@ -300,20 +320,20 @@ export default {
      */
     lastConfrontation (confrontation) {
       this.confrontationPlaying = confrontation[0]
+    },
+    /**
+     * Reload points
+     */
+    reloadPoint () {
+      this.getScoreTeam()
     }
-  },
-  computed: {
-    ...mapGetters(
-      [
-        'confrontations/confrontationsdGetter',
-        'question/getRamdomQuestionGetter'
-      ]
-    )
   },
   created () {
     this.$socket.emit('lastQuestion')
     this.$socket.emit('lastConfrontation')
-    this.getScoreTeam()
+    setTimeout(() => {
+      this.getScoreTeam()
+    }, 200)
   },
   methods: {
     /**
@@ -323,88 +343,64 @@ export default {
      * @param  {String} btn name button
      */
     point (point, id, btn) {
-      // let question = {
-      //   'confrontationId': 2,
-      //   'questionId': 51,
-      //   'teamA': 1,
-      //   'teamB': 2,
-      //   'scoreA': '200',
-      //   'scoreB': '200',
-      //   'created_by': 'string',
-      //   'updated_by': 'string'
-      // }
       for (let disabled in this.disabled) {
         if (disabled !== btn && !this.disabled[btn]) {
           this.disabled[disabled] = !this.disabled[disabled]
-          for (let confrontation in this.confrontationPlaying) {
-            if (typeof this.confrontationPlaying[confrontation] === 'object') {
-              if (this.confrontationPlaying[confrontation]['id'] === id) {
-                console.log(this.confrontationPlaying[confrontation])
-              }
-            }
+          if ((btn === 'add1' || btn === 'sub1') && this.disabled[disabled]) {
+            this.pointQuestion.scoreA = point
+          } else if (this.disabled[disabled]) {
+            this.pointQuestion.scoreB = point
           }
-          // this.teams.forEach((element) => {
-          //   if (element['teamId'] === id) {
-          //     if (this.dataPoints[element['id']] === 0) {
-          //       this.dataPoints[element['id']] = point
-          //       this.dataPoints['id'] = id
-          //     } else {
-          //       this.dataPoints[element['id']] = 0
-          //     }
-          //   }
-          // })
         }
       }
     },
     /**
      * Save points temas
      */
-    // saveRecords () {
-    //   this.submitting = true
-    //   setTimeout(() => {
-    //     this.teams.map(element => {
-    //       if (element['teamId'] === this.dataPoints['id']) {
-    //         this['score/addQuestionRound'](this.dataPoints)
-    //         element.score += this.dataPoints[element['id']]
-    //         this.dataPoints['id'] = 0
-    //         this.dataPoints[element['id']] = 0
-    //         for (let disabled in this.disabled) {
-    //           this.disabled[disabled] = false
-    //         }
-    //       }
-    //     })
-    //     if (this.dataPoints['question']['type'] === 'bonus') {
-    //       this.teams[0]['score'] += Number(this.value['bonus1'])
-    //       this.teams[1]['score'] += Number(this.value['bonus2'])
-    //       this.dataPoints['A'] = this.value['bonus1']
-    //       this.dataPoints['B'] = this.value['bonus2']
-    //       this['score/addQuestionRound'](this.dataPoints)
-    //       this.value['bonus2'] = 0
-    //       this.value['bonus1'] = 0
-    //       this.dataPoints['A'] = 0
-    //       this.dataPoints['B'] = 0
-    //     }
-    //     this.questionRandom()
-    //     this.submitting = false
-    //   }, 1000)
-    // }
     async saveRecords () {
-      this.$socket.emit('disabledBonus', false)
+      this.pointQuestion['confrontationId'] = this.confrontationPlaying['id']
+      this.pointQuestion['questionId'] = this.question['id']
+      this.pointQuestion['teamA'] = this.confrontationPlaying['TeamA']['id']
+      this.pointQuestion['teamB'] = this.confrontationPlaying['TeamB']['id']
+      if (this.question.typeQuestion === 'bonus') {
+        if (this.value.bonus1) {
+          this.pointQuestion.scoreA = this.value.bonus1
+        }
+        this.pointQuestion.scoreB = this.value.bonus2
+      }
+      await this.$services.postData(
+        [
+          'confrontation',
+          this.pointQuestion['confrontationId'],
+          'question-round'
+        ],
+        this.pointQuestion
+      )
+      if (this.pointQuestion.scoreA > 0 || this.pointQuestion.scoreB > 0) {
+        this.$socket.emit('disabledBonus', false)
+      } else {
+        this.$socket.emit('disabledBonus', true)
+      }
+      this.pointQuestion.scoreA = 0
+      this.pointQuestion.scoreB = 0
+      this.value.bonus1 = 0
+      this.value.bonus2 = 0
+      for (let disabled in this.disabled) {
+        this.disabled[disabled] = false
+      }
       this.getScoreTeam()
     },
     /**
-     * [getScoreTeam description]
-     * @return {[type]} [description]
+     * Gets teams score
      */
     async getScoreTeam () {
-      console.log('hola')
       let { response } = await this.$services.getData(['confrontation', this.confrontationPlaying['id'], 'question-round'])
       if (response.status === 200) {
         this.scoreData(response.data)
       }
     },
     /**
-     * [scoreData description]
+     * Add score teams
      * @param  {[type]} data [description]
      * @return {[type]}      [description]
      */
@@ -416,13 +412,7 @@ export default {
         this.pointData['team1'] += Number(element['scoreA'])
         this.pointData['team2'] += Number(element['scoreB'])
       })
-      console.log(this.pointData)
-    },
-    /**
-     * Gets questions random
-     */
-    questionRandom () {
-      this.dataPoints['question'] = this.question[Math.floor(Math.random() * 6)]
+      this.$socket.emit('saveRecords', this.pointData)
     },
     /**
      * Translates the tags in template
