@@ -8,7 +8,7 @@
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
               {{translateLabel('timekeeper', 'teamA')}}
               {{
-                (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'] : ''
+                (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'].toUpperCase() : ''
               }}
             </q-toolbar-title>
           </div>
@@ -16,7 +16,7 @@
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
               {{translateLabel('timekeeper', 'teamB') }}
               {{
-                (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'] : ''
+                (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'].toUpperCase() : ''
               }}
             </q-toolbar-title>
           </div>
@@ -97,31 +97,6 @@
     </q-toolbar>
   </q-page>
 </template>
-
-<style>
-.title {
-  background-color: white;
-  padding: 20px;
-  margin-inline-start: 10px;
-}
-.buttonQ {
-  margin-inline-start: 40px;
-}
-.score {
-  margin-inline-start: 330px;
-  margin-top: 50px;
-}
-.title1 {
-  margin-top: 1000px;
-}
-.buttonF {
-  margin-inline-start: 10px;
-}
-.buttonG {
-  margin-inline-start: 10px;
-}
-</style>
-
 <script>
 import { mapActions, mapGetters } from 'vuex'
 export default {
@@ -163,6 +138,10 @@ export default {
        * @type {Number}
        */
       setIntervalQuestion: null,
+      /**
+       * Data confrontations playing
+       * @type {Object}
+       */
       confrontationPlaying: {}
     }
   },
@@ -170,17 +149,17 @@ export default {
     ...mapGetters(['confrontations/confrontationsdGetter'])
   },
   sockets: {
+    /**
+     * Time confronation
+     * @param  {Object} time confrontations
+     */
     time (time) {
       this.secondsRound = time.secondsRound
       this.minutesRound = time.minutesRound
     },
-    timeQuestion (secondsQuestion) {
-      this.secondsQuestion = secondsQuestion
-    },
     /**
-     * [confrontationsPlaying description]
-     * @param  {[type]} confrontation [description]
-     * @return {[type]}               [description]
+     * sets confrontation playing
+     * @param  {Array} confrontation
      */
     confrontationsPlaying (confrontation) {
       this.confrontationPlaying = confrontation[0]
@@ -242,7 +221,7 @@ export default {
      */
     updateQuestion () {
       this.secondsQuestion -= 1
-      if (this.secondsQuestion <= 0) {
+      if (this.secondsQuestion < 0) {
         this.restartQuestion()
       }
       this.$socket.emit('temporizatorQuestion', this.secondsQuestion)
@@ -282,3 +261,27 @@ export default {
   }
 }
 </script>
+
+<style>
+.title {
+  background-color: white;
+  padding: 20px;
+  margin-inline-start: 10px;
+}
+.buttonQ {
+  margin-inline-start: 40px;
+}
+.score {
+  margin-inline-start: 330px;
+  margin-top: 50px;
+}
+.title1 {
+  margin-top: 1000px;
+}
+.buttonF {
+  margin-inline-start: 10px;
+}
+.buttonG {
+  margin-inline-start: 10px;
+}
+</style>

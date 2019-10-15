@@ -9,7 +9,7 @@
       <div class="col-3">
         <q-input outlined
           style="font-size: 25px"
-          :placeholder="(confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'] : ''"
+          :placeholder="(confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'].toUpperCase() : ''"
           disable/>
       </div>
       <div class="col-auto q-mt-md q-ml-xl">
@@ -20,7 +20,7 @@
       <div class="col-3">
         <q-input outlined
           style="font-size: 25px"
-          :placeholder="(confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'] : ''"
+          :placeholder="(confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'].toUpperCase() : ''"
           disable/>
       </div>
     </div>
@@ -86,14 +86,14 @@
         color="accent"
         label="Bonus"
         :disabled="statusButton"
-        @click="getRandomQuestions('bonus')"/>
+        @click="nextOrbonus('bonus')"/>
       <q-space></q-space>
       <q-btn class="q-px-xl q-py-xs"
         style="font-size: 25px"
         align="center"
         color="accent"
         label="next"
-        @click="getRandomQuestions('tossup')"/>
+        @click="nextOrbonus('tossup')"/>
       <q-space></q-space>
     </q-toolbar>
     <q-toolbar class="spe">
@@ -182,6 +182,17 @@ export default {
   },
   methods: {
     /**
+     * next question
+     * @param  {String} typeQuestion type quesrtion
+     */
+    nextOrbonus (typeQuestion) {
+      this.statusButton = true
+      this.updateQuestion(this.question['id'])
+      setTimeout(() => {
+        this.getRandomQuestions(typeQuestion)
+      }, 100)
+    },
+    /**
      * Set question
      * @return {[type]} [description]
      */
@@ -193,6 +204,16 @@ export default {
       }
       let { response } = await this.$services.getData(['questions'], params)
       this.$socket.emit('getQuestion', response.data[0])
+    },
+    /**
+     * Update state question
+     * @param  {Number} id question
+     */
+    async updateQuestion (id) {
+      let data = {
+        status: 'played'
+      }
+      await this.$services.putData(['questions', id], data)
     }
   }
 }

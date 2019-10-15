@@ -312,7 +312,6 @@ export default {
      * @param  {Object} question
      */
     lastQuestion (question) {
-      console.log(question)
       this.question = question
     },
     /**
@@ -363,9 +362,10 @@ export default {
       this.pointQuestion['questionId'] = this.question['id']
       this.pointQuestion['teamA'] = this.confrontationPlaying['TeamA']['id']
       this.pointQuestion['teamB'] = this.confrontationPlaying['TeamB']['id']
-      if (this.question.typeQuestion === 'bonus' && this.value.bonus1) {
-        this.pointQuestion.scoreA = this.value.bonus1
-      } else {
+      if (this.question.typeQuestion === 'bonus') {
+        if (this.value.bonus1) {
+          this.pointQuestion.scoreA = this.value.bonus1
+        }
         this.pointQuestion.scoreB = this.value.bonus2
       }
       await this.$services.postData(
@@ -391,8 +391,7 @@ export default {
       this.getScoreTeam()
     },
     /**
-     * [getScoreTeam description]
-     * @return {[type]} [description]
+     * Gets teams score
      */
     async getScoreTeam () {
       let { response } = await this.$services.getData(['confrontation', this.confrontationPlaying['id'], 'question-round'])
@@ -401,7 +400,7 @@ export default {
       }
     },
     /**
-     * [scoreData description]
+     * Add score teams
      * @param  {[type]} data [description]
      * @return {[type]}      [description]
      */

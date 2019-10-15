@@ -22,7 +22,7 @@
               <div class="col-12">
                 <q-toolbar-title class="text-h3 text-center text-primary text-bold">
                   {{
-                    (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'] : ''
+                    (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'].toUpperCase() : ''
                   }}
                 </q-toolbar-title>
               </div>
@@ -37,7 +37,7 @@
               <div class="col-12">
                 <q-toolbar-title class="text-h3 text-center text-primary text-bold">
                   {{
-                    (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'] : ''
+                    (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'].toUpperCase() : ''
                   }}
                 </q-toolbar-title>
               </div>

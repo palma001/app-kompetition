@@ -75,9 +75,12 @@
           :columns="columns"
           row-key="name"
           color="info"
-          binary-state-sort>
+          :visible-columns="visibleColumns">
           <template v-slot:body="props">
             <q-tr :props="props">
+              <q-td key="id" :props="props">
+                {{ props.row.id }}
+              </q-td>
               <q-td key="questionId" :props="props">
                 {{ props.row.questionId }}
               </q-td>
@@ -98,6 +101,22 @@
               </q-td>
               <q-td key="numberUpdate" :props="props">
                 {{ props.row.numberUpdate }}
+              </q-td>
+            </q-tr>
+          </template>
+          <template v-slot:bottom-row>
+            <q-tr class="bg-primary text-white">
+              <q-td colspan="2">
+                Summary:
+              </q-td>
+              <q-td>
+                {{ points.team1 }}
+              </q-td>
+              <q-td colspan="2">
+                {{ points.team2 }}
+              </q-td>
+              <q-td>
+                {{ numberEdit }}
               </q-td>
             </q-tr>
           </template>
@@ -176,6 +195,16 @@ export default {
   data () {
     return {
       /**
+       * Total points
+       * @type {Object}
+       */
+      points: null,
+      /**
+       * Columns visible in table
+       * @type {Array}
+       */
+      visibleColumns: ['id', 'questionId', 'scoreA', 'scoreB', 'btn', 'numberUpdate'],
+      /**
        * Drawer menu
        * @type {Boolean}
        */
@@ -195,6 +224,13 @@ export default {
        * @type {Array}
        */
       columns: [
+        {
+          name: 'id',
+          label: 'id',
+          align: 'center',
+          field: 'id',
+          sortable: true
+        },
         {
           name: 'questionId',
           label: 'QID',
@@ -278,6 +314,13 @@ export default {
      */
     disabledBonus (data) {
       this.getScoreTeam()
+    },
+    /**
+     * Point teams
+     * @param  {Object} point teams
+     */
+    pointsTeams (point) {
+      this.points = point
     }
   },
   created () {
@@ -288,7 +331,18 @@ export default {
     }, 200)
   },
   computed: {
-    ...mapGetters(['login/dataUser'])
+    ...mapGetters(['login/dataUser']),
+    /**
+     * Number edit
+     * @return {Number} number edit
+     */
+    numberEdit () {
+      let numberEdit = 0
+      this.data.forEach((element, index) => {
+        numberEdit += Number(element['numberUpdate'])
+      })
+      return numberEdit
+    }
   },
   methods: {
     /**
@@ -354,8 +408,12 @@ export default {
      * @param {String} date formating
      */
     dateFormat (date) {
-      date = new Date(date)
-      date = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+      if (date) {
+        date = new Date(date)
+        date = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+      } else {
+        date = ''
+      }
       return date
     },
     ...mapActions(
