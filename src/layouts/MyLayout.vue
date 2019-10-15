@@ -148,7 +148,7 @@
             <div class="col-6">
               <q-input outlined
                 style="font-size: 25px"
-                :placeholder="dateFormat(confrontation['TimeDurationId']['timeStart'])"
+                :placeholder="dateFormat(confrontation['timeStart'])"
                 disable/>
             </div>
           </div>
@@ -161,7 +161,7 @@
             <div class="col-6">
               <q-input outlined
                 style="font-size: 25px"
-                :placeholder="dateFormat(confrontation['TimeDurationId']['timeStop'])"
+                :placeholder="dateFormat(confrontation['timeStop'])"
                 disable/>
             </div>
           </div>
