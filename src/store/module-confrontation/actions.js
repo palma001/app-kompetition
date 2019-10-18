@@ -5,19 +5,22 @@
  */
 export async function getConfrontations ({ commit, dispatch }, payload) {
   const { params, vm } = payload
-  // vm.$services.getData(['events', eventId, 'phase'], status)
-  //   .then(res => {
+  let events = await vm.$services.getData(['events'], { done: false })
+  let phases = await vm.$services.getData([
+    'events',
+    events['response']['data'][0]['id'],
+    'phase'
+  ], { status: 'toPlay' })
+
   let { response } = await vm.$services.getData(
     [
-      'events',
-      params.eventId,
-      params.phaseId,
+      'phase',
+      phases['response']['data'][0]['id'],
       'confrontation'
     ],
     (params.query) ? params.query : {}
   )
   vm.$socket.emit('confrontations', response.data)
-  // })
 }
 /**
  * Sets value of confrontation
@@ -26,19 +29,22 @@ export async function getConfrontations ({ commit, dispatch }, payload) {
  */
 export async function getConfrontationsPlaying ({ commit }, payload) {
   const { params, vm } = payload
-  // vm.$services.getData(['events', eventId, 'phase'], status)
-  //   .then(res => {
+  let events = await vm.$services.getData(['events'], { done: false })
+  let phases = await vm.$services.getData([
+    'events',
+    events['response']['data'][0]['id'],
+    'phase'
+  ], { status: 'toPlay' })
+
   let { response } = await vm.$services.getData(
     [
-      'events',
-      params.eventId,
-      params.phaseId,
+      'phase',
+      phases['response']['data'][0]['id'],
       'confrontation'
     ],
     (params.query) ? params.query : {}
   )
   vm.$socket.emit('confrontationsPlaying', response.data)
-  // })
 }
 
 export function getAllConfrontations ({ commit }, payload) {

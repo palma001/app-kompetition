@@ -1,22 +1,25 @@
 const routes = [
   {
-    path: '/login',
+    path: '/',
     component: () => import('layouts/login.vue'),
     children: [
-      { path: '', component: () => import('pages/Login.vue') }
+      {
+        path: '/',
+        component: () => import('pages/Login.vue'),
+        name: 'login'
+      }
     ]
   },
   {
-    path: '/scoreKeeper',
-    name: 'scoreKeeper',
+    path: '/scorekeeper',
     component: () => import('layouts/MyLayout.vue'),
     children: [
       {
         path: '',
+        name: 'scorekeeper',
         component: () => import('pages/ScoreKeeperComponent.vue'),
         meta: {
-          authenticate: true,
-          rols: 'scoreKeeper'
+          authenticate: true
         }
       }
     ]
@@ -25,28 +28,56 @@ const routes = [
     path: '/dashboard',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/dashboardComponent.vue') }
+      {
+        path: '',
+        name: 'dashboard',
+        component: () => import('pages/dashboardComponent.vue'),
+        meta: {
+          authenticate: true
+        }
+      }
     ]
   },
   {
     path: '/moderator',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/ModeratorComponent.vue') }
+      {
+        path: '',
+        name: 'moderator',
+        component: () => import('pages/ModeratorComponent.vue'),
+        meta: {
+          authenticate: true
+        }
+      }
     ]
   },
   {
-    path: '/timeKeeper',
+    path: '/timekeeper',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/TimeKeeperComponent.vue') }
+      {
+        path: '',
+        name: 'timeKeeper',
+        component: () => import('pages/TimeKeeperComponent.vue'),
+        meta: {
+          authenticate: true
+        }
+      }
     ]
   },
   {
-    path: '/generalScreen',
+    path: '/generalscreen',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/GeneralScreenComponent.vue') }
+      {
+        path: '',
+        name: 'generalScreen',
+        component: () => import('pages/GeneralScreenComponent.vue'),
+        meta: {
+          authenticate: false
+        }
+      }
     ]
   }
 ]

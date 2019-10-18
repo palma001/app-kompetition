@@ -106,14 +106,8 @@
         align="center"
         color="accent"
         label="next"
+        :disabled="status"
         @click="nextOrbonus('tossup')"/>
-      <q-space></q-space>
-    </q-toolbar>
-    <q-toolbar
-      class="spe">
-      <img
-        src="~assets/speTrans.png"
-        style="height: 150px">
       <q-space></q-space>
     </q-toolbar>
   </q-page>
@@ -153,12 +147,12 @@ export default {
   data () {
     return {
       /**
-       * [question description]
-       * @type {[type]}
+       * List questions
+       * @type {Array}
        */
       question: [],
       /**
-       * [confrontationPlaying description]
+       * Confrontations playing
        * @type {Object}
        */
       confrontationPlaying: {},
@@ -167,7 +161,16 @@ export default {
        * @type {Boolean}
        */
       statusButton: true,
-      error: ''
+      /**
+       * Error messagge
+       * @type {String}
+       */
+      error: '',
+      /**
+       * Status buttons
+       * @type {Boolean}
+       */
+      status: true
     }
   },
   sockets: {
@@ -191,6 +194,13 @@ export default {
      */
     disabledBonus (status) {
       this.statusButton = status
+    },
+    /**
+     * Status buttons
+     * @type {Boolean}
+     */
+    statusButton (status) {
+      this.status = status
     }
   },
   created () {

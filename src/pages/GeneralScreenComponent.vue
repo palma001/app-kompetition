@@ -65,7 +65,7 @@
                   align="center"
                   outline
                   disable
-                  :label="(points) ? points.team1 : ''" />
+                  :label="(points) ? points.teamA : ''" />
               </div>
               <div class="col-12 q-mt-xs">
                 <q-toolbar-title class="text-h3 text-center text-primary text-bold">
@@ -82,7 +82,7 @@
                   align="center"
                   outline
                   disable
-                  :label="(points) ? points.team2 : ''" />
+                  :label="(points) ? points.teamB : ''" />
               </div>
               <div class="col-12 q-mt-xs">
                 <q-toolbar-title class="text-h3 text-center text-primary text-bold">
@@ -94,12 +94,6 @@
         </div>
       </div>
     </div>
-    <q-toolbar>
-      <img src="~assets/speTrans.png"
-        class="q-mt-xs self-end"
-        style="height: 150px">
-      <q-space></q-space>
-    </q-toolbar>
   </q-page>
 </template>
 

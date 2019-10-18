@@ -58,7 +58,7 @@
                 align="center"
                 outline
                 text-color="primary">
-                {{ pointData.team1 }}
+                {{ pointData.teamA }}
               </q-btn>
             </div>
           </div>
@@ -69,7 +69,6 @@
               <q-btn
                 color="positive"
                 class="buttonF"
-                ref="buttonG"
                 :disabled="disabled.add1">
                 <q-icon center
                   size="50px"
@@ -79,7 +78,6 @@
               <q-btn
                 color="negative"
                 class="buttonF"
-                ref="buttonF"
                 :disabled="disabled.sub1">
                 <q-icon
                   center
@@ -129,7 +127,7 @@
                 align="center"
                 outline
                 text-color="secondary">
-                {{ pointData.team2 }}
+                {{ pointData.teamB }}
               </q-btn>
             </div>
           </div>
@@ -178,6 +176,7 @@
           <q-btn
             color="positive"
             :loading="submitting"
+            :disabled="status"
             @click="saveRecords">
             <q-icon
               left
@@ -191,11 +190,6 @@
         </div>
       </div>
     </div>
-    <q-toolbar>
-      <img src="~assets/speTrans.png"
-        style="height: 150px">
-      <q-space></q-space>
-    </q-toolbar>
   </q-page>
 </template>
 
@@ -252,18 +246,8 @@ export default {
        * @type {Array}
        */
       pointData: {
-        team1: 0,
-        team2: 0
-      },
-      /**
-       * Data os points teams
-       * @type {Object}
-       */
-      dataPoints: {
-        id: null,
-        A: 0,
-        B: 0,
-        question: null
+        teamA: 0,
+        teamB: 0
       },
       /**
        * Data confrontations
@@ -289,10 +273,21 @@ export default {
         numberUpdate: 0,
         created_by: 'ss',
         updated_by: 'sss'
-      }
+      },
+      /**
+       * Status app
+       * @param {Boolean}
+       */
+      status: true
     }
   },
   sockets: {
+    /**
+     * Status buttons
+     */
+    statusButton (status) {
+      this.status = status
+    },
     /**
      * Capture event the socket
      * @param  {Array} question question
@@ -306,6 +301,7 @@ export default {
      */
     confrontationsPlaying (confrontation) {
       this.confrontationPlaying = confrontation[0]
+      this.getScoreTeam()
     },
     /**
      * Last question
@@ -376,7 +372,7 @@ export default {
         ],
         this.pointQuestion
       )
-      if (this.pointQuestion.scoreA > 0 || this.pointQuestion.scoreB > 0) {
+      if ((this.pointQuestion.scoreA > 0 || this.pointQuestion.scoreB > 0) && this.question.typeQuestion !== 'bonus') {
         this.$socket.emit('disabledBonus', false)
       } else {
         this.$socket.emit('disabledBonus', true)
@@ -401,16 +397,15 @@ export default {
     },
     /**
      * Add score teams
-     * @param  {[type]} data [description]
-     * @return {[type]}      [description]
+     * @param  {Array} data
      */
     scoreData (data) {
       for (let score in this.pointData) {
         this.pointData[score] = 0
       }
       data.forEach((element, index) => {
-        this.pointData['team1'] += Number(element['scoreA'])
-        this.pointData['team2'] += Number(element['scoreB'])
+        this.pointData['teamA'] += Number(element['scoreA'])
+        this.pointData['teamB'] += Number(element['scoreB'])
       })
       this.$socket.emit('saveRecords', this.pointData)
     },

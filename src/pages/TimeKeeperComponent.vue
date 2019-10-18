@@ -61,40 +61,41 @@
               Time
             </q-toolbar-title>
           </div>
+          <div class="col-12">
+            <!-- Toolbar time adicional -->
+            <q-toolbar>
+              <q-space></q-space>
+              <q-btn class="q-px-xl q-py-xs"
+                style="font-size: 30px"
+                align="center"
+                color="accent"
+                label="restart"
+                @click="restartQuestion" />
+              <q-space></q-space>
+              <q-btn size="35px"
+                class="q-px-xl q-py-xs"
+                align="center"
+                outline
+                disable
+                :label="secondsQuestion"/>
+              <q-space></q-space>
+              <q-btn class="q-px-xl q-py-xs"
+                style="font-size: 30px"
+                align="center"
+                color="accent"
+                label="Start"
+                @click="startQuestion"/>
+              <q-space></q-space>
+            </q-toolbar>
+          </div>
         </div>
-        <!-- Toolbar time adicional -->
-        <q-toolbar>
-          <q-space></q-space>
-          <q-btn class="q-px-xl q-py-xs"
-            style="font-size: 30px"
-            align="center"
-            color="accent"
-            label="restart"
-            @click="restartQuestion" />
-          <q-space></q-space>
-          <q-btn size="35px"
-            class="q-px-xl q-py-xs"
-            align="center"
-            outline
-            disable
-            :label="secondsQuestion"/>
-          <q-space></q-space>
-          <q-btn class="q-px-xl q-py-xs"
-            style="font-size: 30px"
-            align="center"
-            color="accent"
-            label="Start"
-            @click="startQuestion"/>
-          <q-space></q-space>
-        </q-toolbar>
+        <div class="row justify-end q-mr-xl">
+          <div class="col-auto q-mt-xl">
+            <q-btn color="positive"  style="font-size: 25px" label="Finish" @click="finishConfrontation" />
+          </div>
+        </div>
       </div>
     </div>
-    <q-toolbar>
-      <img src="~assets/speTrans.png"
-        class="q-mt-xs self-end"
-        style="height: 150px">
-      <q-space></q-space>
-    </q-toolbar>
   </q-page>
 </template>
 <script>
@@ -142,7 +143,12 @@ export default {
        * Data confrontations playing
        * @type {Object}
        */
-      confrontationPlaying: {}
+      confrontationPlaying: {},
+      /**
+       * Point teams
+       * @type {Object}
+       */
+      points: null
     }
   },
   computed: {
@@ -163,6 +169,13 @@ export default {
      */
     confrontationsPlaying (confrontation) {
       this.confrontationPlaying = confrontation[0]
+    },
+    /**
+     * Point teams
+     * @param  {Object} point teams
+     */
+    pointsTeams (point) {
+      this.points = point
     }
   },
   methods: {
@@ -175,13 +188,9 @@ export default {
         this.minutesRound -= 1
         this.secondsRound = 59
       }
-      if (this.minutesRound === 0) {
+      if (this.minutesRound === 0 && this.secondsRound < 0) {
         this.minutesRound = 10
         this.secondsRound = 0
-        let data = {
-          timeStop: this.dateFormat(Date())
-        }
-        this.updateConfrontations(data)
         this.stopTimer()
       }
       this.$socket.emit('temporizator', {
@@ -199,13 +208,33 @@ export default {
       }
     },
     /**
+     * Finish confrontations
+     */
+    finishConfrontation () {
+      let data = {
+        timeStop: this.dateFormat(Date()),
+        status: 'played'
+      }
+      this.$socket.emit('statusButton', true)
+      this.minutesRound = 10
+      this.secondsRound = 0
+      this.updateConfrontations(data)
+      // this.nextPhase()
+      this.stopTimer()
+    },
+    // nextPhase () {
+    //   console.log(this.points)
+    //   console.log(this.confrontationPlaying)
+    // },
+    /**
      * Start Temporizator
      */
     startTimer () {
       if (!this.stop) {
         this.stop = true
         this.setInterval = setInterval(this.updateCounter, 1000)
-        if (this.minutesRound === 10) {
+        this.$socket.emit('statusButton', false)
+        if (this.minutesRound === 10 && !this.confrontationPlaying.timeStart) {
           let data = {
             timeStart: this.dateFormat(Date())
           }
@@ -218,7 +247,8 @@ export default {
      * @param  {object} data request
      */
     async updateConfrontations (data) {
-      await this.$services.putData(['events', 1, 1, 'confrontation', this.confrontationPlaying['id']], data)
+      await this.$services.putData(['phase', this.confrontationPlaying['phaseId'], 'confrontation', this.confrontationPlaying['id']], data)
+      this.$socket.emit('refreshConfrontations')
     },
     /**
      * Date Format

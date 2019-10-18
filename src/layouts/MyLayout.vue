@@ -50,7 +50,7 @@
       :width="600"
       :breakpoint="500"
       :mini-width="20">
-      <div v-if="route === '/scoreKeeper'">
+      <div v-if="route === '/scorekeeper'">
         <div class="row bg-primary text-white text-h6 text-center"
           style="height: 30px">
           <div class="col">Regular round #1</div>
@@ -110,10 +110,10 @@
                 Summary:
               </q-td>
               <q-td>
-                {{ points.team1 }}
+                {{ points.teamA }}
               </q-td>
               <q-td colspan="2">
-                {{ points.team2 }}
+                {{ points.teamA }}
               </q-td>
               <q-td>
                 {{ numberEdit }}
@@ -122,7 +122,7 @@
           </template>
         </q-table>
       </div>
-      <div v-if="route === '/timeKeeper'">
+      <div v-if="route === '/timekeeper'">
         <div v-for="(confrontation, index) in confrontations" :key="confrontation.id">
           <div class="row bg-primary text-white text-h5 text-center"
             style="height: 30px">
@@ -174,7 +174,7 @@
             <div class="col-6">
               <q-input outlined
                 style="font-size: 25px"
-                placeholder=""
+                :placeholder="(confrontation['duration']) ? confrontation['duration'] : ''"
                 disable/>
             </div>
           </div>
@@ -184,6 +184,11 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+      <q-toolbar>
+        <img src="../assets/speTrans.png"
+          style="height: 150px; position: fixed; bottom: 1px">
+        <q-space></q-space>
+      </q-toolbar>
   </q-layout>
 </template>
 
@@ -267,10 +272,8 @@ export default {
        * @type {Object}
        */
       params: {
-        eventId: 1,
-        phaseId: 1,
         query: {
-          status: 'playing'
+          status: 'toPlay'
         }
       },
       /**
@@ -321,6 +324,13 @@ export default {
      */
     pointsTeams (point) {
       this.points = point
+    },
+    /**
+     * Refresh time confrontations
+     */
+    refreshConfrontations () {
+      this.getAllConfrontations()
+      this.getScoreTeam()
     }
   },
   created () {
@@ -368,7 +378,7 @@ export default {
     logout () {
       this['login/logout']()
         .then(res => {
-          this.$router.push({ path: '/login' })
+          this.$router.push({ path: '/' })
         })
     },
     /**
@@ -376,8 +386,6 @@ export default {
      */
     getAllConfrontations () {
       let params = {
-        eventId: 1,
-        phaseId: 1,
         status: 'toPlay'
       }
       this['confrontations/getConfrontations']({ params: params, vm: this })
@@ -386,11 +394,7 @@ export default {
      * Gets Score team
      */
     async getScoreTeam () {
-      let params = {
-        sort: 'desc',
-        sorteField: 'id'
-      }
-      let { response } = await this.$services.getData(['confrontation', this.confrontationPlaying['id'], 'question-round'], params)
+      let { response } = await this.$services.getData(['confrontation', this.confrontationPlaying['id'], 'question-round'])
       if (response.status === 200) {
         this.data = response.data
       }
