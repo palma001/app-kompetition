@@ -6,7 +6,10 @@ const routes = [
       {
         path: '/',
         component: () => import('pages/Login.vue'),
-        name: 'login'
+        name: 'login',
+        meta: {
+          authenticate: false
+        }
       }
     ]
   },
@@ -58,7 +61,7 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'timeKeeper',
+        name: 'timekeeper',
         component: () => import('pages/TimeKeeperComponent.vue'),
         meta: {
           authenticate: true
@@ -79,13 +82,25 @@ const routes = [
         }
       }
     ]
+  },
+  {
+    path: '/sortingScreen',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('pages/SortingScreen.vue')
+      }
+    ]
   }
 ]
 // Always leave this as last one
 if (process.env.MODE !== 'ssr') {
   routes.push({
     path: '*',
-    component: () => import('pages/Error404.vue')
+    redirect: {
+      name: 'login'
+    }
   })
 }
 

@@ -22,10 +22,10 @@ export function login ({ commit, dispatch }, payload) {
         payload.this.$services
           .getData(['users', res.data])
           .then(res => {
-            payload.this.$router.push({
-              path: '/' + res.response.data.rols
-            })
             commit('updateData', res.response.data)
+            payload.this.$router.push({
+              name: res.response.data.rols
+            })
           })
         commit('updateToken', res.token)
       }

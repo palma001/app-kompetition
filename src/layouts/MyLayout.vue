@@ -11,7 +11,7 @@
           <div class="row" @click="logout">
             <div class="text-h5">
               {{
-                this['login/dataUser']['rols']
+                translateComponent(this['login/dataUser']['rols'])
               }}
               <q-avatar
                 color="purple-9"
@@ -35,7 +35,7 @@
               @click="drawer = !drawer"
               icon="menu"
               aria-label="Menu"
-              v-if="route !== '/moderator' && route !== '/generalScreen'"/>
+              v-if="route !== 'moderator' && route !== 'generalScreen'"/>
           </div>
         </div>
       </q-toolbar>
@@ -50,7 +50,7 @@
       :width="600"
       :breakpoint="500"
       :mini-width="20">
-      <div v-if="route === '/scorekeeper'">
+      <div v-if="route === 'scorekeeper'">
         <div class="row bg-primary text-white text-h6 text-center"
           style="height: 30px">
           <div class="col">Regular round #1</div>
@@ -58,13 +58,13 @@
         <div class="row bg-primary text-grey-1 text-h6 text-center"
           style="height: 40px">
           <div class="col-6">
-            {{ translateLabel('timekeeper', 'teamA')}}:
+            {{ translateLabel('timekeeperEntity', 'teamA')}}:
             {{
               (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'].toUpperCase() : ''
             }}
           </div>
           <div class="col-6">
-            {{ translateLabel('timekeeper', 'teamB') }}:
+            {{ translateLabel('timekeeperEntity', 'teamB') }}:
             {{
               (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'].toUpperCase() : ''
             }}
@@ -122,7 +122,7 @@
           </template>
         </q-table>
       </div>
-      <div v-if="route === '/timekeeper'">
+      <div v-if="route === 'timekeeper'">
         <div v-for="(confrontation, index) in confrontations" :key="confrontation.id">
           <div class="row bg-primary text-white text-h5 text-center"
             style="height: 30px">
@@ -131,11 +131,11 @@
           <div class="row bg-primary text-grey-1 text-h5 text-center"
             style="height: 40px">
             <div class="col-6">
-                {{translateLabel('timekeeper', 'teamA')}}:
+                {{translateLabel('timekeeperEntity', 'teamA')}}:
                 {{ (confrontation['TeamA']) ? confrontation['TeamA']['name'].toUpperCase() : '' }}
             </div>
             <div class="col-6">
-                {{translateLabel('timekeeper', 'teamB')}}:
+                {{translateLabel('timekeeperEntity', 'teamB')}}:
                 {{ (confrontation['TeamA']) ? confrontation['TeamB']['name'].toUpperCase() : '' }}
             </div>
           </div>
@@ -218,7 +218,7 @@ export default {
        * Name route
        * @type {String}
        */
-      route: this.$route.path,
+      route: this.$store.state.login.rols,
       /**
        * Date table
        * @type {Array}
@@ -378,7 +378,7 @@ export default {
     logout () {
       this['login/logout']()
         .then(res => {
-          this.$router.push({ path: '/' })
+          this.$router.push({ name: 'login' })
         })
     },
     /**
@@ -406,6 +406,13 @@ export default {
      */
     translateLabel (entity, message) {
       return this.$i18n.t(`template.${entity}.${message}.label`)
+    },
+    /**
+     * Translates the tags in template
+     * @param {String} message tag to translate
+     */
+    translateComponent (message) {
+      return this.$i18n.t(`template.${message}.label`)
     },
     /**
      * Date Format

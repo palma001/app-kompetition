@@ -6,7 +6,7 @@
         <div class="row q-pa-md q-pb-xl justify-around">
           <div class="col-5">
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
-              {{translateLabel('timekeeper', 'teamA')}}
+              {{translateLabel('timekeeperEntity', 'teamA')}}
               {{
                 (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'].toUpperCase() : ''
               }}
@@ -14,7 +14,7 @@
           </div>
           <div class="col-5">
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
-              {{translateLabel('timekeeper', 'teamB') }}
+              {{translateLabel('timekeeperEntity', 'teamB') }}
               {{
                 (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'].toUpperCase() : ''
               }}

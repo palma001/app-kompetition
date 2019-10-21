@@ -22,17 +22,17 @@ export default function ({ store, ssrContext }) {
     base: process.env.VUE_ROUTER_BASE
   })
   /**
-   * Verifyc if one user is login
-   */
+     * Verifyc if one user is login
+     */
   Router.beforeEach((to, from, next) => {
     let autorization = to.matched.some(record => record.meta.authenticate)
     let usuario = store.state.login.token
     let rols = store.state.login.rols
-    console.log(to.name, rols)
     if ((autorization && !usuario)) {
       next('/')
     } else if (to.name === 'login' && usuario) {
-      console.log(rols)
+      next(rols)
+    } else if (usuario && to.name !== rols) {
       next(rols)
     } else if (!autorization && usuario) {
       next()
