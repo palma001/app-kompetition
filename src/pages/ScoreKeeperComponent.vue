@@ -35,7 +35,7 @@
           <div class="row q-pa-md">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
               <q-toolbar-title class="text-h4 text-white text-center bg-accent">
-                {{ translateLabel('timekeeper', 'teamA') }}:
+                {{ translateLabel('timekeeperEntity', 'teamA') }}:
               </q-toolbar-title>
             </div>
             <div class="col-lg-9 col-md-8 col-sm-8 col-xs-8">
@@ -104,7 +104,7 @@
           <div class="row q-pa-md">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
               <q-toolbar-title class="text-h4 text-white text-center bg-secondary">
-                {{translateLabel('timekeeper', 'teamB')}}:
+                {{translateLabel('timekeeperEntity', 'teamB')}}:
               </q-toolbar-title>
             </div>
             <div class="col-lg-9 col-md-8 col-sm-8 col-xs-8">
@@ -260,7 +260,7 @@ export default {
        */
       question: null,
       /**
-       * [question description]
+       * Points questions
        * @type {Object}
        */
       pointQuestion: {

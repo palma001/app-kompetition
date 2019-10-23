@@ -147,7 +147,7 @@ export default {
        * Point teams
        * @type {Object}
        */
-      points: null
+      points: {}
     }
   },
   computed: {
@@ -176,6 +176,11 @@ export default {
     pointsTeams (point) {
       this.points = point
     }
+  },
+  created () {
+    setTimeout(() => {
+      this.nextPhase(this.confrontationPlaying)
+    }, 1000)
   },
   methods: {
     /**
@@ -218,13 +223,34 @@ export default {
       this.minutesRound = 10
       this.secondsRound = 0
       this.updateConfrontations(data)
-      // this.nextPhase()
+      this.nextPhase(this.confrontationPlaying)
       this.stopTimer()
     },
-    // nextPhase () {
-    //   console.log(this.points)
-    //   console.log(this.confrontationPlaying)
-    // },
+    async getConfrontationsNextPhase (phase, data) {
+      let { response } = await this.$services.getData(['phase', phase + 1, 'confrontation'])
+      data.phaseId += 1
+      delete data.timeStart
+      delete data.timeStop
+      if (response['data'] && response['data'].length > 0) {
+        console.log('update')
+        response['data'].map(element => {
+          if (!element['teamA']) {
+            
+          }
+        })
+        /* await this.$services.putData(['phase', phase, 'confrontation', response.data.id], data) */
+      } else {
+        delete data.id
+        await this.$services.postData(['phase', phase + 1, 'confrontation'], data)
+      }
+    },
+    nextPhase (data) {
+      this.points.teamA = 20
+      this.points.teamB = 10
+      if (this.points['teamA'] > this.points['teamB']) {
+        this.getConfrontationsNextPhase(data['phaseId'], data)
+      }
+    },
     /**
      * Start Temporizator
      */

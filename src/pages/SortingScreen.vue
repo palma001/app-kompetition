@@ -292,7 +292,6 @@ export default {
   },
   sockets: {
     confrontations (confrontations) {
-      this.confrontations = confrontations
       this.getScoreTeam(confrontations)
     }
   },
@@ -314,6 +313,7 @@ export default {
               }
             })
             this.confrontations.push(confrontation)
+            console.log(this.confrontations)
           })
       })
     }

@@ -113,7 +113,7 @@
                 {{ points.teamA }}
               </q-td>
               <q-td colspan="2">
-                {{ points.teamA }}
+                {{ points.teamB }}
               </q-td>
               <q-td>
                 {{ numberEdit }}
@@ -271,11 +271,7 @@ export default {
        * Params confrontation
        * @type {Object}
        */
-      params: {
-        query: {
-          status: 'toPlay'
-        }
-      },
+      params: {},
       /**
        * List confrontations
        * @type {Array}
@@ -386,7 +382,7 @@ export default {
      */
     getAllConfrontations () {
       let params = {
-        status: 'playing'
+        status: null
       }
       this['confrontations/getConfrontations']({ params: params, vm: this })
     },

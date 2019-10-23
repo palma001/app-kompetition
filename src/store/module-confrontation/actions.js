@@ -20,6 +20,7 @@ export async function getConfrontations ({ commit, dispatch }, payload) {
     ],
     (params.query) ? params.query : {}
   )
+  dispatch('getSorting', { vm: vm })
   vm.$socket.emit('confrontations', response.data)
 }
 /**
@@ -46,25 +47,11 @@ export async function getConfrontationsPlaying ({ commit }, payload) {
   )
   vm.$socket.emit('confrontationsPlaying', response.data)
 }
-
-export function getAllConfrontations ({ commit }, payload) {
-  const { params, vm } = payload
-  vm.$services.getData(
-    [
-      'events',
-      params.eventId,
-      params.phaseId,
-      'confrontation'
-    ],
-    {
-      status: params.status
-    }
-  )
-    .then(res => {
-      commit('updateStateAllConfrontation', res.response.data)
-    })
+export async function getSorting ({ commit }, payload) {
+  let { vm } = payload
+  let { response } = vm.$services.getData(['phase', 0, 'confrontation'])
+  console.log(response)
 }
-
 export function addStartTime ({ commit }, payload) {
   const { vm, params } = payload
   vm.$services.postData([''], params.request)
