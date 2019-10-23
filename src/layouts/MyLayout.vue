@@ -7,7 +7,7 @@
           PetroBowl
         </q-toolbar-title>
         <q-space></q-space>
-        <div>
+        <div v-if="route">
           <div class="row" @click="logout">
             <div class="text-h5">
               {{
@@ -126,7 +126,7 @@
         <div v-for="(confrontation, index) in confrontations" :key="confrontation.id">
           <div class="row bg-primary text-white text-h5 text-center"
             style="height: 30px">
-            <div class="col">Regular round {{index + 1}}</div>
+            <div class="col">Phase {{ confrontation['phaseId'] }} regular round {{index + 1}}</div>
           </div>
           <div class="row bg-primary text-grey-1 text-h5 text-center"
             style="height: 40px">
@@ -184,9 +184,9 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-      <q-toolbar>
+      <q-toolbar v-if="this.$route.name !== 'sortingScreen'">
         <img src="../assets/speTrans.png"
-          style="height: 150px; position: fixed; bottom: 1px">
+          style="height: 150px; position: fixed; bottom: 1px; opacity:.5">
         <q-space></q-space>
       </q-toolbar>
   </q-layout>
@@ -386,7 +386,7 @@ export default {
      */
     getAllConfrontations () {
       let params = {
-        status: 'toPlay'
+        status: 'playing'
       }
       this['confrontations/getConfrontations']({ params: params, vm: this })
     },

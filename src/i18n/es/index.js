@@ -6,6 +6,10 @@ export default {
       label: 'Moderator',
       meta: 'Moderator'
     },
+    time: {
+      label: 'Time',
+      meta: 'Time'
+    },
     scorekeeper: {
       label: 'Scorekeeper',
       meta: 'Scorekeeper'

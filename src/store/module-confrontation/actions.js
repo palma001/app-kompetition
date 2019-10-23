@@ -10,7 +10,7 @@ export async function getConfrontations ({ commit, dispatch }, payload) {
     'events',
     events['response']['data'][0]['id'],
     'phase'
-  ], { status: 'toPlay' })
+  ], { status: 'playing' })
 
   let { response } = await vm.$services.getData(
     [
@@ -34,7 +34,7 @@ export async function getConfrontationsPlaying ({ commit }, payload) {
     'events',
     events['response']['data'][0]['id'],
     'phase'
-  ], { status: 'toPlay' })
+  ], { status: 'playing' })
 
   let { response } = await vm.$services.getData(
     [

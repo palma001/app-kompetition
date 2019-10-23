@@ -25,7 +25,7 @@
         <div class="row q-pa-md justify-center">
           <div class="col-12">
             <q-toolbar-title class="q-mt-xl text-h3 text-center text-primary text-bold">
-              Time
+              {{ translateComponent('time') }}
             </q-toolbar-title>
           </div>
         </div>
@@ -58,37 +58,36 @@
         <div class="row q-pa-md justify-center">
           <div class="col-12">
             <q-toolbar-title class="q-mt-xl text-h3 text-center text-primary text-bold">
-              Time
+              {{ translateComponent('time') }}
             </q-toolbar-title>
           </div>
-          <div class="col-12">
-            <!-- Toolbar time adicional -->
-            <q-toolbar>
-              <q-space></q-space>
-              <q-btn class="q-px-xl q-py-xs"
-                style="font-size: 30px"
-                align="center"
-                color="accent"
-                label="restart"
-                @click="restartQuestion" />
-              <q-space></q-space>
-              <q-btn size="35px"
-                class="q-px-xl q-py-xs"
-                align="center"
-                outline
-                disable
-                :label="secondsQuestion"/>
-              <q-space></q-space>
-              <q-btn class="q-px-xl q-py-xs"
-                style="font-size: 30px"
-                align="center"
-                color="accent"
-                label="Start"
-                @click="startQuestion"/>
-              <q-space></q-space>
-            </q-toolbar>
-          </div>
         </div>
+        <!-- Toolbar time adicional -->
+        <q-toolbar>
+          <q-space></q-space>
+          <q-btn class="q-px-xl q-py-xs"
+            style="font-size: 30px;"
+            align="center"
+            color="accent"
+            label="restart"
+            @click="restartQuestion" />
+          <q-space></q-space>
+          <q-btn size="35px"
+            class="q-px-xl q-py-xs q-mr-lg"
+            style="width: 150px;"
+            align="center"
+            outline
+            disable
+            :label="secondsQuestion"/>
+          <q-space></q-space>
+          <q-btn class="q-px-xl q-py-xs"
+            style="font-size: 30px"
+            align="center"
+            color="accent"
+            label="Start"
+            @click="startQuestion"/>
+          <q-space></q-space>
+        </q-toolbar>
         <div class="row justify-end q-mr-xl">
           <div class="col-auto q-mt-xl">
             <q-btn color="positive"  style="font-size: 25px" label="Finish" @click="finishConfrontation" />
@@ -291,6 +290,13 @@ export default {
         this.stopQuestion = false
         clearInterval(this.setIntervalQuestion)
       }
+    },
+    /**
+     * Translates the tags in template
+     * @param {String} message tag to translate
+     */
+    translateComponent (message) {
+      return this.$i18n.t(`template.${message}.label`)
     },
     /**
      * Translates the tags in template
