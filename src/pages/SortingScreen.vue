@@ -14,7 +14,7 @@
               style="width: 120px"
               outline
               color="primary">
-                {{ confrontation['TeamA']['score'] }}
+                {{ (confrontation['TeamA']) ? confrontation['TeamA']['score'] : 0 }}
               </q-btn>
             <q-btn
               style="width: 150px"
@@ -22,7 +22,7 @@
               class="q-px-xl q-ml-md q-py-xs"
               align="center"
               color="primary"
-              :label="confrontation['TeamA']['name']" />
+              :label="(confrontation['TeamA']) ? confrontation['TeamA']['name'] : 'To play'" />
           </div>
           <div class="col-12 q-mt-md q-ml-xl" v-if="confrontation.phaseId === 1">
             <q-btn
@@ -32,7 +32,7 @@
               style="width: 120px"
               outline
               color="primary">
-              {{ confrontation['TeamB']['score'] }}
+              {{ (confrontation['TeamB']) ? confrontation['TeamB']['score'] : 0 }}
             </q-btn>
             <q-btn
               size="20px"
@@ -40,7 +40,7 @@
               class="q-px-xl q-ml-md q-py-xs"
               align="center"
               color="negative"
-              :label="confrontation['TeamB']['name']" />
+              :label="(confrontation['TeamB']) ? confrontation['TeamB']['name'] : 'To play'" />
           </div>
         </div>
       </div>
@@ -48,13 +48,13 @@
         <div class="row"
           v-for="(confrontation, index) in confrontations"
           :key="confrontation.id">
-          <div :class="(index > 0) ? 'col-12 q-mt-xl' : 'col-12 q-mt-xs'" v-if="confrontation.phaseId === 2">
+          <div :class="(index >= 1) ? 'col-12 q-mt-xl' : 'col-12'" v-if="confrontation.phaseId === 2">
             <q-btn size="20px"
               style="width: 150px"
               class="q-px-xl q-ml-md q-py-xs"
               align="center"
               color="primary"
-              :label="confrontation['TeamA']['name']" />
+              :label="(confrontation['TeamA']) ? confrontation['TeamA']['name'] : 'To play'" />
           </div>
           <div class="col-12 q-mt-xs" v-if="confrontation.phaseId === 2">
             <q-btn size="20px"
@@ -63,7 +63,7 @@
               style="width: 120px"
               outline
               color="primary">
-              {{ confrontation['TeamB']['score'] }}
+              {{ (confrontation['TeamB']) ? confrontation['TeamB']['score'] : 0 }}
             </q-btn>
           </div>
           <div class="col-12 q-mt-lg" v-if="confrontation.phaseId === 2">
@@ -71,16 +71,17 @@
               style="width: 150px; margin-top: 5px"
               class="q-px-xl q-ml-md q-py-xs"
               align="center"
-              color="primary"
-              :label="confrontation['TeamB']['name']" />
+              color="negative"
+              :label="(confrontation['TeamB']) ? confrontation['TeamB']['name'] : 'To play'" />
           </div>
           <div class="col-12 q-mt-xs" v-if="confrontation.phaseId === 2">
             <q-btn size="20px"
               class="q-px-xl q-py-xs button6"
               align="center"
               outline
+              style="width: 120px"
               color="primary">
-              {{ confrontation['TeamB']['score'] }}
+              {{ (confrontation['TeamB']) ? confrontation['TeamB']['score'] : 0 }}
             </q-btn>
           </div>
         </div>
@@ -257,7 +258,7 @@
   margin-top: 30px;
 }
 .button6 {
-  margin-left: 40px;
+  margin-left: 30px;
 }
 .button7 {
   margin-top: 60px;
@@ -291,7 +292,7 @@ export default {
     }
   },
   sockets: {
-    confrontations (confrontations) {
+    sorting (confrontations) {
       this.getScoreTeam(confrontations)
     }
   },
@@ -313,7 +314,7 @@ export default {
               }
             })
             this.confrontations.push(confrontation)
-            console.log(this.confrontations)
+            console.log(confrontation)
           })
       })
     }

@@ -136,7 +136,7 @@
             </div>
             <div class="col-6">
                 {{translateLabel('timekeeperEntity', 'teamB')}}:
-                {{ (confrontation['TeamA']) ? confrontation['TeamB']['name'].toUpperCase() : '' }}
+                {{ (confrontation['TeamB']) ? confrontation['TeamB']['name'].toUpperCase() : 'To Play' }}
             </div>
           </div>
           <div class="row q-pa-md justify-center">
@@ -271,7 +271,11 @@ export default {
        * Params confrontation
        * @type {Object}
        */
-      params: {},
+      params: {
+        query: {
+          status: 'TOPLAY'
+        }
+      },
       /**
        * List confrontations
        * @type {Array}

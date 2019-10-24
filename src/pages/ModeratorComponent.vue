@@ -225,7 +225,7 @@ export default {
     async getRandomQuestions (typeQuestion) {
       let params = {
         typeQuestion: typeQuestion,
-        status: 'toplay',
+        status: 'TOPLAY',
         random: true
       }
       let { response } = await this.$services.getData(['questions'], params)
@@ -243,7 +243,7 @@ export default {
      */
     async updateQuestion (id) {
       let data = {
-        status: 'played'
+        status: 'PLAYED'
       }
       await this.$services.putData(['questions', id], data)
     }
