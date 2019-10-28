@@ -3,13 +3,12 @@
     <img src="~assets/login.jpg" class="color" alt="">
     <div class="row justify-center">
       <div class="col-auto">
-        <div class="q-pa-xl bg-login bg-white">
-          <div class="title text-center ">
+        <div class="q-pa-xl bg-login bg-login">
+          <div class="title text-center">
             Login
           </div>
           <q-input
             filled
-            class="bg-white"
             ref="user"
             v-model="credentials.user"
             label="Usuario"
@@ -18,7 +17,6 @@
             @keyup.enter.native="login"
             :rules="[ val => val && val.length > 0 || 'El campo usuario no puede estar vacio']" />
           <q-input
-            class="bg-white"
             v-model="credentials.password"
             ref="password"
             filled
@@ -117,12 +115,14 @@ export default {
   position: absolute;
   width: 100%;
   height: 100vh;
+  object-fit: fill;
   z-index: -1;
 }
 .bg-login {
   width: 550px;
   margin-top: 50%;
   border-radius: 4px;
-  background: rgba(0,0,0,0.7);
+  background: white;
+  opacity: 0.9;
 }
 </style>
