@@ -223,19 +223,24 @@ export default {
      * @return {[type]} [description]
      */
     async getRandomQuestions (typeQuestion) {
-      let params = {
-        typeQuestion: typeQuestion,
-        status: 'TOPLAY',
-        random: true
-      }
-      let { response } = await this.$services.getData(['questions'], params)
-      if (!response.data[0]) {
-        this.error = {
-          error: true,
-          message: 'No questions available'
+      try {
+        let params = {
+          typeQuestion: typeQuestion,
+          status: 'TOPLAY',
+          random: true
         }
+        let res = await this.$services.getData(['questions'], params)
+        if (res.status) throw new Error('Error Server')
+        if (res.response.status === 204) throw new Error('Questions Empty')
+        this.$socket.emit('getQuestion', res.response.data[0])
+      } catch (e) {
+        this.$q.notify({
+          position: 'center',
+          color: 'orange',
+          icon: 'report_problem',
+          message: e.message
+        })
       }
-      this.$socket.emit('getQuestion', response.data[0])
     },
     /**
      * Update state question

@@ -428,7 +428,6 @@ export default {
           data: this.confrontationPlaying
         }
       )
-      this.$socket.emit('reloadPoint')
     },
     /**
      * Translates the tags in template

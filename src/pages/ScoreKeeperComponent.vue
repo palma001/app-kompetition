@@ -301,7 +301,6 @@ export default {
      */
     confrontationsPlaying (confrontation) {
       this.confrontationPlaying = confrontation[0]
-      this.getScoreTeam()
     },
     /**
      * Last question
@@ -327,9 +326,6 @@ export default {
   created () {
     this.$socket.emit('lastQuestion')
     this.$socket.emit('lastConfrontation')
-    setTimeout(() => {
-      this.getScoreTeam()
-    }, 200)
   },
   methods: {
     /**
@@ -407,9 +403,20 @@ export default {
      * Gets teams score
      */
     async getScoreTeam () {
-      let { response } = await this.$services.getData(['confrontation', this.confrontationPlaying['id'], 'question-round'])
-      if (response.status === 200) {
-        this.scoreData(response.data)
+      try {
+        let data = await this['confrontations/getDetailsRound']({
+          vm: this,
+          data: this.confrontationPlaying
+        })
+        if (data.length <= 0) throw new Error('Empty score')
+        this.scoreData(data)
+      } catch (e) {
+        this.$q.notify({
+          position: 'center',
+          color: 'orange',
+          icon: 'report_problem',
+          message: e.message
+        })
       }
     },
     /**
@@ -433,7 +440,7 @@ export default {
     translateLabel (entity, message) {
       return this.$i18n.t(`template.${entity}.${message}.label`)
     },
-    ...mapActions(['score/addQuestionRound', 'confrontations/addQuestionsRounds'])
+    ...mapActions(['confrontations/getDetailsRound', 'confrontations/addQuestionsRounds', 'confrontations/messageNotify'])
   }
 }
 </script>

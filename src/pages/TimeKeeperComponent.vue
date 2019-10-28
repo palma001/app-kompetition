@@ -234,7 +234,14 @@ export default {
       this.updateConfrontations(data)
       this.nextPhase(this.confrontationPlaying)
       this.stopTimer()
+      this.$socket.emit('reloadPoint')
     },
+    /**
+     * [getConfrontationsNextPhase description]
+     * @param  {[type]} team  [description]
+     * @param  {[type]} phase [description]
+     * @return {[type]}       [description]
+     */
     async getConfrontationsNextPhase (team, phase) {
       let { response } = await this.$services.getData(['phase', phase, 'confrontation'])
       if (response['data'] && response['data'].length > 0) {
@@ -250,6 +257,11 @@ export default {
         this.addConfrontations(team, phase)
       }
     },
+    /**
+     * [addConfrontations description]
+     * @param {[type]} team  [description]
+     * @param {[type]} phase [description]
+     */
     async addConfrontations (team, phase) {
       let data = {
         phaseId: phase,
@@ -284,6 +296,7 @@ export default {
         this.stop = true
         this.setInterval = setInterval(this.updateCounter, 1000)
         this.$socket.emit('statusButton', false)
+        this.$socket.emit('reloadPoint')
         if (this.minutesRound === 10 && !this.confrontationPlaying.timeStart) {
           let data = {
             timeStart: this.dateFormat(Date())
