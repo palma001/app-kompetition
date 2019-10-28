@@ -11,7 +11,6 @@ export async function getConfrontations ({ commit, dispatch }, payload) {
     events['response']['data'][0]['id'],
     'phase'
   ], { status: 'TOPLAY' })
-
   let { response } = await vm.$services.getData(
     [
       'phase',

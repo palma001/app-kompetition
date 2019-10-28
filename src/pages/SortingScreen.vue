@@ -48,7 +48,7 @@
         <div class="row"
           v-for="(confrontation, index) in confrontations"
           :key="confrontation.id">
-          <div :class="(index >= 1) ? 'col-12 q-mt-xl' : 'col-12'" v-if="confrontation.phaseId === 2">
+          <div :class="(index === 7) ? 'col-12 q-mt-lg' : (index === 8) ? 'col-12 q-mt-xl' : 'col-12'" v-if="confrontation.phaseId === 2">
             <q-btn size="20px"
               style="width: 150px"
               class="q-px-xl q-ml-md q-py-xs"
@@ -63,7 +63,7 @@
               style="width: 120px"
               outline
               color="primary">
-              {{ (confrontation['TeamB']) ? confrontation['TeamB']['score'] : 0 }}
+              {{ (confrontation['TeamA']) ? confrontation['TeamA']['score'] : 0 }}
             </q-btn>
           </div>
           <div class="col-12 q-mt-lg" v-if="confrontation.phaseId === 2">
@@ -86,39 +86,27 @@
           </div>
         </div>
       </div>
-      <div class="col-3 q-ml-lg">
-        <div class="row justify-end">
-          <div class="button7 col-auto">
+      <div class="col-3 col-lg-2 q-ml-lg">
+        <div class="row justify-end"
+          v-for="(confrontation, index) in confrontations"
+          :key="confrontation.id">
+          <div :class="(index === 10) ? 'button9 col-auto bg-pink' : 'button7 col-auto'"
+            v-if="confrontation.phaseId === 3">
             <q-btn size="20px"
               class="q-px-xl q-py-xs"
+              style="width: 150px;"
               color="primary"
               align="center"
-              label="UDO 26" />
+              :label="(confrontation['TeamA']) ? confrontation['TeamA']['name'] : 'To play'" />
           </div>
-          <div class="button8 col-auto q-mt-xl">
+          <div :class="(index === 10) ? 'lastnbutton col-auto bg-pink' : 'button8 col-auto'"
+            v-if="confrontation.phaseId === 3">
             <q-btn size="20px"
-              class="q-px-xl q-ml-md q-py-xs"
+              class="q-px-xl q-py-xs"
+              style="width: 150px"
+              color="primary"
               align="center"
-              color="negative"
-              label="UDO 25" />
-          </div>
-          <div class="button9 col-auto q-mt-xl">
-            <div class="row justify-end">
-              <div class="col-auto col-lg-7">
-                <q-btn size="20px"
-                  class="q-px-xl q-py-xs"
-                  align="center"
-                  color="primary"
-                  label="UDO 25" />
-              </div>
-              <div class="col-sm-6 col-md-6 col-lg-7 q-mt-xl">
-                <q-btn size="20px"
-                  class="q-px-xl"
-                  align="center"
-                  color="negative"
-                  label="UDO 25" />
-              </div>
-            </div>
+              :label="(confrontation['TeamB']) ? confrontation['TeamB']['name'] : 'To play'" />
           </div>
         </div>
       </div>
@@ -185,7 +173,7 @@
     margin-left: 0%;
   }
   .phase1 {
-    margin-left: -26%;
+    margin-left: -29%;
   }
   .phase2 {
     margin-left: 0%;
@@ -206,7 +194,6 @@
     margin-left: 0%;
   }
   .phase1 {
-    margin-top: -10px;
     margin-left: -10%;
   }
   .phase2 {
@@ -217,9 +204,6 @@
   }
   .button8 {
     margin-left: 170px;
-  }
-  .button9 {
-    margin-right: -30px;
   }
 }
 @media (min-width: 1800px) and (max-width: 3000px)  {
@@ -237,9 +221,6 @@
   }
   .button8 {
     margin-left: 170px;
-  }
-  .button9 {
-    margin-right: -30px;
   }
 }
 .button1 {
@@ -268,9 +249,11 @@
 }
 .button9 {
   margin-top: 230px;
+  float: right;
 }
-.button10 {
-  margin-top: 55px;
+.lastnbutton {
+  margin-top: 30px;
+  margin-left: 200px;
 }
 </style>
 
@@ -301,22 +284,24 @@ export default {
      * Gets Score team
      */
     getScoreTeam (data) {
+      this.confrontations = []
       data.map(confrontation => {
-        this.confrontations = []
+        if (confrontation.TeamA && confrontation.TeamB) {
+          confrontation.TeamA.score = 0
+          confrontation.TeamB.score = 0
+        }
         this.$services.getData(['confrontation', confrontation['id'], 'question-round'])
           .then(res => {
-            confrontation.TeamA.score = 0
-            confrontation.TeamB.score = 0
             res['response']['data'].map(score => {
               if (confrontation['id'] === score['confrontationId']) {
                 confrontation.TeamA.score += Number(score['scoreA'])
                 confrontation.TeamB.score += Number(score['scoreB'])
               }
             })
-            this.confrontations.push(confrontation)
-            console.log(confrontation)
           })
+        this.confrontations.push(confrontation)
       })
+      this.$socket.emit('sortingPoint', this.confrontations)
     }
   }
 }

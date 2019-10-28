@@ -93,6 +93,17 @@ const routes = [
         component: () => import('pages/SortingScreen.vue')
       }
     ]
+  },
+  {
+    path: '/sortingScreenFinal',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'sortingScreenFinal',
+        component: () => import('pages/SortingFinalComponent.vue')
+      }
+    ]
   }
 ]
 // Always leave this as last one

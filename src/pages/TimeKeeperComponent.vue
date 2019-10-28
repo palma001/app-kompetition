@@ -230,12 +230,7 @@ export default {
       this.stopTimer()
     },
     async getConfrontationsNextPhase (team, phase) {
-      let { response } = await this.$services.getData(
-        [
-          'phase',
-          phase,
-          'confrontation'
-        ]
+      let { response } = await this.$services.getData(['phase', phase, 'confrontation']
       )
       if (response['data'] && response['data'].length > 0) {
         let newTeam = response['data'].filter(function (element) {
@@ -244,15 +239,13 @@ export default {
         if (newTeam.length <= 0) {
           this.addConfrontations(team, phase)
         } else {
-          this.$services.putData(['phase', phase, 'confrontation', newTeam[0].id], { phaseId: phase, teamB: team, status: 'TOPLAY' })
-            .then((res) => {
-            })
+          await this.$services.putData(['phase', phase, 'confrontation', newTeam[0].id], { phaseId: phase, teamB: team, status: 'TOPLAY' })
         }
       } else {
         this.addConfrontations(team, phase)
       }
     },
-    addConfrontations (team, phase) {
+    async addConfrontations (team, phase) {
       let data = {
         phaseId: phase,
         teamA: team,
@@ -261,9 +254,7 @@ export default {
         created_by: 'luis',
         updated_by: 'luis'
       }
-      this.$services.postData(['phase', phase, 'confrontation'], data)
-        .then((res) => {
-        })
+      await this.$services.postData(['phase', phase, 'confrontation'], data)
     },
     /**
      * [nextPhase description]

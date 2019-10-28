@@ -16,7 +16,7 @@
           <div class="col-6">
             <div class="row q-pa-sm justify-center">
               <div class="col-xs-8 col-sm-5 col-md-3 col-lg-2">
-                <img src="~assets/UDO.png"
+                <img :src="`img/${confrontationPlaying['TeamA']['logo']}`"
                   style="height: 150px">
               </div>
               <div class="col-12">
@@ -31,7 +31,7 @@
           <div class="col-6">
             <div class="row q-pa-sm justify-center">
               <div class="col-xs-8 col-sm-5 col-md-3 col-lg-2">
-                <img src="~assets/LUZ.png"
+                <img :src="`img/${confrontationPlaying['TeamB']['logo']}`"
                   style="height: 150px">
               </div>
               <div class="col-12">
@@ -46,10 +46,10 @@
         </div>
         <!-- competition time -->
         <div class="row q-pa-xs justify-center">
-          <div class="col-xs-4 col-sm-3 col-md-3 col-lg-1">
-            <q-btn size="50px"
-              class="q-px-xl q-py-xs"
-              align="center"
+          <div class="col-xs-12 col-sm-9 col-md-6 col-lg-4 col-xl-3">
+            <q-btn
+              size="100px"
+              style="width: 450px;"
               outline
               disable
               :label="`${minutesRound}:${secondsRound}`" />
@@ -60,14 +60,15 @@
           <div class="col-6">
             <div class="row q-pa-sm justify-center">
               <div class="col-xs-8 col-sm-5 col-md-3 col-lg-2">
-                <q-btn size="35px"
+                <q-btn
+                  size="35px"
                   class="q-px-xl q-py-xs"
                   align="center"
                   outline
                   disable
                   :label="(points) ? points.teamA : ''" />
               </div>
-              <div class="col-12 q-mt-xs">
+              <div class="col-12 q-mt-xs q-mr-lg">
                 <q-toolbar-title class="text-h3 text-center text-primary text-bold">
                   Score
                 </q-toolbar-title>
@@ -84,7 +85,7 @@
                   disable
                   :label="(points) ? points.teamB : ''" />
               </div>
-              <div class="col-12 q-mt-xs">
+              <div class="col-12 q-mt-xs q-mr-lg">
                 <q-toolbar-title class="text-h3 text-center text-primary text-bold">
                   Score
                 </q-toolbar-title>
@@ -96,10 +97,6 @@
     </div>
   </q-page>
 </template>
-
-<style>
-</style>
-
 <script>
 export default {
   name: 'GeneralScreen',
