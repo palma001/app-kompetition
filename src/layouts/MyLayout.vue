@@ -60,13 +60,13 @@
           <div class="col-6">
             {{ translateLabel('timekeeperEntity', 'teamA')}}:
             {{
-              (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'].toUpperCase() : ''
+              (confrontationPlaying) ? confrontationPlaying['TeamA']['name'].toUpperCase() : ''
             }}
           </div>
           <div class="col-6">
             {{ translateLabel('timekeeperEntity', 'teamB') }}:
             {{
-              (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'].toUpperCase() : ''
+              (confrontationPlaying) ? confrontationPlaying['TeamB']['name'].toUpperCase() : ''
             }}
           </div>
         </div>
@@ -110,13 +110,13 @@
                 Summary:
               </q-td>
               <q-td>
-                {{ points.teamA }}
+                {{ (points) ? points.teamA : 0 }}
               </q-td>
               <q-td colspan="2">
-                {{ points.teamB }}
+                {{ (points) ? points.teamB : 0 }}
               </q-td>
               <q-td>
-                {{ numberEdit }}
+                {{ (numberEdit) ? numberEdit : 0 }}
               </q-td>
             </q-tr>
           </template>
@@ -271,7 +271,13 @@ export default {
        * Params confrontation
        * @type {Object}
        */
-      params: {
+      paramsConfrontationsPlaying: {
+        events: {
+          done: false
+        },
+        pahse: {
+          status: 'TOPLAY'
+        },
         query: {
           status: 'TOPLAY'
         }
@@ -285,7 +291,7 @@ export default {
        * Playing confrontation
        * @type {Array}
        */
-      confrontationPlaying: []
+      confrontationPlaying: null
     }
   },
   sockets: {
@@ -294,7 +300,6 @@ export default {
      * @param  {Array} confrontations
      */
     confrontations (confrontations) {
-      this['confrontations/getConfrontationsPlaying']({ params: this.params, vm: this })
       this.confrontations = confrontations
     },
     /**
@@ -336,9 +341,6 @@ export default {
   created () {
     this.$socket.emit('lastConfrontation')
     this.getAllConfrontations()
-    setTimeout(() => {
-      this.getScoreTeam()
-    }, 200)
   },
   computed: {
     ...mapGetters(['login/dataUser']),
@@ -359,17 +361,18 @@ export default {
      * Edit score
      * @param  {Object} data
      */
-    editPoints (data) {
+    async editPoints (data) {
       data.numberUpdate += 1
-      this.$services.putData([
-        'confrontation',
-        this.confrontationPlaying['id'],
-        'question-round',
-        data.id
-      ], data)
-        .then(res => {
+      try {
+        let update = await this.$services.putData(['confrontation', this.confrontationPlaying['id'], 'question-round', data.id], data)
+        if (update) {
           this.getScoreTeam()
-        })
+        } else {
+          this.messageNotify('report_problem', 'negative', 'center', 'Error modifying data')
+        }
+      } catch (e) {
+        this.messageNotify('report_problem', 'negative', 'center', e.message)
+      }
     },
     openURL,
     /**
@@ -384,20 +387,47 @@ export default {
     /**
      * Gets all Confrontations
      */
-    getAllConfrontations () {
+    async getAllConfrontations () {
       let params = {
-        status: null
+        requestPhases: true,
+        events: {
+          done: false
+        },
+        pahse: {
+          status: 'TOPLAY'
+        },
+        query: {}
       }
-      this['confrontations/getConfrontations']({ params: params, vm: this })
+      let confrontations = await this['confrontations/getConfrontations']({ params: params, vm: this })
+      this.getConfrontationsPlaying()
+      this.$socket.emit('confrontations', confrontations)
+    },
+    /**
+     * Sets confrontations playing
+     */
+    async getConfrontationsPlaying () {
+      try {
+        let confrontationsPlaying = await this['confrontations/getConfrontations']({
+          params: this.paramsConfrontationsPlaying,
+          vm: this
+        })
+        if (!confrontationsPlaying) throw new Error('No rounds playing')
+        this.getScoreTeam()
+        this.$socket.emit('confrontationsPlaying', confrontationsPlaying)
+      } catch (e) {
+        this.messageNotify('report_problem', 'negative', 'center', e.message)
+      }
     },
     /**
      * Gets Score team
      */
     async getScoreTeam () {
-      let { response } = await this.$services.getData(['confrontation', this.confrontationPlaying['id'], 'question-round'])
-      if (response.status === 200) {
-        this.data = response.data
-      }
+      this.data = await this['confrontations/getDetailsRound'](
+        {
+          vm: this,
+          data: this.confrontationPlaying
+        }
+      )
       this.$socket.emit('reloadPoint')
     },
     /**
@@ -427,11 +457,27 @@ export default {
       }
       return date
     },
+    /**
+     * Message notify
+     * @param  {String} icon     icon notify
+     * @param  {String} color    color notify
+     * @param  {String} position postions notify
+     * @param  {String} message  message notify
+     */
+    messageNotify (icon, color, position, message) {
+      this.$q.notify({
+        position: position,
+        color: color,
+        icon: icon,
+        message: message
+      })
+    },
     ...mapActions(
       [
         'login/logout',
         'confrontations/getConfrontations',
-        'confrontations/getConfrontationsPlaying'
+        'confrontations/getConfrontationsPlaying',
+        'confrontations/getDetailsRound'
       ]
     )
   }

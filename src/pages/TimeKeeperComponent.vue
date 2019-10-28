@@ -147,7 +147,12 @@ export default {
        * Point teams
        * @type {Object}
        */
-      points: {}
+      points: {},
+      /**
+       * questions
+       * @type {Object}
+       */
+      question: {}
     }
   },
   computed: {
@@ -181,6 +186,7 @@ export default {
      * @param  {Array} question question
      */
     getQuestions (question) {
+      this.question = question
       this.secondsQuestion = (question.typeQuestion === 'bonus') ? 15 : 5
       this.restartQuestion()
     }
@@ -230,8 +236,7 @@ export default {
       this.stopTimer()
     },
     async getConfrontationsNextPhase (team, phase) {
-      let { response } = await this.$services.getData(['phase', phase, 'confrontation']
-      )
+      let { response } = await this.$services.getData(['phase', phase, 'confrontation'])
       if (response['data'] && response['data'].length > 0) {
         let newTeam = response['data'].filter(function (element) {
           return element['teamB'] === null
@@ -313,7 +318,7 @@ export default {
      */
     updateQuestion () {
       this.secondsQuestion -= 1
-      if (this.secondsQuestion < 0) {
+      if (this.secondsQuestion <= 0) {
         this.restartQuestion()
       }
       this.$socket.emit('temporizatorQuestion', this.secondsQuestion)
@@ -333,6 +338,7 @@ export default {
     restartQuestion () {
       if (this.stopQuestion) {
         this.stopQuestion = false
+        this.$socket.emit('getQuestions', this.question)
         clearInterval(this.setIntervalQuestion)
       }
     },

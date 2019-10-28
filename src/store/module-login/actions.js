@@ -12,7 +12,7 @@ export function login ({ commit, dispatch }, payload) {
           position: 'center',
           color: 'negative',
           icon: 'report_problem',
-          message: 'Los datos son incorrectos.'
+          message: 'Incorrect data.'
         })
       } else {
         payload.this.$services.setAxiosHeader(

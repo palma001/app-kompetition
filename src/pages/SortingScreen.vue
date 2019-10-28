@@ -258,6 +258,7 @@
 </style>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'SortingScreen',
   data () {
@@ -271,38 +272,38 @@ export default {
        * Questions rounds
        * @type {Array}
        */
-      data: []
+      data: [],
+      /**
+       * Params confrontations
+       * @type {Object}
+       */
+      params: {
+        requestPhases: false,
+        events: {
+          done: false
+        },
+        phase: {},
+        query: {}
+      }
     }
   },
   sockets: {
-    sorting (confrontations) {
-      this.getScoreTeam(confrontations)
+    confrontations (confrontations) {
+      this.getScoreTeam()
     }
   },
   methods: {
     /**
-     * Gets Score team
+     * Sets score teams
+     * @param  {Array} confrontations All confrontations
      */
-    getScoreTeam (data) {
-      this.confrontations = []
-      data.map(confrontation => {
-        if (confrontation.TeamA && confrontation.TeamB) {
-          confrontation.TeamA.score = 0
-          confrontation.TeamB.score = 0
-        }
-        this.$services.getData(['confrontation', confrontation['id'], 'question-round'])
-          .then(res => {
-            res['response']['data'].map(score => {
-              if (confrontation['id'] === score['confrontationId']) {
-                confrontation.TeamA.score += Number(score['scoreA'])
-                confrontation.TeamB.score += Number(score['scoreB'])
-              }
-            })
-          })
-        this.confrontations.push(confrontation)
-      })
-      this.$socket.emit('sortingPoint', this.confrontations)
-    }
+    async getScoreTeam () {
+      let confrontationsAll = await this['confrontations/getConfrontations']({ params: this.params, vm: this })
+      if (confrontationsAll) {
+        this.confrontations = await this['confrontations/getScoreTeam']({ vm: this, data: confrontationsAll })
+      }
+    },
+    ...mapActions(['confrontations/getScoreTeam', 'confrontations/getConfrontations'])
   }
 }
 </script>

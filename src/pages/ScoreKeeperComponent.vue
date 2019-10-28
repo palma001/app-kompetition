@@ -58,7 +58,7 @@
                 align="center"
                 outline
                 text-color="primary">
-                {{ pointData.teamA }}
+                {{ (pointData.teamA) ?  pointData.teamA : 0}}
               </q-btn>
             </div>
           </div>
@@ -127,7 +127,7 @@
                 align="center"
                 outline
                 text-color="secondary">
-                {{ pointData.teamB }}
+                {{ (pointData.teamB) ? pointData.teamB : 0 }}
               </q-btn>
             </div>
           </div>
@@ -258,7 +258,7 @@ export default {
        * Questions
        * @type {Object}
        */
-      question: null,
+      question: {},
       /**
        * Points questions
        * @type {Object}
@@ -351,32 +351,28 @@ export default {
       }
     },
     /**
-     * Save points temas
+     * Assigned value
      */
-    async saveRecords () {
+    assignedValue () {
       this.pointQuestion['confrontationId'] = this.confrontationPlaying['id']
       this.pointQuestion['questionId'] = this.question['id']
       this.pointQuestion['teamA'] = this.confrontationPlaying['TeamA']['id']
       this.pointQuestion['teamB'] = this.confrontationPlaying['TeamB']['id']
-      if (this.question.typeQuestion === 'bonus') {
-        if (this.value.bonus1) {
-          this.pointQuestion.scoreA = this.value.bonus1
-        }
-        this.pointQuestion.scoreB = this.value.bonus2
-      }
-      await this.$services.postData(
-        [
-          'confrontation',
-          this.pointQuestion['confrontationId'],
-          'question-round'
-        ],
-        this.pointQuestion
-      )
+    },
+    /**
+     * Validate ype questions
+     */
+    validateQuestions () {
       if ((this.pointQuestion.scoreA > 0 || this.pointQuestion.scoreB > 0) && this.question.typeQuestion !== 'bonus') {
         this.$socket.emit('disabledBonus', false)
       } else {
         this.$socket.emit('disabledBonus', true)
       }
+    },
+    /**
+     * restar values inputs
+     */
+    restarValues () {
       this.pointQuestion.scoreA = 0
       this.pointQuestion.scoreB = 0
       this.value.bonus1 = 0
@@ -384,6 +380,27 @@ export default {
       for (let disabled in this.disabled) {
         this.disabled[disabled] = false
       }
+    },
+    /**
+     * Validate if bonus
+     */
+    addPointsBonus () {
+      if (this.question.typeQuestion === 'bonus') {
+        if (this.value.bonus1) {
+          this.pointQuestion.scoreA = this.value.bonus1
+        }
+        this.pointQuestion.scoreB = this.value.bonus2
+      }
+    },
+    /**
+     * Save points temas
+     */
+    async saveRecords () {
+      this.assignedValue()
+      this.addPointsBonus()
+      await this['confrontations/addQuestionsRounds']({ vm: this, data: this.pointQuestion })
+      this.validateQuestions()
+      this.restarValues()
       this.getScoreTeam()
     },
     /**
@@ -416,7 +433,7 @@ export default {
     translateLabel (entity, message) {
       return this.$i18n.t(`template.${entity}.${message}.label`)
     },
-    ...mapActions(['score/addQuestionRound', 'confrontations/getConfrontations'])
+    ...mapActions(['score/addQuestionRound', 'confrontations/addQuestionsRounds'])
   }
 }
 </script>

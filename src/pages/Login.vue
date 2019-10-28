@@ -115,7 +115,6 @@ export default {
   position: absolute;
   width: 100%;
   height: 100vh;
-  object-fit: fill;
   z-index: -1;
 }
 .bg-login {
