@@ -236,7 +236,7 @@ export default {
       } catch (e) {
         this.$q.notify({
           position: 'center',
-          color: 'orange',
+          color: 'negative',
           icon: 'report_problem',
           message: e.message
         })
