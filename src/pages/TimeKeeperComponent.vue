@@ -6,7 +6,9 @@
         <div class="row q-pa-md q-pb-xl justify-around">
           <div class="col-5">
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
-              {{translateLabel('timekeeperEntity', 'teamA')}}
+              {{
+                translateLabel('timekeeperEntity', 'teamA')
+              }}
               {{
                 (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'].toUpperCase() : ''
               }}
@@ -14,7 +16,9 @@
           </div>
           <div class="col-5">
             <q-toolbar-title class="text-h4 text-white text-center bg-primary">
-              {{translateLabel('timekeeperEntity', 'teamB') }}
+              {{
+                translateLabel('timekeeperEntity', 'teamB')
+              }}
               {{
                 (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'].toUpperCase() : ''
               }}
@@ -25,7 +29,9 @@
         <div class="row q-pa-md justify-center">
           <div class="col-12">
             <q-toolbar-title class="q-mt-xl text-h3 text-center text-primary text-bold">
-              {{ translateComponent('time') }}
+              {{
+                translateComponent('time')
+              }}
             </q-toolbar-title>
           </div>
         </div>
@@ -58,7 +64,9 @@
         <div class="row q-pa-md justify-center">
           <div class="col-12">
             <q-toolbar-title class="q-mt-xl text-h3 text-center text-primary text-bold">
-              {{ translateComponent('time') }}
+              {{
+                translateComponent('time')
+              }}
             </q-toolbar-title>
           </div>
         </div>
@@ -173,6 +181,7 @@ export default {
      */
     confrontationsPlaying (confrontation) {
       this.confrontationPlaying = confrontation[0]
+      this.addConfrontations(this.confrontationPlaying['teamA'], this.confrontationPlaying['phaseId'] + 1)
     },
     /**
      * Point teams
@@ -206,6 +215,12 @@ export default {
         this.secondsRound = 0
         this.stopTimer()
       }
+      this.reloadTemporizator()
+    },
+    /**
+     * Reload temporizator
+     */
+    reloadTemporizator () {
       this.$socket.emit('temporizator', {
         secondsRound: this.secondsRound,
         minutesRound: this.minutesRound
@@ -234,13 +249,15 @@ export default {
       this.updateConfrontations(data)
       this.nextPhase(this.confrontationPlaying)
       this.stopTimer()
-      this.$socket.emit('reloadPoint')
+      this.reloadTemporizator()
+      setTimeout(() => {
+        this.$socket.emit('reloadPoint')
+      }, 200)
     },
     /**
-     * [getConfrontationsNextPhase description]
-     * @param  {[type]} team  [description]
-     * @param  {[type]} phase [description]
-     * @return {[type]}       [description]
+     * Sets nex phase
+     * @param  {Number} team  team id
+     * @param  {Number} phase phase id
      */
     async getConfrontationsNextPhase (team, phase) {
       let { response } = await this.$services.getData(['phase', phase, 'confrontation'])
@@ -251,32 +268,63 @@ export default {
         if (newTeam.length <= 0) {
           this.addConfrontations(team, phase)
         } else {
-          await this.$services.putData(['phase', phase, 'confrontation', newTeam[0].id], { phaseId: phase, teamB: team, status: 'TOPLAY' })
+          this.updateConfrontationsWinner(team, phase, newTeam[0].id)
         }
       } else {
         this.addConfrontations(team, phase)
       }
     },
     /**
-     * [addConfrontations description]
-     * @param {[type]} team  [description]
-     * @param {[type]} phase [description]
+     * Add confrontations
+     * @param {Number} team  number team
+     * @param {Number} phase number phase
      */
     async addConfrontations (team, phase) {
-      let data = {
-        phaseId: phase,
-        teamA: team,
-        teamB: null,
-        status: 'TOPLAY',
-        created_by: 'luis',
-        updated_by: 'luis'
+      // let data = {
+      //   phaseId: phase,
+      //   teamA: team,
+      //   teamB: null,
+      //   status: 'TOPLAY',
+      //   created_by: 'luis',
+      //   updated_by: 'luis'
+      // }
+      console.log(team, phase)
+      for (let teamW in this.confrontationPlaying) {
+        if (typeof this.confrontationPlaying[teamW] === 'object') {
+          console.log(this.confrontationPlaying[teamW])
+          for (let teamL in this.confrontationPlaying[teamW]) {
+            if (this.confrontationPlaying[teamW][teamL].indexOf(team) > -1) {
+              console.log(this.confrontationPlaying[teamW][teamL])
+            }
+          }
+        }
       }
-      await this.$services.postData(['phase', phase, 'confrontation'], data)
+      // await this.$services.postData(['phase', phase, 'confrontation'], data)
     },
     /**
-     * [nextPhase description]
-     * @param  {[type]} data [description]
-     * @return {[type]}      [description]
+     * Update confrontations winner
+     * @param  {Number} team
+     * @param  {Number} phase
+     * @param  {Number} newTeam
+     */
+    async updateConfrontationsWinner (team, phase, newTeam) {
+      await this.$services.putData(
+        [
+          'phase',
+          phase,
+          'confrontation',
+          newTeam
+        ],
+        {
+          phaseId: phase,
+          teamB: team,
+          status: 'TOPLAY'
+        }
+      )
+    },
+    /**
+     * Next phase
+     * @param  {Object} data
      */
     nextPhase (data) {
       let team = 0

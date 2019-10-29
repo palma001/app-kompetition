@@ -63,7 +63,7 @@
               style="width: 120px"
               outline
               color="primary">
-              {{ (confrontation['TeamA']) ? confrontation['TeamA']['score'] : 0 }}
+              {{ (confrontation['TeamA'] && confrontation['TeamA']['score']) ? confrontation['TeamA']['score'] : 0 }}
             </q-btn>
           </div>
           <div class="col-12 q-mt-lg" v-if="confrontation.phaseId === 2">
@@ -298,12 +298,24 @@ export default {
      * @param  {Array} confrontations All confrontations
      */
     async getScoreTeam () {
-      let confrontationsAll = await this['confrontations/getConfrontations']({ params: this.params, vm: this })
+      let confrontationsAll = await this['confrontations/getConfrontations'](
+        {
+          params: this.params,
+          vm: this
+        }
+      )
       if (confrontationsAll) {
-        this.confrontations = await this['confrontations/getScoreTeam']({ vm: this, data: confrontationsAll })
+        this.confrontations = await this['confrontations/getScoreTeam'](
+          {
+            vm: this,
+            data: confrontationsAll
+          }
+        )
       }
     },
-    ...mapActions(['confrontations/getScoreTeam', 'confrontations/getConfrontations'])
+    ...mapActions(
+      ['confrontations/getScoreTeam', 'confrontations/getConfrontations']
+    )
   }
 }
 </script>

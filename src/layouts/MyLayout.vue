@@ -184,11 +184,10 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-      <q-toolbar v-if="this.$route.name !== 'sortingScreen'">
-        <img src="../assets/speTrans.png"
-          style="height: 150px; position: fixed; bottom: 1px; opacity:.5">
-        <q-space></q-space>
-      </q-toolbar>
+    <q-toolbar v-if="this.$route.name !== 'sortingScreen'">
+      <img src="../assets/speTrans.png"
+        style="height: 150px; position: fixed; bottom: 1px; opacity:.5">
+    </q-toolbar>
   </q-layout>
 </template>
 
@@ -283,6 +282,20 @@ export default {
         }
       },
       /**
+       * parmas all confrontations
+       * @type {Object}
+       */
+      paramsAllConfrontatios: {
+        requestPhases: false,
+        events: {
+          done: false
+        },
+        pahse: {
+          status: 'TOPLAY'
+        },
+        query: {}
+      },
+      /**
        * List confrontations
        * @type {Array}
        */
@@ -365,10 +378,10 @@ export default {
       data.numberUpdate += 1
       try {
         let update = await this.$services.putData(['confrontation', this.confrontationPlaying['id'], 'question-round', data.id], data)
-        if (update) {
+        if (!update.status) throw new Error('Server Error')
+        if (update.response.status === 200) {
           this.getScoreTeam()
-        } else {
-          this.messageNotify('report_problem', 'negative', 'center', 'Error modifying data')
+          this.messageNotify('', 'positive', 'center', 'Update successfull')
         }
       } catch (e) {
         this.messageNotify('report_problem', 'negative', 'center', e.message)
@@ -388,19 +401,19 @@ export default {
      * Gets all Confrontations
      */
     async getAllConfrontations () {
-      let params = {
-        requestPhases: true,
-        events: {
-          done: false
-        },
-        pahse: {
-          status: 'TOPLAY'
-        },
-        query: {}
+      try {
+        let confrontations = await this['confrontations/getConfrontations'](
+          {
+            params: this.paramsAllConfrontatios,
+            vm: this
+          }
+        )
+        if (!confrontations) throw new Error('No rounds to play')
+        this.getConfrontationsPlaying()
+        this.$socket.emit('confrontations', confrontations)
+      } catch (e) {
+        this.messageNotify('report_problem', 'negative', 'center', e.message)
       }
-      let confrontations = await this['confrontations/getConfrontations']({ params: params, vm: this })
-      this.getConfrontationsPlaying()
-      this.$socket.emit('confrontations', confrontations)
     },
     /**
      * Sets confrontations playing
@@ -413,10 +426,23 @@ export default {
         })
         if (!confrontationsPlaying) throw new Error('No rounds playing')
         this.getScoreTeam()
+        confrontationsPlaying = this.getSemiFinal(confrontationsPlaying)
         this.$socket.emit('confrontationsPlaying', confrontationsPlaying)
       } catch (e) {
         this.messageNotify('report_problem', 'negative', 'center', e.message)
       }
+    },
+    getSemiFinal (data) {
+      if (data.length === 1) {
+        data.map(element => {
+          element.phaseFinal = 'final'
+        })
+      } else if (data.length === 2) {
+        data.map(element => {
+          element.phaseFinal = 'semifinal'
+        })
+      }
+      return data
     },
     /**
      * Gets Score team
@@ -428,6 +454,7 @@ export default {
           data: this.confrontationPlaying
         }
       )
+      this.$socket.emit('reloadPoint')
     },
     /**
      * Translates the tags in template

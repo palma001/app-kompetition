@@ -219,8 +219,8 @@ export default {
       this.updateQuestion(this.question['id'])
     },
     /**
-     * Set question
-     * @return {[type]} [description]
+     * Sets question
+     * @return {String} Type questions
      */
     async getRandomQuestions (typeQuestion) {
       try {
@@ -230,7 +230,7 @@ export default {
           random: true
         }
         let res = await this.$services.getData(['questions'], params)
-        if (res.status) throw new Error('Error Server')
+        if (!res.status) throw new Error('Error Server')
         if (res.response.status === 204) throw new Error('Questions Empty')
         this.$socket.emit('getQuestion', res.response.data[0])
       } catch (e) {

@@ -9,10 +9,10 @@
           <div class="col-12 q-ml-xl q-mt-xs">
             <q-btn size="20px"
               class="q-px-xl q-ml-xl q-py-xs"
-              style="width: 150px;"
+              style="width: 180px;"
               align="center"
               color="primary"
-              :label="(confrontations[0]['TeamA']) ? confrontations[0]['TeamA']['name'] : 'To Play'" />
+              :label="(confrontations[0]['TeamA']) ? confrontations[0]['TeamA']['name'] : 'to play'" />
           </div>
           <div class="button1 col-12 q-mt-xs">
             <q-btn size="20px"
@@ -20,23 +20,31 @@
               align="center"
               style="width: 120px;"
               outline
-              color="primary"
-              :label="(confrontations[0]['TeamA']) ? confrontations[0]['TeamA']['score'] : 0" />
+              color="primary">
+              {{
+                (confrontations[0]['TeamA'] && confrontations[0]['TeamA']['score']) ? confrontations[0]['TeamA']['score'] : 0
+              }}
+            </q-btn>
           </div>
           <div class="col-12 q-ml-xl q-mt-xs">
             <q-btn size="20px"
+              style="width: 180px;"
               class="button2 q-px-xl q-ml-xl q-py-xs"
               align="center"
-              color="primary"
-              :label="(confrontations[0]['TeamB']) ? confrontations[0]['TeamB']['name'] : 'To Play'" />
+              color="primary">
+              {{(confrontations[0]['TeamB']) ? confrontations[0]['TeamB']['name'] : 'to play'}}
+            </q-btn>
           </div>
           <div class="button1 col-12 q-mt-xs">
             <q-btn size="20px"
               class="q-px-xl q-py-xs"
               align="center"
               outline
-              color="primary"
-              :label="(confrontations[0]['TeamB']) ? confrontations[0]['TeamB']['score'] : 'To Play'" />
+              color="primary">
+              {{
+                (confrontations[0]['TeamB'] && confrontations[0]['TeamB']['score']) ? confrontations[0]['TeamB']['score'] : 0
+              }}
+            </q-btn>
           </div>
         </div>
       </div>
@@ -64,7 +72,7 @@
             <q-btn size="20px"
               class="button6 q-px-xl q-ml-xl q-py-xs"
               align="center"
-              style="width: 150px;"
+              style="width: 180px;"
               color="negative"
               label="UDO 25" />
           </div>
@@ -86,7 +94,7 @@
             <q-btn size="30px"
               class="q-px-xl q-ml-md q-py-xs"
               align="center"
-              style="width: 150px;"
+              style="width: 180px;"
               color="primary"
               label="UDO 25" />
           </div>
@@ -94,7 +102,7 @@
             <q-btn size="20px"
               class="q-px-xl  q-ml-md q-py-xs"
               align="center"
-              style="width: 150px;"
+              style="width: 180px;"
               color="primary"
               label="UDO 25" />
           </div>
@@ -105,26 +113,8 @@
         <div class="row">
           <div class="col-12 q-mt-xs">
             <q-btn size="20px"
-              class="q-px-xl q-ml-md q-py-xs"
-              align="center"
-              style="width: 160px; margin-top: 150px; margin-left: 20px;"
-              color="negative"
-              label="UDO 25" />
-          </div>
-          <div class="button8 col-12 q-mt-xs">
-            <q-btn size="20px"
-              class="q-px-xl q-py-xs"
-              align="center"
-              outline
-              style="width: 120px;"
-              color="negative"
-              label="1000" />
-          </div>
-          <div class="col-12 q-mt-xs">
-            <q-btn size="20px"
-              class="button6 q-px-xl q-ml-md q-py-xs"
-              align="center"
-              style="width: 150px;"
+              class="q-px-xl q-ml-xl q-py-xs"
+              style="width: 180px;"
               color="negative"
               label="UDO 25" />
           </div>
@@ -142,39 +132,47 @@
       <!-- Clasificados lado right -->
       <div class="col-2 q-ml-xl">
         <div class="row">
-          <div class="col-12 q-ml-xs q-mt-xs">
-            <q-btn size="20px"
-              class="q-px-xl q-ml-md q-py-xs"
-              align="center"
-              style="width: 150px;"
-              color="primary"
-              :label="(confrontations[1]['TeamA']) ? confrontations[1]['TeamA']['name'] : 'To Play'" />
-          </div>
           <div class="col-12 q-mt-xs">
             <q-btn size="20px"
-              class="button7 q-px-xl q-py-xs"
-              align="center"
-              style="width: 120px;"
-              outline
-              color="primary"
-              :label="(confrontations[1]['TeamA']) ? confrontations[1]['TeamA']['score'] : 0" />
-          </div>
-          <div class="col-12 q-ml-xs q-mt-xs">
-            <q-btn size="20px"
-              class="button2 q-px-xl q-ml-md q-py-xs"
+              class="q-px-xl q-py-xs"
+              style="width: 180px; margin-left: 15px;"
               align="center"
               color="primary"
-              style="width: 150px;"
-              :label="(confrontations[1]['TeamB']) ? confrontations[1]['TeamB']['name'] : 'to Play'" />
+              :label="(confrontations[1]['TeamA']) ? confrontations[1]['TeamA']['name'] : 'to play'" />
           </div>
-          <div class="button7 col-12 q-mt-xs">
+          <div class="col-12 q-mt-xs q-ml-xl">
             <q-btn size="20px"
               class="q-px-xl q-py-xs"
               align="center"
-              outline
               style="width: 120px;"
-              color="primary"
-              :label="(confrontations[1]['TeamB'] && confrontations[1]['TeamB']['score']) ? confrontations[1]['TeamB']['score'] : 0" />
+              outline
+              color="primary">
+              {{
+                (confrontations[1]['TeamA'] && confrontations[1]['TeamA']['score']) ? confrontations[1]['TeamA']['score'] : 0
+              }}
+            </q-btn>
+          </div>
+          <div class="col-12 q-mt-xs">
+            <q-btn size="20px"
+              style="width: 180px; margin-left: 15px;"
+              class="button2 q-px-xl q-py-xs"
+              align="center"
+              color="primary">
+              {{
+                (confrontations[1]['TeamB']) ? confrontations[1]['TeamB']['name'] : 'to play'
+              }}
+            </q-btn>
+          </div>
+          <div class="col-12 q-mt-xs">
+            <q-btn size="20px"
+              class="q-px-xl q-py-xs q-ml-xl"
+              align="center"
+              outline
+              color="primary">
+              {{
+                (confrontations[1]['TeamB'] && confrontations[1]['TeamB']['score']) ? confrontations[1]['TeamB']['score'] : 0
+              }}
+            </q-btn>
           </div>
         </div>
       </div>
@@ -223,11 +221,16 @@ export default {
        * Confrontations
        * @type {Array}
        */
-      confrontations: []
+      confrontations: [],
+      /**
+       * Confrontations final
+       * @type {Array}
+       */
+      confrontationsPhaseFinal: []
     }
   },
   sockets: {
-    sortingPoint (confrontations) {
+    confrontations (confrontations) {
       this.getConfrontations(confrontations)
     }
   },
@@ -243,9 +246,24 @@ export default {
      * @return {Array}
      */
     getConfrontationsPhaseTree (data, phase) {
-      return data.filter(element => {
+      let newData = data.filter(element => {
         return element['phaseId'] === phase
       })
+      if (newData.length <= 1) {
+        newData.push(
+          {
+            TeamA: {
+              name: 'To play',
+              score: 0
+            },
+            TeamB: {
+              name: 'To play',
+              score: 0
+            }
+          }
+        )
+      }
+      return newData
     }
   }
 }

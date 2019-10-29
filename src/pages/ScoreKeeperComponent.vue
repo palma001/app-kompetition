@@ -394,7 +394,12 @@ export default {
     async saveRecords () {
       this.assignedValue()
       this.addPointsBonus()
-      await this['confrontations/addQuestionsRounds']({ vm: this, data: this.pointQuestion })
+      await this['confrontations/addQuestionsRounds'](
+        {
+          vm: this,
+          data: this.pointQuestion
+        }
+      )
       this.validateQuestions()
       this.restarValues()
       this.getScoreTeam()
@@ -404,11 +409,12 @@ export default {
      */
     async getScoreTeam () {
       try {
-        let data = await this['confrontations/getDetailsRound']({
-          vm: this,
-          data: this.confrontationPlaying
-        })
-        if (data.length <= 0) throw new Error('Empty score')
+        let data = await this['confrontations/getDetailsRound'](
+          {
+            vm: this,
+            data: this.confrontationPlaying
+          }
+        )
         this.scoreData(data)
       } catch (e) {
         this.$q.notify({
