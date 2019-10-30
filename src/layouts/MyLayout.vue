@@ -274,9 +274,7 @@ export default {
         events: {
           done: false
         },
-        pahse: {
-          status: 'TOPLAY'
-        },
+        pahse: {},
         query: {
           status: 'TOPLAY'
         }
@@ -290,9 +288,7 @@ export default {
         events: {
           done: false
         },
-        pahse: {
-          status: 'TOPLAY'
-        },
+        pahse: {},
         query: {}
       },
       /**
@@ -433,11 +429,7 @@ export default {
       }
     },
     getSemiFinal (data) {
-      if (data.length === 1) {
-        data.map(element => {
-          element.phaseFinal = 'final'
-        })
-      } else if (data.length === 2) {
+      if (data.length <= 2) {
         data.map(element => {
           element.phaseFinal = 'semifinal'
         })

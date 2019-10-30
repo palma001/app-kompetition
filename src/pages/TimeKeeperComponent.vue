@@ -181,7 +181,6 @@ export default {
      */
     confrontationsPlaying (confrontation) {
       this.confrontationPlaying = confrontation[0]
-      this.addConfrontations(this.confrontationPlaying['teamA'], this.confrontationPlaying['phaseId'] + 1)
     },
     /**
      * Point teams
@@ -261,17 +260,30 @@ export default {
      */
     async getConfrontationsNextPhase (team, phase) {
       let { response } = await this.$services.getData(['phase', phase, 'confrontation'])
+      console.log(this.confrontationPlaying)
       if (response['data'] && response['data'].length > 0) {
         let newTeam = response['data'].filter(function (element) {
           return element['teamB'] === null
         })
         if (newTeam.length <= 0) {
-          this.addConfrontations(team, phase)
+          if (this.confrontationPlaying['phaseFinal'] === 'semifinal') {
+            // statement
+            this.addConfrontations(team.winner, phase + 1)
+            this.addConfrontations(team.loser, phase)
+          }
         } else {
-          this.updateConfrontationsWinner(team, phase, newTeam[0].id)
+          if (this.confrontationPlaying['phaseFinal'] === 'semifinal') {
+            // statement
+            this.updateConfrontationsWinner(team.winner, phase + 1, newTeam[0].id)
+            this.updateConfrontationsWinner(team.loser, phase, newTeam[0].id)
+          }
         }
       } else {
-        this.addConfrontations(team, phase)
+        if (this.confrontationPlaying['phaseFinal'] === 'semifinal') {
+          // statement
+          this.addConfrontations(team.winner, phase + 1)
+          this.addConfrontations(team.loser, phase)
+        }
       }
     },
     /**
@@ -280,26 +292,15 @@ export default {
      * @param {Number} phase number phase
      */
     async addConfrontations (team, phase) {
-      // let data = {
-      //   phaseId: phase,
-      //   teamA: team,
-      //   teamB: null,
-      //   status: 'TOPLAY',
-      //   created_by: 'luis',
-      //   updated_by: 'luis'
-      // }
-      console.log(team, phase)
-      for (let teamW in this.confrontationPlaying) {
-        if (typeof this.confrontationPlaying[teamW] === 'object') {
-          console.log(this.confrontationPlaying[teamW])
-          for (let teamL in this.confrontationPlaying[teamW]) {
-            if (this.confrontationPlaying[teamW][teamL].indexOf(team) > -1) {
-              console.log(this.confrontationPlaying[teamW][teamL])
-            }
-          }
-        }
+      let data = {
+        phaseId: phase,
+        teamA: team,
+        teamB: null,
+        status: 'TOPLAY',
+        created_by: 'luis',
+        updated_by: 'luis'
       }
-      // await this.$services.postData(['phase', phase, 'confrontation'], data)
+      await this.$services.postData(['phase', phase, 'confrontation'], data)
     },
     /**
      * Update confrontations winner
@@ -327,11 +328,17 @@ export default {
      * @param  {Object} data
      */
     nextPhase (data) {
-      let team = 0
+      let team = {}
       if (this.points['teamA'] > this.points['teamB']) {
-        team = data['teamA']
+        team = {
+          winner: data['teamA'],
+          loser: data['teamB']
+        }
       } else {
-        team = data['teamB']
+        team = {
+          winner: data['teamB'],
+          loser: data['teamA']
+        }
       }
       data.phaseId += 1
       this.getConfrontationsNextPhase(team, data.phaseId)

@@ -56,8 +56,11 @@
               style="width: 160px;"
               class="button3 q-px-xl q-ml-xl q-py-xs"
               align="center"
-              color="negative"
-              :label="'To Play'"/>
+              color="negative">
+              {{
+                (confrontationsPhaseFinal[0]['TeamA'] && confrontationsPhaseFinal[0]['TeamA']['name']) ? confrontationsPhaseFinal[0]['TeamA']['name'] : 'To play'
+              }}
+            </q-btn>
           </div>
           <div class="button4 col-12 q-mt-xs">
             <q-btn size="20px"
@@ -65,16 +68,18 @@
               align="center"
               outline
               style="width: 120px;"
-              color="negative"
-              label="1000" />
+              color="negative">
+              {{ (confrontationsPhaseFinal[0]['TeamA'] && confrontationsPhaseFinal[0]['TeamA']['score']) ? confrontationsPhaseFinal[0]['TeamA']['score'] : 0 }}
+            </q-btn>
           </div>
           <div class="col-12 q-mt-xs">
             <q-btn size="20px"
               class="button6 q-px-xl q-ml-xl q-py-xs"
               align="center"
               style="width: 180px;"
-              color="negative"
-              label="UDO 25" />
+              color="negative">
+              asdsa
+            </q-btn>
           </div>
           <div class="button4 col-12 q-mt-xs">
             <q-btn size="20px"
@@ -82,8 +87,11 @@
               align="center"
               outline
               style="width: 120px;"
-              color="negative"
-              label="1000" />
+              color="negative">
+              {{
+                (confrontationsPhaseFinal[0]['TeamB'] && confrontationsPhaseFinal[0]['TeamB']['score']) ? confrontationsPhaseFinal[0]['TeamB']['score'] : 0
+              }}
+            </q-btn>
           </div>
         </div>
       </div>
@@ -115,8 +123,11 @@
             <q-btn size="20px"
               class="q-px-xl q-ml-xl q-py-xs"
               style="width: 180px;"
-              color="negative"
-              label="UDO 25" />
+              color="negative">
+              {{
+                (confrontationsPhaseFinal[0]['TeamB'] && confrontationsPhaseFinal[0]['TeamB']['name']) ? confrontationsPhaseFinal[0]['TeamB']['name'] : 'To play'
+              }}
+            </q-btn>
           </div>
           <div class="button8 col-12 q-mt-xs">
             <q-btn size="20px"
@@ -124,8 +135,11 @@
               align="center"
               outline
               style="width: 120px;"
-              color="negative"
-              label="1000" />
+              color="negative">
+              {{
+                (confrontationsPhaseFinal[0]['TeamB'] && confrontationsPhaseFinal[0]['TeamB']['score']) ? confrontationsPhaseFinal[0]['TeamB']['score'] : 'To play'
+              }}
+            </q-btn>
           </div>
         </div>
       </div>
@@ -213,6 +227,7 @@
 </style>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'SortingFinalComponent',
   data () {
@@ -235,9 +250,15 @@ export default {
     }
   },
   methods: {
-    getConfrontations (data) {
-      this.confrontations = this.getConfrontationsPhaseTree(data, 3)
-      this.confrontationsPhaseFinal = this.getConfrontationsPhaseTree(data, 4)
+    async getConfrontations (data) {
+      let datas = await this['confrontations/getScoreTeam'](
+        {
+          vm: this,
+          data: data
+        }
+      )
+      this.confrontations = this.getConfrontationsPhaseTree(datas, 3)
+      this.confrontationsPhaseFinal = this.getConfrontationsPhaseTree(datas, 5)
     },
     /**
      * Sets phase final
@@ -264,7 +285,10 @@ export default {
         )
       }
       return newData
-    }
+    },
+    ...mapActions(
+      ['confrontations/getScoreTeam', 'confrontations/getConfrontations']
+    )
   }
 }
 </script>
