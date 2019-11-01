@@ -422,19 +422,10 @@ export default {
         })
         if (!confrontationsPlaying) throw new Error('No rounds playing')
         this.getScoreTeam()
-        confrontationsPlaying = this.getSemiFinal(confrontationsPlaying)
         this.$socket.emit('confrontationsPlaying', confrontationsPlaying)
       } catch (e) {
         this.messageNotify('report_problem', 'negative', 'center', e.message)
       }
-    },
-    getSemiFinal (data) {
-      if (data.length <= 2) {
-        data.map(element => {
-          element.phaseFinal = 'semifinal'
-        })
-      }
-      return data
     },
     /**
      * Gets Score team

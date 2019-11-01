@@ -1,12 +1,9 @@
 <template>
-  <q-page class="backgrund">
-    <img src="~assets/login.jpg" class="color" alt="">
+  <q-page class="bg-primary">
     <div class="row justify-center">
       <div class="col-auto">
         <div class="q-pa-xl bg-login bg-login">
-          <div class="title text-center">
-            Login
-          </div>
+          <img src="~assets/petro.svg" style="height: 150px; margin-left: 30%">
           <q-input
             filled
             ref="user"
@@ -50,6 +47,10 @@
         </div>
       </div>
     </div>
+    <q-toolbar>
+      <img src="../assets/speTrans.png"
+        style="height: 150px; position: fixed; bottom: 1px; opacity:0.4">
+    </q-toolbar>
   </q-page>
 </template>
 
@@ -111,12 +112,6 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.color {
-  position: absolute;
-  width: 100%;
-  height: 100vh;
-  z-index: -1;
-}
 .bg-login {
   width: 550px;
   margin-top: 50%;

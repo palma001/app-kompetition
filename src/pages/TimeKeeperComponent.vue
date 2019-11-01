@@ -189,6 +189,7 @@ export default {
     pointsTeams (point) {
       this.points = point
     },
+    semifinal: false,
     /**
      * Capture event the socket
      * @param  {Array} question question
@@ -260,31 +261,50 @@ export default {
      */
     async getConfrontationsNextPhase (team, phase) {
       let { response } = await this.$services.getData(['phase', phase, 'confrontation'])
-      console.log(this.confrontationPlaying)
       if (response['data'] && response['data'].length > 0) {
         let newTeam = response['data'].filter(function (element) {
           return element['teamB'] === null
         })
         if (newTeam.length <= 0) {
-          if (this.confrontationPlaying['phaseFinal'] === 'semifinal') {
-            // statement
-            this.addConfrontations(team.winner, phase + 1)
-            this.addConfrontations(team.loser, phase)
-          }
+          await this.addConfrontations(team.winner, phase)
         } else {
-          if (this.confrontationPlaying['phaseFinal'] === 'semifinal') {
-            // statement
-            this.updateConfrontationsWinner(team.winner, phase + 1, newTeam[0].id)
-            this.updateConfrontationsWinner(team.loser, phase, newTeam[0].id)
-          }
+          await this.updateConfrontationsWinner(team.winner, phase, newTeam[0].id)
         }
       } else {
-        if (this.confrontationPlaying['phaseFinal'] === 'semifinal') {
-          // statement
-          this.addConfrontations(team.winner, phase + 1)
-          this.addConfrontations(team.loser, phase)
-        }
+        await this.addConfrontations(team.winner, phase)
       }
+    },
+    async final (team, phase) {
+      let { response } = await this.$services.getData(['phase', phase, 'confrontation'])
+      if (response['data'] && response['data'].length > 0) {
+        let newTeam = response['data'].filter(function (element) {
+          return element['teamB'] === null
+        })
+        console.log(newTeam)
+        if (newTeam.length <= 0) {
+          console.log('semifinal 1')
+          await this.addConfrontations(team.winner, phase + 1)
+          await this.addConfrontations(team.loser, phase)
+        } else {
+          console.log(team, phase)
+          await this.updateConfrontationsWinner(team.winner, phase + 1, newTeam[0].id)
+          await this.updateConfrontationsWinner(team.loser, phase, newTeam[0].id)
+        }
+      } else {
+        console.log(team, phase)
+        await this.addConfrontations(team.winner, phase + 1)
+        await this.addConfrontations(team.loser, phase)
+      }
+    },
+    async getPlayed () {
+      let { response } = await this.$services.getData(['phase', 0, 'confrontation'], { status: 'PLAYED' })
+      let allConfrontation = await this.$services.getData(['phase', 0, 'confrontation'])
+      let semifinal = allConfrontation.response.data.length - response.data.length
+      if (semifinal === 2) {
+        console.log('semifinal')
+        this.semifinal = true
+      }
+      console.log('semifinal2', semifinal)
     },
     /**
      * Add confrontations
@@ -327,7 +347,7 @@ export default {
      * Next phase
      * @param  {Object} data
      */
-    nextPhase (data) {
+    async nextPhase (data) {
       let team = {}
       if (this.points['teamA'] > this.points['teamB']) {
         team = {
@@ -341,7 +361,12 @@ export default {
         }
       }
       data.phaseId += 1
-      this.getConfrontationsNextPhase(team, data.phaseId)
+      if (this.semifinal) {
+        this.final(team, data.phaseId)
+      } else {
+        this.getConfrontationsNextPhase(team, data.phaseId)
+      }
+      await this.getPlayed()
     },
     /**
      * Start Temporizator
