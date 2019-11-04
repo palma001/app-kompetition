@@ -185,7 +185,7 @@
       <router-view />
     </q-page-container>
     <q-toolbar v-if="this.$route.name !== 'sortingScreen'">
-      <img src="../assets/speTrans.png"
+      <img src="statics/speTrans.png"
         style="height: 150px; position: fixed; bottom: 1px; opacity:.5">
     </q-toolbar>
   </q-layout>

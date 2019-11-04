@@ -66,11 +66,24 @@ module.exports = function (ctx) {
         'QIcon',
         'QInput',
         'QBtnToggle',
+        'QSelect',
         'QCard',
         'QCardSection',
         'QCardActions',
-        'QSeparator',
-        'QImg'
+        'QParallax',
+        'QTabPanels',
+        'QTabPanel',
+        'QSplitter',
+        'QTab',
+        'QTabs',
+        'QStepper',
+        'QStep',
+        'QStepperNavigation',
+        'QDialog',
+        'QDate',
+        'QPopupProxy',
+        'ClosePopup',
+        'QForm'
       ],
 
       directives: [

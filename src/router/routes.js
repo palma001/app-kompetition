@@ -104,6 +104,17 @@ const routes = [
         component: () => import('pages/SortingFinalComponent.vue')
       }
     ]
+  },
+  {
+    path: '/admin',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'admin',
+        component: () => import('pages/admin.vue')
+      }
+    ]
   }
 ]
 // Always leave this as last one
