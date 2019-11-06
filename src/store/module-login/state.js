@@ -18,5 +18,5 @@ export default {
    * Rols user
    * @type {String}
    */
-  rols: localStorage.getItem('rols') || null
+  rols: (localStorage.getItem('rols')) ? localStorage.getItem('rols').toLowerCase() : null
 }

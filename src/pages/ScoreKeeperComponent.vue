@@ -69,6 +69,7 @@
               <q-btn
                 color="positive"
                 class="buttonF"
+                :push="!disabled.add1"
                 :disabled="disabled.add1">
                 <q-icon center
                   size="50px"
@@ -78,6 +79,7 @@
               <q-btn
                 color="negative"
                 class="buttonF"
+                :push="!disabled.sub1"
                 :disabled="disabled.sub1">
                 <q-icon
                   center
@@ -138,6 +140,7 @@
                 color="positive"
                 class="buttonF"
                 ref="buttonA"
+                :push="!disabled.add2"
                 :disabled="disabled.add2">
                 <q-icon center
                   size="50px"
@@ -148,6 +151,7 @@
                 color="negative"
                 class="buttonF"
                 ref="buttonB"
+                :push="!disabled.sub2"
                 :disabled="disabled.sub2">
                 <q-icon
                   center
@@ -177,6 +181,7 @@
             color="positive"
             :loading="submitting"
             :disabled="status"
+            push
             @click="saveRecords">
             <q-icon
               left

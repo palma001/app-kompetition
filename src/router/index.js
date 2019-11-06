@@ -27,7 +27,7 @@ export default function ({ store, ssrContext }) {
   Router.beforeEach((to, from, next) => {
     let autorization = to.matched.some(record => record.meta.authenticate)
     let usuario = store.state.login.token
-    let rols = store.state.login.rols
+    let rols = (store.state.login.rols) ? store.state.login.rols.toLowerCase() : null
     if ((autorization && !usuario)) {
       next('/')
     } else if (to.name === 'login' && usuario) {

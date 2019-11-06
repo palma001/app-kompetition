@@ -43,6 +43,7 @@
             align="center"
             color="positive"
             label="Start"
+            push
             @click="startTimer"/>
           <q-space></q-space>
           <q-btn size="35px"
@@ -50,6 +51,7 @@
             align="center"
             outline
             disable
+            push
             :label="`${minutesRound}:${secondsRound}`" />
           <q-space></q-space>
           <q-btn class="q-px-xl q-py-xs"
@@ -57,6 +59,7 @@
             align="center"
             color="negative"
             label="Stop"
+            push
             @click="stopTimer"/>
           <q-space></q-space>
         </q-toolbar>
@@ -78,14 +81,16 @@
             align="center"
             color="accent"
             label="restart"
+            push
             @click="restartQuestion" />
           <q-space></q-space>
           <q-btn size="35px"
-            class="q-px-xl q-py-xs q-mr-lg"
+            class="q-px-xl q-py-xs q-ml-md q-mr-lg"
             style="width: 150px;"
             align="center"
             outline
             disable
+            push
             :label="secondsQuestion"/>
           <q-space></q-space>
           <q-btn class="q-px-xl q-py-xs"
@@ -93,12 +98,17 @@
             align="center"
             color="accent"
             label="Start"
+            push
             @click="startQuestion"/>
           <q-space></q-space>
         </q-toolbar>
         <div class="row justify-end q-mr-xl">
           <div class="col-auto q-mt-xl">
-            <q-btn color="positive"  style="font-size: 25px" label="Finish" @click="finishConfrontation" />
+            <q-btn color="positive"
+              style="font-size: 25px"
+              label="Finish"
+              push
+              @click="finishConfrontation" />
           </div>
         </div>
       </div>
@@ -261,10 +271,12 @@ export default {
      */
     async getConfrontationsNextPhase (team, phase) {
       let { response } = await this.$services.getData(['phase', phase, 'confrontation'])
+      console.log(response)
       if (response['data'] && response['data'].length > 0) {
         let newTeam = response['data'].filter(function (element) {
           return element['teamB'] === null
         })
+        console.log(newTeam)
         if (newTeam.length <= 0) {
           await this.addConfrontations(team.winner, phase)
         } else {
@@ -274,38 +286,38 @@ export default {
         await this.addConfrontations(team.winner, phase)
       }
     },
-    async final (team, phase) {
-      let { response } = await this.$services.getData(['phase', phase, 'confrontation'])
-      if (response['data'] && response['data'].length > 0) {
-        let newTeam = response['data'].filter(function (element) {
-          return element['teamB'] === null
-        })
-        console.log(newTeam)
-        if (newTeam.length <= 0) {
-          console.log('semifinal 1')
-          await this.addConfrontations(team.winner, phase + 1)
-          await this.addConfrontations(team.loser, phase)
-        } else {
-          console.log(team, phase)
-          await this.updateConfrontationsWinner(team.winner, phase + 1, newTeam[0].id)
-          await this.updateConfrontationsWinner(team.loser, phase, newTeam[0].id)
-        }
-      } else {
-        console.log(team, phase)
-        await this.addConfrontations(team.winner, phase + 1)
-        await this.addConfrontations(team.loser, phase)
-      }
-    },
-    async getPlayed () {
-      let { response } = await this.$services.getData(['phase', 0, 'confrontation'], { status: 'PLAYED' })
-      let allConfrontation = await this.$services.getData(['phase', 0, 'confrontation'])
-      let semifinal = allConfrontation.response.data.length - response.data.length
-      if (semifinal === 2) {
-        console.log('semifinal')
-        this.semifinal = true
-      }
-      console.log('semifinal2', semifinal)
-    },
+    // async final (team, phase) {
+    //   let { response } = await this.$services.getData(['phase', phase, 'confrontation'])
+    //   if (response['data'] && response['data'].length > 0) {
+    //     let newTeam = response['data'].filter(function (element) {
+    //       return element['teamB'] === null
+    //     })
+    //     console.log(newTeam)
+    //     if (newTeam.length <= 0) {
+    //       console.log('semifinal 1')
+    //       await this.addConfrontations(team.winner, phase + 1)
+    //       await this.addConfrontations(team.loser, phase)
+    //     } else {
+    //       console.log(team, phase)
+    //       await this.updateConfrontationsWinner(team.winner, phase + 1, newTeam[0].id)
+    //       await this.updateConfrontationsWinner(team.loser, phase, newTeam[0].id)
+    //     }
+    //   } else {
+    //     console.log(team, phase)
+    //     await this.addConfrontations(team.winner, phase + 1)
+    //     await this.addConfrontations(team.loser, phase)
+    //   }
+    // },
+    // async getPlayed () {
+    //   let { response } = await this.$services.getData(['phase', 0, 'confrontation'], { status: 'PLAYED' })
+    //   let allConfrontation = await this.$services.getData(['phase', 0, 'confrontation'])
+    //   let semifinal = allConfrontation.response.data.length - response.data.length
+    //   if (semifinal === 2) {
+    //     console.log('semifinal')
+    //     this.semifinal = true
+    //   }
+    //   console.log('semifinal2', semifinal)
+    // },
     /**
      * Add confrontations
      * @param {Number} team  number team
@@ -361,12 +373,7 @@ export default {
         }
       }
       data.phaseId += 1
-      if (this.semifinal) {
-        this.final(team, data.phaseId)
-      } else {
-        this.getConfrontationsNextPhase(team, data.phaseId)
-      }
-      await this.getPlayed()
+      this.getConfrontationsNextPhase(team, data.phaseId)
     },
     /**
      * Start Temporizator
