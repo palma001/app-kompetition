@@ -97,6 +97,7 @@
         align="center"
         color="accent"
         label="Bonus"
+        push
         :disabled="statusButton"
         @click="nextOrbonus('bonus')"/>
       <q-space></q-space>
@@ -105,6 +106,7 @@
         style="font-size: 25px"
         align="center"
         color="accent"
+        push
         label="next"
         :disabled="status"
         @click="nextOrbonus('tossup')"/>

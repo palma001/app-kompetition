@@ -22,7 +22,8 @@
               label="General data"/>
             <q-tab name="team"
               label="Registration of team" />
-            <q-tab name="confrontations"
+            <q-tab
+              name="confrontations"
               label="Assign confrontations" />
           </q-tabs>
         </template>
@@ -142,7 +143,7 @@
                     row-key="name"
                     color="primary"
                     flat
-                    filter
+                    :filter="filterUsers"
                     :visible-columns="users.table.visibleColumns"
                     bordered>
                     <template v-slot:top-left>
@@ -212,23 +213,75 @@
                   <q-toolbar-title class="text-h5 text-primary text-bold">
                     Registration of team
                   </q-toolbar-title>
-                  <q-space></q-space>
-                  <div>
-                    <q-btn color="primary"
-                      label="Add team"
-                      @click="addTeam = true" />
-                  </div>
                 </q-toolbar>
                 <div>
-                  <q-table class="my-sticky-header-table q-mt-md"
+                  <q-table class="q-mt-md"
                     :data="teamsData"
                     :columns="teams['table']['column']"
                     row-key="name"
                     color="primary"
                     flat
+                    :filter="filterTeams"
                     :visible-columns="teams['table']['visibleColumns']"
                     bordered>
-
+                    <template v-slot:top-left>
+                      <q-input
+                        borderless
+                        dense debounce="300"
+                        v-model="filterTeams"
+                        placeholder="Search">
+                        <template v-slot:append>
+                          <q-icon name="search" />
+                        </template>
+                      </q-input>
+                    </template>
+                    <template v-slot:top-right>
+                      <div>
+                        <q-btn
+                          color="primary"
+                          label="Add Teams"
+                          @click="modalteams(true, teams['modelTeams'])" />
+                      </div>
+                    </template>
+                    <template v-slot:body="props">
+                      <q-tr
+                        :props="props">
+                        <q-td
+                          key="eventId"
+                          :props="props">
+                          {{ props.row.eventId }}
+                        </q-td>
+                        <q-td
+                          key="name"
+                          :props="props">
+                          {{ props.row.name }}
+                        </q-td>
+                        <q-td
+                          key="University"
+                          :props="props">
+                          {{ props.row.University }}
+                        </q-td>
+                        <q-td
+                          key="created_by"
+                          :props="props">
+                          {{ props.row.created_by }}
+                        </q-td>
+                        <q-td
+                          key="updated_by"
+                          :props="props">
+                          {{ props.row.updated_by }}
+                        </q-td>
+                        <q-td
+                          key="edit"
+                          :props="props">
+                          <q-btn
+                            color="primary"
+                            icon="edit"
+                            size="10px"
+                            @click="selectedTeam(props.row)" />
+                        </q-td>
+                      </q-tr>
+                    </template>
                   </q-table>
                 </div>
                 <q-toolbar class="q-mt-md">
@@ -254,210 +307,100 @@
 
               </div>
             </q-tab-panel>
-<!--             <q-tab-panel name="confrontations">
-              <div class="text-h5 q-mb-md"
-                style="height: 800px">Assign confrontations
-                <q-stepper class="q-mt-md"
-                  v-model="step"
-                  header-nav
-                  ref="stepper"
-                  color="primary"
-                  animated
-                  vertical>
-                  <q-step :name="1"
-                    title="Regular rounds"
-                    icon="add_comment"
-                    :done="done1">
-                    <q-toolbar-title class="text-subtitle1 text-primary text-left">
-                      Round 1
-                    </q-toolbar-title>
-                    <div class="row">
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                    </div>
-                    <q-toolbar-title class="text-subtitle1 text-primary text-left">
-                      Round 2
-                    </q-toolbar-title>
-                    <div class="row">
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                    </div>
-                    <q-toolbar-title class="text-subtitle1 text-primary text-left">
-                      Round 3
-                    </q-toolbar-title>
-                    <div class="row">
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                    </div>
-                    <q-toolbar-title class="text-subtitle1 text-primary text-left">
-                      Round 4
-                    </q-toolbar-title>
-                    <div class="row">
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                    </div>
-                    <q-toolbar-title class="text-subtitle1 text-primary text-left">
-                      Round 5
-                    </q-toolbar-title>
-                    <div class="row">
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                    </div>
-                    <q-toolbar-title class="text-subtitle1 text-primary text-left">
-                      Round 6
-                    </q-toolbar-title>
-                    <div class="row">
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                    </div>
-                    <q-stepper-navigation>
-                      <q-btn @click="() => { done1 = true; step = 2 }"
-                        color="primary"
-                        label="Continue" />
-                    </q-stepper-navigation>
-                  </q-step>
-
-                  <q-step :name="2"
-                    title="Semifinal rounds"
-                    icon="add_comment"
-                    :done="done2">
-                    <q-toolbar-title class="text-subtitle1 text-primary text-left">
-                      Semifinal round 1
-                    </q-toolbar-title>
-                    <div class="row">
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                    </div>
-                    <q-toolbar-title class="text-subtitle1 text-primary text-left">
-                      Semifinal round 2
-                    </q-toolbar-title>
-                    <div class="row">
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                    </div>
-                    <q-stepper-navigation>
-                      <q-btn @click="() => { done2 = true; step = 3 }"
-                        color="primary"
-                        label="Continue" />
-                      <q-btn flat
-                        @click="step = 1"
-                        color="primary"
-                        label="Back"
-                        class="q-ml-sm" />
-                    </q-stepper-navigation>
-                  </q-step>
-                  <q-step :name="3"
-                    title="Final round"
-                    icon="add_comment"
-                    :done="done3">
-                    <q-toolbar-title class="text-subtitle1 text-primary text-left">
-                      Final round
-                    </q-toolbar-title>
-                    <div class="row">
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                    </div>
-                    <q-toolbar-title class="text-subtitle1 text-primary text-left">
-                      Third place
-                    </q-toolbar-title>
-                    <div class="row">
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                      <div class="col-6">
-                        <q-select v-model="model"
-                          :options="options1"
-                          label="Select team" />
-                      </div>
-                    </div>
-                    <q-stepper-navigation>
-                      <q-btn color="primary"
-                        @click="done4 = true"
-                        label="Finish" />
-                      <q-btn flat
-                        @click="step = 2"
-                        color="primary"
-                        label="Back"
-                        class="q-ml-sm" />
-                    </q-stepper-navigation>
-                  </q-step>
-                </q-stepper>
+            <q-tab-panel
+              name="confrontations">
+              <div class="text-h5 q-mb-md">Assign confrontations
               </div>
-            </q-tab-panel> -->
+                <div>
+                  <q-table
+                    class="q-mt-md"
+                    :data="confrontationsAll"
+                    :columns="confrontations['table']['column']"
+                    row-key="name"
+                    :filter="filterConfrontations"
+                    flat
+                    :visible-columns="confrontations['table']['visibleColumns']"
+                    bordered>
+                    <template v-slot:top-left>
+                      <q-input
+                        borderless
+                        dense
+                        debounce="300"
+                        v-model="filterConfrontations"
+                        placeholder="Search">
+                        <template v-slot:append>
+                          <q-icon name="search" />
+                        </template>
+                      </q-input>
+                    </template>
+                    <template v-slot:top-right>
+                      <div>
+                        <q-btn color="primary"
+                          label="Add Confrontations"
+                          @click="modalConfrontations(true, confrontations['modelsConfrontations'])" />
+                      </div>
+                    </template>
+                     <template v-slot:body="props">
+                      <q-tr
+                        :props="props">
+                        <q-td
+                          key="phaseId"
+                          :props="props">
+                          {{ props.row.phaseId }}
+                        </q-td>
+                        <q-td
+                          key="teamA"
+                          :props="props">
+                          {{ props.row.teamA }}
+                        </q-td>
+                        <q-td
+                          key="teamB"
+                          :props="props">
+                          {{ props.row.teamB }}
+                        </q-td>
+                        <q-td
+                          key="TeamA"
+                          :props="props">
+                          {{
+                            (props.row.TeamA) ? props.row.TeamA.name : 'TOPLAY'
+                          }}
+                        </q-td>
+                        <q-td
+                          key="TeamB"
+                          :props="props">
+                          {{
+                            (props.row.TeamB) ? props.row.TeamB.name : 'TOPLAY'
+                          }}
+                        </q-td>
+                        <q-td
+                          key="status"
+                          :props="props">
+                          {{ props.row.status }}
+                        </q-td>
+                        <q-td
+                          key="created_by"
+                          :props="props">
+                          {{ props.row.created_by }}
+                        </q-td>
+                        <q-td
+                          key="updated_by"
+                          :props="props">
+                          {{ props.row.updated_by }}
+                        </q-td>
+                        <q-td
+                          key="edit"
+                          :props="props">
+                          <q-btn
+                            color="primary"
+                            icon="edit"
+                            size="10px"
+                            @click="selectedConfrontations(props.row)" />
+                        </q-td>
+                      </q-tr>
+                    </template>
+                  </q-table>
+                </div>
+            </q-tab-panel>
           </q-tab-panels>
         </template>
       </q-splitter>
@@ -616,8 +559,9 @@
             <q-btn
               label="delete"
               color="negative"
+              v-if="editForm"
               @click="deleteData('events')"/>
-              <q-btn
+            <q-btn
               label="Edit"
               color="primary"
               v-if="editForm"
@@ -642,8 +586,11 @@
               v-model="teams['modelTeams']['eventId']['value']"
               ref="eventId"
               label="Event"
+              emit-value
+              lazy-rules
+              expanded
               :options="eventData"
-              :rules="[ val => val && val.length > 0 || 'Please type something']"/>
+              :rules="[ val => val || 'Please type something']"/>
             </div>
             <div class="col-12">
               <q-input
@@ -659,7 +606,9 @@
               label="University"
               ref="university"
               expanded
-              :rules="[ val => val && val.length > 0 || 'Please type something']"
+              lazy-rules
+              emit-value
+              :rules="[ val => val || 'Please type something']"
               :options="universityDataSelect"/>
             </div>
           </div>
@@ -672,9 +621,20 @@
             color="primary"
             @click="modalteams(false, teams['modelTeams'])"/>
           <q-btn
+            label="delete"
+            color="negative"
+            v-if="editForm"
+            @click="deleteData('teams')"/>
+          <q-btn
+            label="Edit"
+            color="primary"
+            v-if="editForm"
+            @click="editTeams"/>
+          <q-btn
             type="submit"
             label="Add"
             color="primary"
+            v-if="!editForm"
             @click="addTeams"/>
         </q-card-actions>
       </q-card>
@@ -719,6 +679,79 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="addConfrontations"
+      persistent>
+      <q-card style="width: 500px">
+        <q-card-section class="text-primary text-h6">Add information
+          <div class="row">
+          <div class="col-12">
+              <q-select
+                v-model="confrontations['modelsConfrontations']['phaseId']['value']"
+                :options="phaseSelect"
+                label="Phase"
+                emit-value
+                ref="phaseId"
+                :rules="[ val => val || 'Please type something']"
+                expanded/>
+            </div>
+          <div class="col-12">
+              <q-select
+                v-model="confrontations['modelsConfrontations']['teamA']['value']"
+                :options="teamsData"
+                label="TeamA"
+                emit-value
+                ref="teamA"
+                :rules="[ val => val || 'Please type something']"
+                expanded/>
+            </div>
+            <div class="col-12">
+              <q-select
+                v-model="confrontations['modelsConfrontations']['teamB']['value']"
+                :options="teamsData"
+                label="Team B"
+                emit-value
+                ref="teamB"
+                :rules="[ val => val || 'Please type something']"
+                expanded/>
+            </div>
+            <div class="col-12">
+              <q-select
+                v-model="confrontations['modelsConfrontations']['status']['value']"
+                :options="['TOPLAY', 'PLAYED']"
+                ref="status"
+                label="Status"
+                :rules="[ val => val && val.length > 0 || 'Please type something']"
+                expanded/>
+            </div>
+          </div>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn
+            type="reset"
+            label="Cancel"
+            color="primary"
+            @click="modalConfrontations(false, confrontations['modelsConfrontations'])"/>
+          <q-btn
+            label="delete"
+            color="negative"
+            v-if="editForm"
+            @click="deleteData('confrontation')"/>
+          <q-btn
+            label="Edit"
+            color="primary"
+            v-if="editForm"
+            @click="editConfrontations"/>
+          <q-btn
+            type="submit"
+            label="Add"
+            color="primary"
+            v-if="!editForm"
+            @click="addConfrontation"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -735,21 +768,85 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { config, users, events, teams } from './config'
+import { users, events, teams, confrontations } from './config'
 export default {
   data () {
     return {
-      config,
+      /**
+       * Status modal confrontations
+       * @type {Boolean}
+       */
+      addConfrontations: false,
+      /**
+       * Config confrontations
+       * @type {Object}
+       */
+      confrontations,
+      /**
+       * Config users
+       * @type {Object}
+       */
       users,
+      /**
+       * Config events
+       * @type {Object}
+       */
       events,
+      /**
+       * Config teams
+       * @type {Object}
+       */
       teams,
+      /**
+       * filter users
+       * @type {String}
+       */
       filterUsers: '',
+      /**
+       * filter confrontations
+       * @type {String}
+       */
+      filterConfrontations: '',
+      /**
+       * filter Teams
+       * @type {String}
+       */
+      filterTeams: '',
       text: '',
+      /**
+       * filter table
+       * @type {String}
+       */
       filter: '',
+      /**
+       * Tab default
+       * @type {String}
+       */
       tab: 'events',
+      /**
+       * Status modal users
+       * @type {Boolean}
+       */
       addUsers: false,
+      /**
+       * Status modal events
+       * @type {Boolean}
+       */
       addEvent: false,
+      /**
+       * Status modal teams
+       * @type {Boolean}
+       */
       addTeam: false,
+      /**
+       * Status modal confrontatios
+       * @type {Boolean}
+       */
+      modalConfrontationsStatus: false,
+      /**
+       * Status modal member
+       * @type {Boolean}
+       */
       addMember: false,
       splitterModel: 20,
       step: 1,
@@ -758,6 +855,11 @@ export default {
       done3: false,
       done4: false,
       model: null,
+      /**
+       * All confrontations
+       * @type {Array}
+       */
+      confrontationsAll: [],
       /**
        * Select university
        * @type {Array}
@@ -771,6 +873,16 @@ export default {
        * @type {Array}
        */
       teamsData: [],
+      /**
+       * Select teams
+       * @type {Array}
+       */
+      teamsSelect: [],
+      /**
+       * Select teams
+       * @type {Array}
+       */
+      phaseSelect: [],
       /**
        * [options1 description]
        * @type {Array}
@@ -812,17 +924,42 @@ export default {
        * [usersData description]
        * @type {Array}
        */
-      usersData: []
+      usersData: [],
+      /**
+       * parmas all confrontations
+       * @type {Object}
+       */
+      paramsAllConfrontatios: {
+        requestPhases: false,
+        events: {
+          done: false
+        },
+        pahse: {},
+        query: {}
+      }
+    }
+  },
+  sockets: {
+    confrontations (data) {
+      this.confrontationsAll = data
     }
   },
   created () {
-    this.getAllEvents()
-    this.getAllUsers()
-    this.selectEvents()
-    this.getAllteams()
-    this.selectUniversity()
+    this.loadTable()
   },
   methods: {
+    /**
+     * load tables
+     */
+    loadTable () {
+      this.getAllEvents()
+      this.getAllUsers()
+      this.selectEvents()
+      this.getAllteams()
+      this.selectUniversity()
+      this.getAllConfrontations()
+      this.getAllPhase()
+    },
     /**
      * Sets data select events
      */
@@ -862,7 +999,7 @@ export default {
       }
     },
     /**
-     * Modal de events
+     * Modal the events
      * @param  {Boolean} data status events
      * @param  {Object} model events
      */
@@ -872,7 +1009,17 @@ export default {
       this.onReset(model)
     },
     /**
-     * Modal de events
+     * Modal the Confrontations
+     * @param  {Boolean} data status events
+     * @param  {Object} model events
+     */
+    modalConfrontations (data, model) {
+      this.addConfrontations = data
+      this.editForm = false
+      this.onReset(model)
+    },
+    /**
+     * Modal the events
      * @param  {Boolean} data status events
      * @param  {Object} model events
      */
@@ -880,6 +1027,42 @@ export default {
       this.addUsers = data
       this.editForm = false
       this.onReset(model)
+    },
+    /**
+     * Gets all Confrontations
+     */
+    async getAllConfrontations () {
+      try {
+        let confrontations = await this['confrontations/getConfrontations'](
+          {
+            params: this.paramsAllConfrontatios,
+            vm: this
+          }
+        )
+        if (!confrontations) throw new Error('No rounds')
+        this.confrontationsAll = confrontations
+        this.$socket.emit('confrontations', confrontations)
+        this.modalConfrontations(false, this.confrontations['modelsConfrontations'])
+      } catch (e) {
+        this.messageNotify('report_problem', 'negative', 'center', e.message)
+      }
+    },
+
+    /**
+     * Gets all Confrontations
+     */
+    async getAllPhase () {
+      try {
+        let phase = await this.$services.getData(['events', 0, 'phase'])
+        if (!phase.status) throw new Error('Error in server')
+        phase['response']['data'].map(element => {
+          element.value = element.id
+          element.label = element.id
+        })
+        this.phaseSelect = phase['response']['data']
+      } catch (e) {
+        this.messageNotify('report_problem', 'negative', 'center', e.message)
+      }
     },
     /**
      * Modal de teams
@@ -935,6 +1118,38 @@ export default {
       }
     },
     /**
+     * Select data to edit
+     * @param  {Object} data events
+     */
+    selectedConfrontations (data) {
+      this.addConfrontations = true
+      this.editForm = true
+      this.entityId = data['id']
+      for (let model in data) {
+        for (let modelEvents in this.confrontations['modelsConfrontations']) {
+          if (modelEvents === model && modelEvents !== 'password') {
+            this.confrontations['modelsConfrontations'][model]['value'] = data[model]
+          }
+        }
+      }
+    },
+    /**
+     * Select data to edit
+     * @param  {Object} data events
+     */
+    selectedTeam (data) {
+      this.addTeam = true
+      this.editForm = true
+      this.entityId = data['id']
+      for (let model in data) {
+        for (let modelEvents in this.teams['modelTeams']) {
+          if (modelEvents === model && modelEvents !== 'password') {
+            this.teams['modelTeams'][model]['value'] = data[model]
+          }
+        }
+      }
+    },
+    /**
      * Gets all Confrontations
      */
     async getAllEvents () {
@@ -972,9 +1187,14 @@ export default {
      */
     async getAllteams () {
       try {
-        let res = await this.$services.getData(['phase'])
+        let res = await this.$services.getData(['teams'])
         if (!res.status) throw new Error('Error in server')
         if (res.response.status === 204) throw new Error('No events loaded')
+        res['response']['data'].map(element => {
+          element.University = (element.University) ? element.University.name : null
+          element.value = element.id
+          element.label = element.name
+        })
         this.teamsData = res['response']['data']
         this.modalteams(false, this.teams['modelTeams'])
       } catch (e) {
@@ -985,6 +1205,14 @@ export default {
      * Add events
      */
     async addTeams () {
+      this.teams['modelTeams'].created_by = {
+        value: 'luis',
+        validate: false
+      }
+      this.teams['modelTeams'].updated_by = {
+        value: 'luis',
+        validate: false
+      }
       try {
         this.validateInput(this.teams['modelTeams'])
         if (
@@ -1054,6 +1282,43 @@ export default {
       }
     },
     /**
+     * Add events
+     */
+    async addConfrontation () {
+      try {
+        this.confrontations['modelsConfrontations'].created_by = {
+          value: 'luis',
+          validate: false
+        }
+        this.confrontations['modelsConfrontations'].updated_by = {
+          value: 'luis',
+          validate: false
+        }
+        this.validateInput(this.confrontations['modelsConfrontations'])
+        if (
+          !this.$refs['phaseId'].hasError &&
+          !this.$refs['teamA'].hasError &&
+          !this.$refs['teamB'].hasError &&
+          !this.$refs['status'].hasError
+        ) {
+          let response = await this.$services.postData(
+            [
+              'phase',
+              this.confrontations['modelsConfrontations']['phaseId'],
+              'confrontation'
+            ],
+            this.modelsObject(this.confrontations['modelsConfrontations'])
+          )
+          if (!response.status) throw new Error('Error server')
+          this.getAllConfrontations()
+          this.messageNotify('', 'positive', 'center', 'Users add successfull')
+          this.onReset(this.confrontations['modelsConfrontations'])
+        }
+      } catch (e) {
+        this.messageNotify('report_problem', 'negative', 'center', e.message)
+      }
+    },
+    /**
      * Edit events
      * @param  {Object} data events
      */
@@ -1082,14 +1347,43 @@ export default {
       }
     },
     /**
+     * Edit confrontations
+     * @param  {Object} data confrontations
+     */
+    async editConfrontations () {
+      try {
+        this.validateInput(this.confrontations['modelsConfrontations'])
+        if (
+          !this.$refs['phaseId'].hasError &&
+          !this.$refs['teamA'].hasError &&
+          !this.$refs['teamB'].hasError &&
+          !this.$refs['status'].hasError
+        ) {
+          let response = await this.$services.putData(
+            [
+              'phase',
+              this.confrontations['modelsConfrontations']['phaseId']['value'],
+              'confrontation',
+              this.entityId
+            ],
+            this.modelsObject(this.confrontations['modelsConfrontations'])
+          )
+          if (!response.status) throw new Error('Error server')
+          this.getAllConfrontations()
+          this.messageNotify('', 'positive', 'center', 'Confrontations edit successfull')
+        }
+      } catch (e) {
+        this.messageNotify('report_problem', 'negative', 'center', e.message)
+      }
+    },
+    /**
      * Delete data
      * @param {String} name entity
      */
     async deleteData (data) {
       try {
         await this.$services.deleteData([data, this.entityId])
-        this.getAllEvents()
-        this.getAllUsers()
+        this.loadTable()
       } catch (e) {
         this.messageNotify('report_problem', 'negative', 'center', e.message)
       }
@@ -1125,11 +1419,37 @@ export default {
       }
     },
     /**
+     * Edit events
+     * @param  {Object} data events
+     */
+    editTeams () {
+      if (
+        !this.$refs['eventId'].hasError &&
+        !this.$refs['name'].hasError &&
+        !this.$refs['university'].hasError
+      ) {
+        this.$services.putData(
+          [
+            'teams',
+            this.entityId
+          ],
+          this.modelsObject(this.teams['modelTeams'])
+        )
+          .then(response => {
+            if (!response.status) throw new Error('Error server')
+            this.messageNotify('', 'positive', 'center', 'Teams edit successfull')
+            this.getAllUsers()
+          })
+          .catch(e => {
+            this.messageNotify('report_problem', 'negative', 'center', e.message)
+          })
+      }
+    },
+    /**
      * Validate form
      * @param  {Object} data models input
      */
     validateInput (data) {
-      console.log(data)
       for (let input in data) {
         if (data[input]['validate']) {
           this.$refs[input].validate()
@@ -1144,13 +1464,8 @@ export default {
     modelsObject (data) {
       let models = {}
       for (let input in data) {
-        if (typeof data[input]['value'] === 'object' && data[input] !== null) {
-          console.log(data[input])
-          data[input] = data[input]['value']
-        }
         models[input] = data[input]['value']
       }
-      console.log(models)
       return models
     },
     /**

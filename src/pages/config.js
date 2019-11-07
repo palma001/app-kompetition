@@ -155,6 +155,14 @@ export const users = {
     password: {
       value: null,
       validate: true
+    },
+    created_by: {
+      value: 'Ramon teran',
+      validate: false
+    },
+    updated_by: {
+      value: 'ramon teran',
+      validate: false
     }
   }
 }
@@ -256,7 +264,7 @@ export const events = {
   }
 }
 export const teams = {
-  entity: 'temas',
+  entity: 'teams',
   table: {
     column: [
       {
@@ -274,17 +282,37 @@ export const teams = {
         sortable: true
       },
       {
-        name: 'university',
+        name: 'University',
         align: 'center',
         label: 'University',
-        field: 'university',
+        field: 'University',
         sortable: true
+      },
+      {
+        name: 'edit',
+        align: 'center',
+        label: 'Edit',
+        field: 'edit',
+        sortable: true
+      },
+      {
+        name: 'created_by',
+        align: 'center',
+        label: 'Created by',
+        field: 'created_by'
+      },
+      {
+        name: 'updated_by',
+        align: 'center',
+        label: 'Updated by',
+        field: 'updated_by'
       }
     ],
     visibleColumns: [
       'eventId',
       'name',
-      'university'
+      'University',
+      'edit'
     ]
   },
   modelTeams: {
@@ -301,11 +329,101 @@ export const teams = {
       validate: true
     },
     created_by: {
-      value: 'luis palma',
+      value: 'Ramon teran',
       validate: false
     },
     updated_by: {
-      value: 'luis palma',
+      value: 'ramon teran',
+      validate: false
+    }
+  }
+}
+
+export const confrontations = {
+  entity: 'confrontations',
+  table: {
+    column: [
+      {
+        name: 'phaseId',
+        align: 'center',
+        label: 'Phase',
+        field: 'phaseId',
+        sortable: true
+      },
+      {
+        name: 'teamA',
+        align: 'center',
+        label: 'Team A',
+        field: 'teamA',
+        sortable: true
+      },
+      {
+        name: 'teamB',
+        align: 'center',
+        label: 'Team B',
+        field: 'teamB',
+        sortable: true
+      },
+      {
+        name: 'TeamA',
+        align: 'center',
+        label: 'Team A',
+        field: 'TeamA',
+        sortable: true
+      },
+      {
+        name: 'TeamB',
+        align: 'center',
+        label: 'Team B',
+        field: 'TeamB',
+        sortable: true
+      },
+      {
+        name: 'status',
+        align: 'center',
+        label: 'Status',
+        field: 'status',
+        sortable: true
+      },
+      {
+        name: 'edit',
+        align: 'center',
+        label: 'Edit',
+        field: 'edit',
+        sortable: true
+      }
+    ],
+    visibleColumns: [
+      'phaseId',
+      'TeamA',
+      'TeamB',
+      'status',
+      'edit'
+    ]
+  },
+  modelsConfrontations: {
+    phaseId: {
+      value: null,
+      validate: true
+    },
+    teamA: {
+      value: null,
+      validate: true
+    },
+    teamB: {
+      value: null,
+      validate: true
+    },
+    status: {
+      value: null,
+      validate: true
+    },
+    created_by: {
+      value: 'Ramon teran',
+      validate: false
+    },
+    updated_by: {
+      value: 'ramon teran',
       validate: false
     }
   }

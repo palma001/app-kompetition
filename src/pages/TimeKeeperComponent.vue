@@ -271,12 +271,10 @@ export default {
      */
     async getConfrontationsNextPhase (team, phase) {
       let { response } = await this.$services.getData(['phase', phase, 'confrontation'])
-      console.log(response)
       if (response['data'] && response['data'].length > 0) {
         let newTeam = response['data'].filter(function (element) {
           return element['teamB'] === null
         })
-        console.log(newTeam)
         if (newTeam.length <= 0) {
           await this.addConfrontations(team.winner, phase)
         } else {
@@ -286,38 +284,6 @@ export default {
         await this.addConfrontations(team.winner, phase)
       }
     },
-    // async final (team, phase) {
-    //   let { response } = await this.$services.getData(['phase', phase, 'confrontation'])
-    //   if (response['data'] && response['data'].length > 0) {
-    //     let newTeam = response['data'].filter(function (element) {
-    //       return element['teamB'] === null
-    //     })
-    //     console.log(newTeam)
-    //     if (newTeam.length <= 0) {
-    //       console.log('semifinal 1')
-    //       await this.addConfrontations(team.winner, phase + 1)
-    //       await this.addConfrontations(team.loser, phase)
-    //     } else {
-    //       console.log(team, phase)
-    //       await this.updateConfrontationsWinner(team.winner, phase + 1, newTeam[0].id)
-    //       await this.updateConfrontationsWinner(team.loser, phase, newTeam[0].id)
-    //     }
-    //   } else {
-    //     console.log(team, phase)
-    //     await this.addConfrontations(team.winner, phase + 1)
-    //     await this.addConfrontations(team.loser, phase)
-    //   }
-    // },
-    // async getPlayed () {
-    //   let { response } = await this.$services.getData(['phase', 0, 'confrontation'], { status: 'PLAYED' })
-    //   let allConfrontation = await this.$services.getData(['phase', 0, 'confrontation'])
-    //   let semifinal = allConfrontation.response.data.length - response.data.length
-    //   if (semifinal === 2) {
-    //     console.log('semifinal')
-    //     this.semifinal = true
-    //   }
-    //   console.log('semifinal2', semifinal)
-    // },
     /**
      * Add confrontations
      * @param {Number} team  number team
