@@ -78,7 +78,9 @@
               align="center"
               style="width: 180px;"
               color="negative">
-              asdsa
+              {{
+                (confrontations3er[0]['TeamA'] && confrontations3er[0]['TeamA']['name']) ? confrontations3er[0]['TeamA']['name'] : 'To play'
+              }}
             </q-btn>
           </div>
           <div class="button4 col-12 q-mt-xs">
@@ -103,8 +105,9 @@
               class="q-px-xl q-ml-md q-py-xs"
               align="center"
               style="width: 180px;"
-              color="primary"
-              label="UDO 25" />
+              color="primary">
+              hola
+            </q-btn>
           </div>
           <div class="button5 col-12 q-mt-xl">
             <q-btn size="20px"
@@ -112,16 +115,16 @@
               align="center"
               style="width: 180px;"
               color="primary"
-              label="UDO 25" />
+              label="hola 3r" />
           </div>
         </div>
       </div>
       <!-- Ganador lado right -->
       <div class="col-2 q-ml-xl">
         <div class="row">
-          <div class="col-12 q-mt-xs">
+          <div class="col-12 q-mt-xs button3">
             <q-btn size="20px"
-              class="q-px-xl q-ml-xl q-py-xs"
+              class="q-px-xl q-py-xs"
               style="width: 180px;"
               color="negative">
               {{
@@ -138,6 +141,27 @@
               color="negative">
               {{
                 (confrontationsPhaseFinal[0]['TeamB'] && confrontationsPhaseFinal[0]['TeamB']['score']) ? confrontationsPhaseFinal[0]['TeamB']['score'] : 'To play'
+              }}
+            </q-btn>
+          </div>
+          <div class="col-12 q-mt-xs">
+            <q-btn size="20px"
+              class="button6 q-px-xl q-ml-md q-py-xs"
+              align="center"
+              color="negative">
+              {{
+                (confrontations3er[0]['TeamB'] && confrontations3er[0]['TeamB']['name']) ? confrontations3er[0]['TeamB']['name'] : 'To play'
+              }}
+            </q-btn>
+          </div>
+          <div class="button8 col-12 q-mt-xs">
+            <q-btn size="20px"
+              class="q-px-xl q-py-xs"
+              align="center"
+              outline
+              color="negative">
+              {{
+                (confrontations3er[0]['TeamB'] && confrontations3er[0]['TeamB']['score']) ? confrontations3er[0]['TeamB']['score'] : 'To play'
               }}
             </q-btn>
           </div>
@@ -241,7 +265,12 @@ export default {
        * Confrontations final
        * @type {Array}
        */
-      confrontationsPhaseFinal: []
+      confrontationsPhaseFinal: [],
+      /**
+       * Confrontations 3er
+       * @type {Array}
+       */
+      confrontations3er: []
     }
   },
   sockets: {
@@ -259,6 +288,7 @@ export default {
       )
       this.confrontations = this.getConfrontationsPhaseTree(datas, 3)
       this.confrontationsPhaseFinal = this.getConfrontationsPhaseTree(datas, 5)
+      this.confrontations3er = this.getConfrontationsPhaseTree(datas, 4)
     },
     /**
      * Sets phase final

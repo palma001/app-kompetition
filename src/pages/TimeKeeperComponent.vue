@@ -270,18 +270,35 @@ export default {
      * @param  {Number} phase phase id
      */
     async getConfrontationsNextPhase (team, phase) {
-      let { response } = await this.$services.getData(['phase', phase, 'confrontation'])
+      let { response } = await this.$services.getData(['phase', 0, 'confrontation'])
       if (response['data'] && response['data'].length > 0) {
         let newTeam = response['data'].filter(function (element) {
           return element['teamB'] === null
         })
         if (newTeam.length <= 0) {
-          await this.addConfrontations(team.winner, phase)
+          if (this.confrontationPlaying.semifinale) {
+            await this.addConfrontations(team.winner, phase + 1)
+            await this.addConfrontations(team.loser, phase)
+          } else {
+            await this.addConfrontations(team.winner, phase)
+          }
         } else {
-          await this.updateConfrontationsWinner(team.winner, phase, newTeam[0].id)
+          if (this.confrontationPlaying.semifinale) {
+            await this.updateConfrontationsWinner(team.winner, phase + 1, newTeam[0].id)
+            setTimeout(async () => {
+              await this.updateConfrontationsWinner(team.loser, phase, newTeam[1].id)
+            }, 1000)
+          } else {
+            await this.updateConfrontationsWinner(team.winner, phase, newTeam[0].id)
+          }
         }
       } else {
-        await this.addConfrontations(team.winner, phase)
+        if (this.confrontationPlaying.semifinale) {
+          await this.addConfrontations(team.winner, phase + 1)
+          await this.addConfrontations(team.loser, phase)
+        } else {
+          await this.addConfrontations(team.winner, phase)
+        }
       }
     },
     /**
@@ -301,13 +318,31 @@ export default {
       await this.$services.postData(['phase', phase, 'confrontation'], data)
     },
     /**
+     * Update semifinal
+     * @param  {Number} phase Number
+     */
+    async getSemifinal (phase) {
+      let { response } = await this.$services.getData(['phase', 0, 'confrontation'], {
+        status: 'TOPLAY'
+      })
+      let resp = await this.$services.getData(['phase', 0, 'confrontation'], {
+        semifinale: true
+      })
+      if (response['data'].length === 2 && resp['response']['data'].length === 0) {
+        let res = await this.$services.getData(['phase', phase, 'confrontation'])
+        res.response.data.map(async (element) => {
+          await this.$services.putData(['phase', phase, 'confrontation', element.id], { semifinale: true })
+        })
+      }
+    },
+    /**
      * Update confrontations winner
      * @param  {Number} team
      * @param  {Number} phase
      * @param  {Number} newTeam
      */
     async updateConfrontationsWinner (team, phase, newTeam) {
-      await this.$services.putData(
+      let res = await this.$services.putData(
         [
           'phase',
           phase,
@@ -320,6 +355,7 @@ export default {
           status: 'TOPLAY'
         }
       )
+      return res
     },
     /**
      * Next phase
@@ -339,6 +375,7 @@ export default {
         }
       }
       data.phaseId += 1
+      this.getSemifinal(data.phaseId)
       this.getConfrontationsNextPhase(team, data.phaseId)
     },
     /**
