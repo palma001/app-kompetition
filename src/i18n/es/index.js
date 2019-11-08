@@ -6,6 +6,18 @@ export default {
       label: 'Moderator',
       meta: 'Moderator'
     },
+    MODERATOR: {
+      label: 'Moderator',
+      meta: 'Moderator'
+    },
+    ADMIN: {
+      label: 'Admin',
+      meta: 'Admin'
+    },
+    admin: {
+      label: 'Admin',
+      meta: 'Admin'
+    },
     time: {
       label: 'Time',
       meta: 'Time'
@@ -13,6 +25,14 @@ export default {
     scorekeeper: {
       label: 'Scorekeeper',
       meta: 'Scorekeeper'
+    },
+    SCOREKEEPER: {
+      label: 'Scorekeeper',
+      meta: 'Scorekeeper'
+    },
+    TIMEKEEPER: {
+      label: 'Timekeeper',
+      meta: 'Timekeeper'
     },
     timekeeper: {
       label: 'Timekeeper',

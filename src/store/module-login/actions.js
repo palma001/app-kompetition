@@ -24,7 +24,7 @@ export function login ({ commit, dispatch }, payload) {
           .then(res => {
             commit('updateData', res.response.data)
             payload.this.$router.push({
-              name: res.response.data.rols
+              name: res.response.data.rols.toLowerCase()
             })
           })
         commit('updateToken', res.token)

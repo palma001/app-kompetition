@@ -13,7 +13,7 @@ export default {
    * Lastname user
    * @type {String}
    */
-  lastName: localStorage.getItem('lastName') || null,
+  lastName: localStorage.getItem('lastname') || null,
   /**
    * Rols user
    * @type {String}

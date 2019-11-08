@@ -32,6 +32,8 @@ export default function ({ store, ssrContext }) {
       next('/')
     } else if (to.name === 'login' && usuario) {
       next(rols)
+    } else if (usuario && rols === 'admin') {
+      next()
     } else if (usuario && to.name !== rols) {
       next(rols)
     } else if (!autorization && usuario) {

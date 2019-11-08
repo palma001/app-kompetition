@@ -130,7 +130,7 @@ export default {
        * secons confrontation
        * @type {Number}
        */
-      secondsRound: 0,
+      secondsRound: '00',
       /**
        * secons question
        * @type {Number}
@@ -255,7 +255,7 @@ export default {
       }
       this.$socket.emit('statusButton', true)
       this.minutesRound = 10
-      this.secondsRound = 0
+      this.secondsRound = '00'
       this.updateConfrontations(data)
       this.nextPhase(this.confrontationPlaying)
       this.stopTimer()

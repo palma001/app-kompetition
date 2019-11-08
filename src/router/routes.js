@@ -101,7 +101,10 @@ const routes = [
       {
         path: '',
         name: 'sortingScreenFinal',
-        component: () => import('pages/SortingFinalComponent.vue')
+        component: () => import('pages/SortingFinalComponent.vue'),
+        meta: {
+          authenticate: false
+        }
       }
     ]
   },
@@ -112,7 +115,10 @@ const routes = [
       {
         path: '',
         name: 'admin',
-        component: () => import('pages/admin.vue')
+        component: () => import('pages/admin.vue'),
+        meta: {
+          authenticate: true
+        }
       }
     ]
   }

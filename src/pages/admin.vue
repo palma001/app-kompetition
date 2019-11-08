@@ -25,6 +25,9 @@
             <q-tab
               name="confrontations"
               label="Assign confrontations" />
+            <q-tab
+              name="universities"
+              label="universities" />
           </q-tabs>
         </template>
 
@@ -284,7 +287,7 @@
                     </template>
                   </q-table>
                 </div>
-                <q-toolbar class="q-mt-md">
+<!--                 <q-toolbar class="q-mt-md">
                   <q-toolbar-title class="text-h5 text-primary text-bold">
                     Members
                   </q-toolbar-title>
@@ -295,7 +298,7 @@
                       @click="addMember = true" />
                   </div>
                 </q-toolbar>
-<!--                 <div>
+                <div>
                   <q-table class="my-sticky-header-table q-mt-md"
                     :data="data3"
                     :columns="columns3"
@@ -309,8 +312,11 @@
             </q-tab-panel>
             <q-tab-panel
               name="confrontations">
-              <div class="text-h5 q-mb-md">Assign confrontations
-              </div>
+              <q-toolbar>
+                <q-toolbar-title class="text-h5 text-primary text-bold">
+                  Assign confrontations
+                </q-toolbar-title>
+              </q-toolbar>
                 <div>
                   <q-table
                     class="q-mt-md"
@@ -340,7 +346,7 @@
                           @click="modalConfrontations(true, confrontations['modelsConfrontations'])" />
                       </div>
                     </template>
-                     <template v-slot:body="props">
+                    <template v-slot:body="props">
                       <q-tr
                         :props="props">
                         <q-td
@@ -395,6 +401,84 @@
                             icon="edit"
                             size="10px"
                             @click="selectedConfrontations(props.row)" />
+                        </q-td>
+                      </q-tr>
+                    </template>
+                  </q-table>
+                </div>
+            </q-tab-panel>
+            <q-tab-panel
+              name="universities">
+              <q-toolbar>
+                <q-toolbar-title class="text-h5 text-primary text-bold">
+                  Universities
+                </q-toolbar-title>
+              </q-toolbar>
+                <div>
+                  <q-table
+                    class="q-mt-md"
+                    :data="universityData"
+                    :columns="universities['table']['column']"
+                    row-key="name"
+                    :filter="filterConfrontations"
+                    flat
+                    :visible-columns="universities['table']['visibleColumns']"
+                    bordered>
+                    <template v-slot:top-left>
+                      <q-input
+                        borderless
+                        dense
+                        debounce="300"
+                        v-model="filterConfrontations"
+                        placeholder="Search">
+                        <template v-slot:append>
+                          <q-icon name="search" />
+                        </template>
+                      </q-input>
+                    </template>
+                    <template v-slot:top-right>
+                      <div>
+                        <q-btn color="primary"
+                          label="Add University"
+                          @click="modalUniversity(true, universities['modelsUniversities'])" />
+                      </div>
+                    </template>
+                    <template v-slot:body="props">
+                      <q-tr
+                        :props="props">
+                        <q-td
+                          key="name"
+                          :props="props">
+                          {{ props.row.name }}
+                        </q-td>
+                        <q-td
+                          key="sortName"
+                          :props="props">
+                          {{ props.row.sortName }}
+                        </q-td>
+                        <q-td
+                          key="university"
+                          :props="props">
+                          {{ props.row.university }}
+                        </q-td>
+                        <q-td
+                          key="created_by"
+                          :props="props">
+                          {{ props.row.created_by }}
+                        </q-td>
+                        <q-td
+                          key="updated_by"
+                          :props="props">
+                          {{ props.row.updated_by }}
+                        </q-td>
+                        <q-td
+                          key="edit"
+                          :props="props">
+                          <q-btn
+                            color="primary"
+                            icon="edit"
+                            size="10px"
+                            @click="selectedUniversity(props.row)" />
                         </q-td>
                       </q-tr>
                     </template>
@@ -473,6 +557,7 @@
             <q-btn
               label="delete"
               color="negative"
+              v-if="editForm"
               @click="deleteData('users')"/>
             <q-btn
               label="Edit"
@@ -576,7 +661,8 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="addTeam"
+    <q-dialog
+      v-model="addTeam"
       persistent>
       <q-card>
         <q-card-section class="text-primary text-h6">Add information
@@ -640,14 +726,15 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="addMember"
+    <q-dialog
+      v-model="addMember"
       persistent>
       <q-card>
         <q-card-section class="text-primary text-h6">Add information
           <div class="row">
-          <div class="col-12">
+            <div class="col-12">
               <q-select
-                v-model="model"
+                v-model="text"
                 :options="eventData"
                 label="Event"
                 expanded/>
@@ -663,7 +750,7 @@
                 expanded/>
             </div>
             <div class="col-12">
-              <q-select v-model="model"
+              <q-select v-model="text"
                 :options="options4"
                 label="Type of competitor"
                 expanded/>
@@ -680,7 +767,8 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="addConfrontations"
+    <q-dialog
+      v-model="addConfrontations"
       persistent>
       <q-card style="width: 500px">
         <q-card-section class="text-primary text-h6">Add information
@@ -752,6 +840,71 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
+    <q-dialog
+      v-model="addUniversities"
+      persistent>
+      <q-card style="width: 500px">
+        <q-card-section class="text-primary text-h6">Add information
+          <div class="row">
+            <div class="col-12">
+              <q-input
+                ref="name"
+                v-model="universities['modelsUniversities']['name']['value']"
+                label="Name"
+                :rules="[ val => val && val.length > 0 || 'Please type something']"
+                expanded/>
+            </div>
+            <div class="col-12">
+              <q-input
+                ref="sortName"
+                v-model="universities['modelsUniversities']['sortName']['value']"
+                label="Sort name"
+                :rules="[ val => val && val.length > 0 || 'Please type something']"
+                expanded/>
+            </div>
+            <div class="col-12">
+              <q-input
+                ref="university"
+                v-model="universities['modelsUniversities']['university']['value']"
+                label="University"
+                :rules="[ val => val && val.length > 0 || 'Please type something']"
+                expanded/>
+            </div>
+            <div class="col-12">
+              <q-input
+                ref="logo"
+                v-model="universities['modelsUniversities']['logo']['value']"
+                type="file"/>
+            </div>
+          </div>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn
+            type="reset"
+            label="Cancel"
+            color="primary"
+            @click="modalUniversity(false, universities['modelsUniversities'])"/>
+          <q-btn
+            label="delete"
+            color="negative"
+            v-if="editForm"
+            @click="deleteData('universities')"/>
+          <q-btn
+            label="Edit"
+            color="primary"
+            v-if="editForm"
+            @click="editUniversity"/>
+          <q-btn
+            type="submit"
+            label="Add"
+            color="primary"
+            v-if="!editForm"
+            @click="addUniversity"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -768,7 +921,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { users, events, teams, confrontations } from './config'
+import { users, events, teams, confrontations, universities } from './config'
 export default {
   data () {
     return {
@@ -778,10 +931,20 @@ export default {
        */
       addConfrontations: false,
       /**
+       * Status modal universities
+       * @type {Boolean}
+       */
+      addUniversities: false,
+      /**
        * Config confrontations
        * @type {Object}
        */
       confrontations,
+      /**
+       * Config universities
+       * @type {Object}
+       */
+      universities,
       /**
        * Config users
        * @type {Object}
@@ -849,17 +1012,16 @@ export default {
        */
       addMember: false,
       splitterModel: 20,
-      step: 1,
-      done1: false,
-      done2: false,
-      done3: false,
-      done4: false,
-      model: null,
       /**
        * All confrontations
        * @type {Array}
        */
       confrontationsAll: [],
+      /**
+       * All universities
+       * @type {Array}
+       */
+      universityData: [],
       /**
        * Select university
        * @type {Array}
@@ -884,13 +1046,6 @@ export default {
        */
       phaseSelect: [],
       /**
-       * [options1 description]
-       * @type {Array}
-       */
-      options1: [
-        'Team 1', 'Team 2', 'Team 3', 'Team 4', 'Team 5', 'Team 6', 'Team 7', 'Team 8', 'Team 9', 'Team 10', 'Team 11', 'Team 12'
-      ],
-      /**
        * data select events
        * @type {Array}
        */
@@ -899,7 +1054,7 @@ export default {
        * [rols description]
        * @type {Array}
        */
-      rols: ['SCOREKEEPER', 'TIMEKEEPER', 'MODERATOR', 'ADMINISTRADOR'],
+      rols: ['SCOREKEEPER', 'TIMEKEEPER', 'MODERATOR', 'ADMIN'],
       /**
        * [options4 description]
        * @type {Array}
@@ -988,6 +1143,7 @@ export default {
         let res = await this.$services.getData(['universities'])
         if (!res.status) throw new Error('Error in server')
         if (res.response.status === 204) throw new Error('No events loaded')
+        this.universityData = res['response']['data']
         res['response']['data'].map(element => {
           this.universityDataSelect.push({
             label: element['sortName'],
@@ -1015,6 +1171,16 @@ export default {
      */
     modalConfrontations (data, model) {
       this.addConfrontations = data
+      this.editForm = false
+      this.onReset(model)
+    },
+    /**
+     * Modal the Confrontations
+     * @param  {Boolean} data status events
+     * @param  {Object} model events
+     */
+    modalUniversity (data, model) {
+      this.addUniversities = data
       this.editForm = false
       this.onReset(model)
     },
@@ -1075,17 +1241,6 @@ export default {
       this.onReset(model)
     },
     /**
-     * [reset description]
-     * @return {[type]} [description]
-     */
-    reset () {
-      this.done1 = false
-      this.done2 = false
-      this.done3 = false
-      this.done4 = false
-      this.step = 1
-    },
-    /**
      * Select data to edit
      * @param  {Object} data events
      */
@@ -1097,6 +1252,22 @@ export default {
         for (let modelEvents in this.events['modelsAddEvents']) {
           if (modelEvents === model) {
             this.events['modelsAddEvents'][model]['value'] = data[model]
+          }
+        }
+      }
+    },
+    /**
+     * Select data to edit
+     * @param  {Object} data events
+     */
+    selectedUniversity (data) {
+      this.addUniversities = true
+      this.editForm = true
+      this.entityId = data['id']
+      for (let model in data) {
+        for (let modelEvents in this.universities['modelsUniversities']) {
+          if (modelEvents === model) {
+            this.universities['modelsUniversities'][model]['value'] = data[model]
           }
         }
       }
@@ -1245,12 +1416,45 @@ export default {
           !this.$refs['dateEvent'].hasError &&
           !this.$refs['address'].hasError
         ) {
-          let response = await this.$services.postData(['events'], this.modelsObject(this.events['modelsAddEvents']))
+          let response = await this.$services.postData(
+            ['events'],
+            this.modelsObject(this.events['modelsAddEvents'])
+          )
 
           if (!response.status) throw new Error('Error server')
-          this.getAllEvents()
-          this.messageNotify('', 'positive', 'center', 'Event add successfull')
+          this.selectUniversity()
+          this.messageNotify('', 'positive', 'center', 'University add successfull')
           this.onReset(this.events['modelsAddEvents'])
+        }
+      } catch (e) {
+        this.messageNotify('report_problem', 'negative', 'center', e.message)
+      }
+    },
+    /**
+     * Add events
+     */
+    async addUniversity () {
+      try {
+        this.universities['modelsUniversities'].created_by = {
+          value: `${this.$store.state.login.name} ${this.$store.state.login.lastName}`,
+          validate: false
+        }
+        this.universities['modelsUniversities'].updated_by = {
+          value: `${this.$store.state.login.name} ${this.$store.state.login.lastName}`,
+          validate: false
+        }
+        this.validateInput(this.universities['modelsUniversities'])
+        if (
+          !this.$refs['name'].hasError &&
+          !this.$refs['sortName'].hasError &&
+          !this.$refs['university'].hasError
+        ) {
+          let response = await this.$services.postData(['universities'], this.modelsObject(this.universities['modelsUniversities']))
+          if (!response.status) throw new Error('Error server')
+          this.selectUniversity()
+          this.modalUniversity(false, this.universities['modelsUniversities'])
+          this.messageNotify('', 'positive', 'center', 'Event add successfull')
+          this.onReset(this.universities['modelsUniversities'])
         }
       } catch (e) {
         this.messageNotify('report_problem', 'negative', 'center', e.message)
@@ -1286,12 +1490,12 @@ export default {
      */
     async addConfrontation () {
       try {
-        this.confrontations['modelsConfrontations'].created_by = {
-          value: 'luis',
+        this.this.confrontations['modelsConfrontations'].created_by = {
+          value: `${this.$store.state.login.name} ${this.$store.state.login.lastName}`,
           validate: false
         }
-        this.confrontations['modelsConfrontations'].updated_by = {
-          value: 'luis',
+        this.this.confrontations['modelsConfrontations'].updated_by = {
+          value: `${this.$store.state.login.name} ${this.$store.state.login.lastName}`,
           validate: false
         }
         this.validateInput(this.confrontations['modelsConfrontations'])
@@ -1313,6 +1517,38 @@ export default {
           this.getAllConfrontations()
           this.messageNotify('', 'positive', 'center', 'Users add successfull')
           this.onReset(this.confrontations['modelsConfrontations'])
+        }
+      } catch (e) {
+        this.messageNotify('report_problem', 'negative', 'center', e.message)
+      }
+    },
+    /**
+     * Edit events
+     * @param  {Object} data events
+     */
+    async editUniversity () {
+      try {
+        this.universities['modelsUniversities'].updated_by = {
+          value: `${this.$store.state.login.name} ${this.$store.state.login.lastName}`,
+          validate: false
+        }
+        this.validateInput(this.universities['modelsUniversities'])
+        if (
+          !this.$refs['name'].hasError &&
+          !this.$refs['sortName'].hasError &&
+          !this.$refs['university'].hasError
+        ) {
+          let response = await this.$services.putData(
+            [
+              'universities',
+              this.entityId
+            ],
+            this.modelsObject(this.universities['modelsUniversities'])
+          )
+          if (!response.status) throw new Error('Error server')
+          this.selectUniversity()
+          this.modalUniversity(false, this.universities['modelsUniversities'])
+          this.messageNotify('', 'positive', 'center', 'University edit successfull')
         }
       } catch (e) {
         this.messageNotify('report_problem', 'negative', 'center', e.message)

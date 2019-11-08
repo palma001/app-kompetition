@@ -17,7 +17,7 @@
             <div class="row q-pa-sm justify-center">
               <div class="col-xs-8 col-sm-5 col-md-3 col-lg-2">
                 <img
-                  :src="`statics/${confrontationPlaying['TeamA']['logo']}`"
+                  :src="`statics/${(confrontationPlaying['TeamA']['logo']) ? confrontationPlaying['TeamA']['logo'] : 'no_data.svg'}`"
                   style="width: 100%; height: 180px"
                 />
               </div>
@@ -34,7 +34,7 @@
             <div class="row q-pa-sm justify-center">
               <div class="col-xs-8 col-sm-5 col-md-3 col-lg-2">
                 <img
-                  :src="`statics/${confrontationPlaying['TeamB']['logo']}`"
+                  :src="`statics/${(confrontationPlaying['TeamB']['logo']) ? confrontationPlaying['TeamA']['logo'] : 'no_data.svg'}`"
                   style="width: 100%; height: 180px"
                 />
               </div>
@@ -106,7 +106,7 @@ export default {
        * Seconds Round
        * @type {Number}
        */
-      secondsRound: 0,
+      secondsRound: '00',
       /**
        * Minutes Round
        * @type {Number}
@@ -133,7 +133,7 @@ export default {
      * @param  {Object} time [description]
      */
     time (time) {
-      this.secondsRound = time.secondsRound
+      this.secondsRound = (time.secondsRound === 0) ? '00' : time.secondsRound
       this.minutesRound = time.minutesRound
     },
     /**

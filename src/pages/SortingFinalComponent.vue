@@ -12,7 +12,7 @@
               style="width: 180px;"
               align="center"
               color="primary"
-              :label="(confrontations[0]['TeamA']) ? confrontations[0]['TeamA']['name'] : 'to play'" />
+              :label="(confrontations[0] && confrontations[0]['TeamA']) ? confrontations[0]['TeamA']['name'] : 'to play'" />
           </div>
           <div class="button1 col-12 q-mt-xs">
             <q-btn size="20px"

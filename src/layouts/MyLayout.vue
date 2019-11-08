@@ -35,7 +35,7 @@
               @click="drawer = !drawer"
               icon="menu"
               aria-label="Menu"
-              v-if="route !== 'moderator' && route !== 'generalScreen'"/>
+              v-if="route !== 'moderator' && route !== 'generalScreen' && route !== 'admin'"/>
           </div>
         </div>
       </q-toolbar>

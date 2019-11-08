@@ -100,11 +100,24 @@ export default {
         this.submitting = true
         this['login/login'](
           {
-            credentials: this.credentials,
+            credentials: this.converUppercase(this.credentials),
             this: this
           }
         )
       }
+    },
+    /**
+     * Convert upper case
+     * @param {Object} data
+     */
+    converUppercase (data) {
+      let model = {}
+      for (let string in data) {
+        if (data[string]) {
+          model[string] = data[string].toUpperCase()
+        }
+      }
+      return model
     },
     ...mapActions(['login/login'])
   }

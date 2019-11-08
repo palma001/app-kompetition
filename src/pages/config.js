@@ -428,3 +428,71 @@ export const confrontations = {
     }
   }
 }
+
+export const universities = {
+  entity: 'confrontations',
+  table: {
+    column: [
+      {
+        name: 'name',
+        align: 'center',
+        label: 'Name',
+        field: 'name',
+        sortable: true
+      },
+      {
+        name: 'sortName',
+        align: 'center',
+        label: 'Sort Name',
+        field: 'sortName',
+        sortable: true
+      },
+      {
+        name: 'university',
+        align: 'center',
+        label: 'Universities',
+        field: 'university',
+        sortable: true
+      },
+      {
+        name: 'edit',
+        align: 'center',
+        label: 'Edit',
+        field: 'edit',
+        sortable: true
+      }
+    ],
+    visibleColumns: [
+      'name',
+      'sortName',
+      'university',
+      'edit'
+    ]
+  },
+  modelsUniversities: {
+    name: {
+      value: null,
+      validate: true
+    },
+    sortName: {
+      value: null,
+      validate: true
+    },
+    university: {
+      value: null,
+      validate: true
+    },
+    logo: {
+      value: null,
+      validate: false
+    },
+    created_by: {
+      value: 'Ramon teran',
+      validate: false
+    },
+    updated_by: {
+      value: 'ramon teran',
+      validate: false
+    }
+  }
+}
