@@ -277,25 +277,25 @@ export default {
         })
         if (newTeam.length <= 0) {
           if (this.confrontationPlaying.semifinale) {
-            await this.addConfrontations(team.winner, phase + 1)
             await this.addConfrontations(team.loser, phase)
+            await this.addConfrontations(team.winner, phase + 1)
           } else {
             await this.addConfrontations(team.winner, phase)
           }
         } else {
           if (this.confrontationPlaying.semifinale) {
-            await this.updateConfrontationsWinner(team.winner, phase + 1, newTeam[0].id)
-            setTimeout(async () => {
-              await this.updateConfrontationsWinner(team.loser, phase, newTeam[1].id)
-            }, 1000)
+            console.log(team.winner, phase, newTeam)
+            console.log(this.confrontationPlaying)
+            await this.updateConfrontationsWinner(team.winner, phase + 1, newTeam[1].id)
+            await this.updateConfrontationsWinner(team.loser, phase, newTeam[0].id)
           } else {
             await this.updateConfrontationsWinner(team.winner, phase, newTeam[0].id)
           }
         }
       } else {
         if (this.confrontationPlaying.semifinale) {
-          await this.addConfrontations(team.winner, phase + 1)
           await this.addConfrontations(team.loser, phase)
+          await this.addConfrontations(team.winner, phase + 1)
         } else {
           await this.addConfrontations(team.winner, phase)
         }
@@ -331,6 +331,7 @@ export default {
       if (response['data'].length === 2 && resp['response']['data'].length === 0) {
         let res = await this.$services.getData(['phase', phase, 'confrontation'])
         res.response.data.map(async (element) => {
+          console.log(element.id)
           await this.$services.putData(['phase', phase, 'confrontation', element.id], { semifinale: true })
         })
       }
@@ -375,8 +376,8 @@ export default {
         }
       }
       data.phaseId += 1
-      this.getSemifinal(data.phaseId)
       this.getConfrontationsNextPhase(team, data.phaseId)
+      this.getSemifinal(data.phaseId)
     },
     /**
      * Start Temporizator

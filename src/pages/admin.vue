@@ -1490,11 +1490,11 @@ export default {
      */
     async addConfrontation () {
       try {
-        this.this.confrontations['modelsConfrontations'].created_by = {
+        this.confrontations['modelsConfrontations'].created_by = {
           value: `${this.$store.state.login.name} ${this.$store.state.login.lastName}`,
           validate: false
         }
-        this.this.confrontations['modelsConfrontations'].updated_by = {
+        this.confrontations['modelsConfrontations'].updated_by = {
           value: `${this.$store.state.login.name} ${this.$store.state.login.lastName}`,
           validate: false
         }
