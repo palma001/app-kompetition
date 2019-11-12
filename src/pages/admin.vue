@@ -389,7 +389,6 @@
                   :filter="filterConfrontations"
                   :data="confrontationsAll"
                   :columns="confrontations['table']['column']"
-                  :pagination.sync="{ rowsPerPage: 10 }"
                   :visible-columns="confrontations['table']['visibleColumns']"
                   bordered>
                   <template v-slot:top-left>
