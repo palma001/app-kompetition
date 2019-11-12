@@ -7,14 +7,16 @@
       <div class="col-2 q-ml-xl">
         <div class="row">
           <div class="col-12 q-ml-xl q-mt-xs">
-            <q-btn size="20px"
+            <q-btn
+              size="20px"
               class="q-px-xl q-ml-xl q-py-xs"
               style="width: 180px;"
               align="center"
               color="primary"
               :label="(confrontations[0] && confrontations[0]['TeamA']) ? confrontations[0]['TeamA']['name'] : 'to play'" />
           </div>
-          <div class="button1 col-12 q-mt-xs">
+          <div
+            class="button1 col-12 q-mt-xs">
             <q-btn size="20px"
               class="q-px-xl q-py-xs"
               align="center"
@@ -22,7 +24,7 @@
               outline
               color="primary">
               {{
-                (confrontations[0]['TeamA'] && confrontations[0]['TeamA']['score']) ? confrontations[0]['TeamA']['score'] : 0
+                (confrontations[0] && confrontations[0]['TeamA']) ? confrontations[0]['TeamA']['score'] : 0
               }}
             </q-btn>
           </div>
@@ -32,7 +34,9 @@
               class="button2 q-px-xl q-ml-xl q-py-xs"
               align="center"
               color="primary">
-              {{(confrontations[0]['TeamB']) ? confrontations[0]['TeamB']['name'] : 'to play'}}
+              {{
+                (confrontations[0] && confrontations[0]['TeamB']) ? confrontations[0]['TeamB']['name'] : 'to play'
+              }}
             </q-btn>
           </div>
           <div class="button1 col-12 q-mt-xs">
@@ -42,7 +46,7 @@
               outline
               color="primary">
               {{
-                (confrontations[0]['TeamB'] && confrontations[0]['TeamB']['score']) ? confrontations[0]['TeamB']['score'] : 0
+                (confrontations[0] && confrontations[0]['TeamB']) ? confrontations[0]['TeamB']['score'] : 0
               }}
             </q-btn>
           </div>
@@ -53,12 +57,12 @@
         <div class="row">
           <div class="col-12 q-mt-xs">
             <q-btn size="20px"
-              style="width: 160px;"
+              style="width: 166px;"
               class="button3 q-px-xl q-ml-xl q-py-xs"
               align="center"
               color="negative">
               {{
-                (confrontationsPhaseFinal[0]['TeamA'] && confrontationsPhaseFinal[0]['TeamA']['name']) ? confrontationsPhaseFinal[0]['TeamA']['name'] : 'To play'
+                (confrontationsPhaseFinal[0] && confrontationsPhaseFinal[0]['TeamA']) ? confrontationsPhaseFinal[0]['TeamA']['name'] : 'To play'
               }}
             </q-btn>
           </div>
@@ -69,7 +73,7 @@
               outline
               style="width: 120px;"
               color="negative">
-              {{ (confrontationsPhaseFinal[0]['TeamA'] && confrontationsPhaseFinal[0]['TeamA']['score']) ? confrontationsPhaseFinal[0]['TeamA']['score'] : 0 }}
+              {{ (confrontationsPhaseFinal[0] && confrontationsPhaseFinal[0]['TeamA']) ? confrontationsPhaseFinal[0]['TeamA']['score'] : 0 }}
             </q-btn>
           </div>
           <div class="col-12 q-mt-xs">
@@ -79,7 +83,7 @@
               style="width: 180px;"
               color="negative">
               {{
-                (confrontations3er[0]['TeamA'] && confrontations3er[0]['TeamA']['name']) ? confrontations3er[0]['TeamA']['name'] : 'To play'
+                (confrontations3er[0] && confrontations3er[0]['TeamA']) ? confrontations3er[0]['TeamA']['name'] : 'To play'
               }}
             </q-btn>
           </div>
@@ -91,7 +95,7 @@
               style="width: 120px;"
               color="negative">
               {{
-                (confrontationsPhaseFinal[0]['TeamB'] && confrontationsPhaseFinal[0]['TeamB']['score']) ? confrontationsPhaseFinal[0]['TeamB']['score'] : 0
+                (confrontations3er[0] && confrontations3er[0]['TeamA']) ? confrontations3er[0]['TeamA']['score'] : 0
               }}
             </q-btn>
           </div>
@@ -106,7 +110,9 @@
               align="center"
               style="width: 180px;"
               color="primary">
-              hola
+              {{
+                (winner[0] && winner[0]['TeamA']) ? winner[0]['TeamA']['name'] : 'To play'
+              }}
             </q-btn>
           </div>
           <div class="button5 col-12 q-mt-xl">
@@ -114,8 +120,11 @@
               class="q-px-xl  q-ml-md q-py-xs"
               align="center"
               style="width: 180px;"
-              color="primary"
-              label="hola 3r" />
+              color="primary">
+              {{
+                (winner3er[0] && winner3er[0]['TeamA']) ? winner3er[0]['TeamA']['name'] : 'To play'
+              }}
+            </q-btn>
           </div>
         </div>
       </div>
@@ -125,10 +134,10 @@
           <div class="col-12 q-mt-xs button3">
             <q-btn size="20px"
               class="q-px-xl q-py-xs"
-              style="width: 180px;"
+              style="width: 166px; margin-left: -32px;"
               color="negative">
               {{
-                (confrontationsPhaseFinal[0]['TeamB'] && confrontationsPhaseFinal[0]['TeamB']['name']) ? confrontationsPhaseFinal[0]['TeamB']['name'] : 'To play'
+                (confrontationsPhaseFinal[0] && confrontationsPhaseFinal[0]['TeamB']) ? confrontationsPhaseFinal[0]['TeamB']['name'] : 'To play'
               }}
             </q-btn>
           </div>
@@ -140,7 +149,7 @@
               style="width: 120px;"
               color="negative">
               {{
-                (confrontationsPhaseFinal[0]['TeamB'] && confrontationsPhaseFinal[0]['TeamB']['score']) ? confrontationsPhaseFinal[0]['TeamB']['score'] : 'To play'
+                (confrontationsPhaseFinal[0] && confrontationsPhaseFinal[0]['TeamB']) ? confrontationsPhaseFinal[0]['TeamB']['score'] : 0
               }}
             </q-btn>
           </div>
@@ -150,7 +159,7 @@
               align="center"
               color="negative">
               {{
-                (confrontations3er[0]['TeamB'] && confrontations3er[0]['TeamB']['name']) ? confrontations3er[0]['TeamB']['name'] : 'To play'
+                (confrontations3er[0] && confrontations3er[0]['TeamB']) ? confrontations3er[0]['TeamB']['name'] : 'To play'
               }}
             </q-btn>
           </div>
@@ -161,7 +170,7 @@
               outline
               color="negative">
               {{
-                (confrontations3er[0]['TeamB'] && confrontations3er[0]['TeamB']['score']) ? confrontations3er[0]['TeamB']['score'] : 'To play'
+                (confrontations3er[0] && confrontations3er[0]['TeamB']) ? confrontations3er[0]['TeamB']['score'] : 0
               }}
             </q-btn>
           </div>
@@ -176,7 +185,7 @@
               style="width: 180px; margin-left: 15px;"
               align="center"
               color="primary"
-              :label="(confrontations[1]['TeamA']) ? confrontations[1]['TeamA']['name'] : 'to play'" />
+              :label="(confrontations[1] && confrontations[1]['TeamA']) ? confrontations[1]['TeamA']['name'] : 'to play'" />
           </div>
           <div class="col-12 q-mt-xs q-ml-xl">
             <q-btn size="20px"
@@ -186,7 +195,7 @@
               outline
               color="primary">
               {{
-                (confrontations[1]['TeamA'] && confrontations[1]['TeamA']['score']) ? confrontations[1]['TeamA']['score'] : 0
+                (confrontations[1] && confrontations[1]['TeamA']) ? confrontations[1]['TeamA']['score'] : 0
               }}
             </q-btn>
           </div>
@@ -197,7 +206,7 @@
               align="center"
               color="primary">
               {{
-                (confrontations[1]['TeamB']) ? confrontations[1]['TeamB']['name'] : 'to play'
+                (confrontations[1] && confrontations[1]['TeamB']) ? confrontations[1]['TeamB']['name'] : 'to play'
               }}
             </q-btn>
           </div>
@@ -208,7 +217,7 @@
               outline
               color="primary">
               {{
-                (confrontations[1]['TeamB'] && confrontations[1]['TeamB']['score']) ? confrontations[1]['TeamB']['score'] : 0
+                (confrontations[1] && confrontations[1]['TeamB']) ? confrontations[1]['TeamB']['score'] : 0
               }}
             </q-btn>
           </div>
@@ -270,7 +279,22 @@ export default {
        * Confrontations 3er
        * @type {Array}
        */
-      confrontations3er: []
+      confrontations3er: [],
+      /**
+       * Confrontations 3er
+       * @type {Array}
+       */
+      confrontations3erFinal: [],
+      /**
+       * Confrontations 3er
+       * @type {Array}
+       */
+      winner3er: [],
+      /**
+       * Confrontations 3er
+       * @type {Array}
+       */
+      winner: []
     }
   },
   sockets: {
@@ -287,8 +311,10 @@ export default {
         }
       )
       this.confrontations = this.getConfrontationsPhaseTree(datas, 3)
-      this.confrontationsPhaseFinal = this.getConfrontationsPhaseTree(datas, 5)
+      this.confrontationsPhaseFinal = this.getConfrontationsPhaseTree(datas, 6)
       this.confrontations3er = this.getConfrontationsPhaseTree(datas, 4)
+      this.winner3er = this.getConfrontationsPhaseTree(datas, 5)
+      this.winner = this.getConfrontationsPhaseTree(datas, 7)
     },
     /**
      * Sets phase final

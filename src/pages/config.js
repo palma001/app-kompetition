@@ -1,80 +1,3 @@
-export const config = [
-  {
-    entity: 'team',
-    table: {
-      columns: [
-        {
-          name: 'event',
-          required: true,
-          label: 'Event',
-          align: 'center',
-          field: 'event',
-          sortable: true
-        },
-        {
-          name: 'name',
-          align: 'center',
-          label: 'Name team',
-          field: 'name',
-          sortable: true
-        },
-        {
-          name: 'university',
-          align: 'center',
-          label: 'University',
-          field: 'university',
-          sortable: true
-        }
-      ],
-      visibleColumns: [
-        'event',
-        'name',
-        'university'
-      ]
-    }
-  },
-  {
-    entity: 'competitors',
-    table: {
-      column: [
-        {
-          name: 'university',
-          align: 'center',
-          label: 'University',
-          field: 'university',
-          sortable: true
-        },
-        {
-          name: 'name',
-          align: 'center',
-          label: 'Name team',
-          field: 'name',
-          sortable: true
-        },
-        {
-          name: 'lastName',
-          align: 'center',
-          label: 'Last Name',
-          field: 'lastName',
-          sortable: true
-        },
-        {
-          name: 'competitorType',
-          align: 'center',
-          label: 'Type of competitor',
-          field: 'competitorType',
-          sortable: true
-        }
-      ],
-      visibleColumns: [
-        'lastname',
-        'name',
-        'university'
-      ]
-    }
-  }
-]
-
 export const users = {
   entity: 'users',
   table: {
@@ -296,6 +219,13 @@ export const teams = {
         sortable: true
       },
       {
+        name: 'member',
+        align: 'center',
+        label: 'Competitors',
+        field: 'member',
+        sortable: true
+      },
+      {
         name: 'created_by',
         align: 'center',
         label: 'Created by',
@@ -312,7 +242,8 @@ export const teams = {
       'eventId',
       'name',
       'University',
-      'edit'
+      'edit',
+      'member'
     ]
   },
   modelTeams: {
@@ -483,6 +414,86 @@ export const universities = {
       validate: true
     },
     logo: {
+      value: null,
+      validate: false
+    },
+    created_by: {
+      value: 'Ramon teran',
+      validate: false
+    },
+    updated_by: {
+      value: 'ramon teran',
+      validate: false
+    }
+  }
+}
+
+export const competitors = {
+  entity: 'competitors',
+  table: {
+    column: [
+      {
+        name: 'teamId',
+        align: 'center',
+        label: 'Team',
+        field: 'teamId',
+        sortable: true
+      },
+      {
+        name: 'name',
+        align: 'center',
+        label: 'Name',
+        field: 'name',
+        sortable: true
+      },
+      {
+        name: 'lastName',
+        align: 'center',
+        label: 'Last Name',
+        field: 'lastName',
+        sortable: true
+      },
+      {
+        name: 'email',
+        align: 'center',
+        label: 'Email',
+        field: 'email',
+        sortable: true
+      },
+      {
+        name: 'competitorType',
+        align: 'center',
+        label: 'Type of competitor',
+        field: 'competitorType',
+        sortable: true
+      }
+    ],
+    visibleColumns: [
+      'teamId',
+      'lastName',
+      'name',
+      'email',
+      'competitorType'
+    ]
+  },
+  modelsMembers: {
+    teamId: {
+      value: null,
+      validate: true
+    },
+    name: {
+      value: null,
+      validate: true
+    },
+    lastName: {
+      value: null,
+      validate: true
+    },
+    email: {
+      value: null,
+      validate: true
+    },
+    competitorType: {
       value: null,
       validate: false
     },

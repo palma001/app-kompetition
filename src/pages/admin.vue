@@ -219,11 +219,11 @@
                 </q-toolbar>
                 <div>
                   <q-table class="q-mt-md"
-                    :data="teamsData"
-                    :columns="teams['table']['column']"
                     row-key="name"
                     color="primary"
                     flat
+                    :data="teamsData"
+                    :columns="teams['table']['column']"
                     :filter="filterTeams"
                     :visible-columns="teams['table']['visibleColumns']"
                     bordered>
@@ -283,30 +283,94 @@
                             size="10px"
                             @click="selectedTeam(props.row)" />
                         </q-td>
+                        <q-td
+                          key="member"
+                          :props="props">
+                          <q-btn
+                            color="primary"
+                            icon="camera_front"
+                            size="10px"
+                            @click="selectedRow(props.row)" />
+                        </q-td>
                       </q-tr>
                     </template>
                   </q-table>
                 </div>
-<!--                 <q-toolbar class="q-mt-md">
+                <q-toolbar class="q-mt-md">
                   <q-toolbar-title class="text-h5 text-primary text-bold">
                     Members
                   </q-toolbar-title>
-                  <q-space></q-space>
-                  <div>
-                    <q-btn color="primary"
-                      label="Add member"
-                      @click="addMember = true" />
-                  </div>
                 </q-toolbar>
                 <div>
-                  <q-table class="my-sticky-header-table q-mt-md"
-                    :data="data3"
-                    :columns="columns3"
+                  <q-table
+                    class="q-mt-md"
                     row-key="name"
                     color="primary"
                     flat
-                    bordered/>
-                </div> -->
+                    :data="dataMember"
+                    :columns="competitors['table']['column']"
+                    :filter="filterTeams"
+                    :visible-columns="competitors['table']['visibleColumns']"
+                    bordered>
+                    <template v-slot:top-left>
+                      <q-input
+                        borderless
+                        dense debounce="300"
+                        v-model="filterTeams"
+                        placeholder="Search">
+                        <template v-slot:append>
+                          <q-icon name="search" />
+                        </template>
+                      </q-input>
+                    </template>
+                    <template v-slot:top-right>
+                      <div>
+                        <q-btn color="primary"
+                          label="Add member"
+                          @click="modalMembers(true, competitors['modelsMembers'])" />
+                      </div>
+                    </template>
+                     <template v-slot:body="props">
+                      <q-tr
+                        :props="props">
+                        <q-td
+                          key="teamId"
+                          :props="props">
+                          {{ props.row.teamId }}
+                        </q-td>
+                        <q-td
+                          key="name"
+                          :props="props">
+                          {{ props.row.name }}
+                        </q-td>
+                        <q-td
+                          key="lastName"
+                          :props="props">
+                          {{ props.row.lastName }}
+                        </q-td>
+                        <q-td
+                          key="email"
+                          :props="props">
+                          {{ props.row.email }}
+                        </q-td>
+                        <q-td
+                          key="competitorType"
+                          :props="props">
+                          {{ props.row.competitorType }}
+                        </q-td>
+                        <q-td
+                          key="edit"
+                          :props="props">
+                          <q-btn
+                            color="primary"
+                            icon="edit"
+                            size="10px"
+                            @click="selectedMember(props.row)" />
+                        </q-td>
+                      </q-tr>
+                    </template>
+                  </q-table>
+                </div>
 
               </div>
             </q-tab-panel>
@@ -317,95 +381,96 @@
                   Assign confrontations
                 </q-toolbar-title>
               </q-toolbar>
-                <div>
-                  <q-table
-                    class="q-mt-md"
-                    :data="confrontationsAll"
-                    :columns="confrontations['table']['column']"
-                    row-key="name"
-                    :filter="filterConfrontations"
-                    flat
-                    :visible-columns="confrontations['table']['visibleColumns']"
-                    bordered>
-                    <template v-slot:top-left>
-                      <q-input
-                        borderless
-                        dense
-                        debounce="300"
-                        v-model="filterConfrontations"
-                        placeholder="Search">
-                        <template v-slot:append>
-                          <q-icon name="search" />
-                        </template>
-                      </q-input>
-                    </template>
-                    <template v-slot:top-right>
-                      <div>
-                        <q-btn color="primary"
-                          label="Add Confrontations"
-                          @click="modalConfrontations(true, confrontations['modelsConfrontations'])" />
-                      </div>
-                    </template>
-                    <template v-slot:body="props">
-                      <q-tr
+              <div>
+                <q-table
+                  class="q-mt-md"
+                  row-key="name"
+                  flat
+                  :filter="filterConfrontations"
+                  :data="confrontationsAll"
+                  :columns="confrontations['table']['column']"
+                  :pagination.sync="{ rowsPerPage: 10 }"
+                  :visible-columns="confrontations['table']['visibleColumns']"
+                  bordered>
+                  <template v-slot:top-left>
+                    <q-input
+                      borderless
+                      dense
+                      debounce="300"
+                      v-model="filterConfrontations"
+                      placeholder="Search">
+                      <template v-slot:append>
+                        <q-icon name="search" />
+                      </template>
+                    </q-input>
+                  </template>
+                  <template v-slot:top-right>
+                    <div>
+                      <q-btn color="primary"
+                        label="Add Confrontations"
+                        @click="modalConfrontations(true, confrontations['modelsConfrontations'])" />
+                    </div>
+                  </template>
+                  <template v-slot:body="props">
+                    <q-tr
+                      :props="props">
+                      <q-td
+                        key="phaseId"
                         :props="props">
-                        <q-td
-                          key="phaseId"
-                          :props="props">
-                          {{ props.row.phaseId }}
-                        </q-td>
-                        <q-td
-                          key="teamA"
-                          :props="props">
-                          {{ props.row.teamA }}
-                        </q-td>
-                        <q-td
-                          key="teamB"
-                          :props="props">
-                          {{ props.row.teamB }}
-                        </q-td>
-                        <q-td
-                          key="TeamA"
-                          :props="props">
-                          {{
-                            (props.row.TeamA) ? props.row.TeamA.name : 'TOPLAY'
-                          }}
-                        </q-td>
-                        <q-td
-                          key="TeamB"
-                          :props="props">
-                          {{
-                            (props.row.TeamB) ? props.row.TeamB.name : 'TOPLAY'
-                          }}
-                        </q-td>
-                        <q-td
-                          key="status"
-                          :props="props">
-                          {{ props.row.status }}
-                        </q-td>
-                        <q-td
-                          key="created_by"
-                          :props="props">
-                          {{ props.row.created_by }}
-                        </q-td>
-                        <q-td
-                          key="updated_by"
-                          :props="props">
-                          {{ props.row.updated_by }}
-                        </q-td>
-                        <q-td
-                          key="edit"
-                          :props="props">
-                          <q-btn
-                            color="primary"
-                            icon="edit"
-                            size="10px"
-                            @click="selectedConfrontations(props.row)" />
-                        </q-td>
-                      </q-tr>
-                    </template>
-                  </q-table>
-                </div>
+                        {{ props.row.phaseId }}
+                      </q-td>
+                      <q-td
+                        key="teamA"
+                        :props="props">
+                        {{ props.row.teamA }}
+                      </q-td>
+                      <q-td
+                        key="teamB"
+                        :props="props">
+                        {{ props.row.teamB }}
+                      </q-td>
+                      <q-td
+                        key="TeamA"
+                        :props="props">
+                        {{
+                          (props.row.TeamA) ? props.row.TeamA.name : 'TOPLAY'
+                        }}
+                      </q-td>
+                      <q-td
+                        key="TeamB"
+                        :props="props">
+                        {{
+                          (props.row.TeamB) ? props.row.TeamB.name : 'TOPLAY'
+                        }}
+                      </q-td>
+                      <q-td
+                        key="status"
+                        :props="props">
+                        {{ props.row.status }}
+                      </q-td>
+                      <q-td
+                        key="created_by"
+                        :props="props">
+                        {{ props.row.created_by }}
+                      </q-td>
+                      <q-td
+                        key="updated_by"
+                        :props="props">
+                        {{ props.row.updated_by }}
+                      </q-td>
+                      <q-td
+                        key="edit"
+                        :props="props">
+                        <q-btn
+                          color="primary"
+                          icon="edit"
+                          size="10px"
+                          @click="selectedConfrontations(props.row)" />
+                      </q-td>
+                    </q-tr>
+                  </template>
+                </q-table>
+              </div>
             </q-tab-panel>
             <q-tab-panel
               name="universities">
@@ -730,39 +795,70 @@
       v-model="addMember"
       persistent>
       <q-card>
-        <q-card-section class="text-primary text-h6">Add information
+        <q-card-section class="text-primary text-h6">
+          Add information
           <div class="row">
             <div class="col-12">
               <q-select
-                v-model="text"
+                v-model="competitors['modelsMembers']['teamId']['value']"
                 :options="eventData"
                 label="Event"
+                ref="teamId"
                 expanded/>
             </div>
             <div class="col-12">
-              <q-input v-model="text"
+              <q-input
+                v-model="competitors['modelsMembers']['name']['value']"
                 label="Name"
+                ref="name"
                 expanded/>
             </div>
             <div class="col-12">
-              <q-input v-model="text"
+              <q-input
+                v-model="competitors['modelsMembers']['lastName']['value']"
                 label="Last name"
+                ref="lastName"
                 expanded/>
             </div>
             <div class="col-12">
-              <q-select v-model="text"
+              <q-input
+                v-model="competitors['modelsMembers']['email']['value']"
+                label="Email"
+                ref="email"
+                expanded/>
+            </div>
+            <div class="col-12">
+              <q-select
+                v-model="competitors['modelsMembers']['competitorType']['value']"
                 :options="options4"
+                ref="competitorType"
                 label="Type of competitor"
                 expanded/>
             </div>
           </div>
         </q-card-section>
-
         <q-card-actions align="right">
-          <q-btn label="Cancel"
-            color="primary" />
-          <q-btn label="Add"
-            color="primary" />
+          <q-btn
+            type="reset"
+            label="Cancel"
+            color="primary"
+            @click="modalMembers(false, competitors['modelsMembers'])"/>
+          <q-btn
+            label="delete"
+            color="negative"
+            v-if="editForm"
+            @click="deleteData('confrontation')"/>
+          <q-btn
+            label="Edit"
+            color="primary"
+            v-if="editForm"
+            @click="editConfrontations"/>
+          <q-btn
+            type="submit"
+            label="Add"
+            color="primary"
+            v-if="!editForm"
+            @click="addConfrontation"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -921,10 +1017,11 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { users, events, teams, confrontations, universities } from './config'
+import { users, events, teams, confrontations, universities, competitors } from './config'
 export default {
   data () {
     return {
+      competitors,
       /**
        * Status modal confrontations
        * @type {Boolean}
@@ -975,7 +1072,6 @@ export default {
        * @type {String}
        */
       filterTeams: '',
-      text: '',
       /**
        * filter table
        * @type {String}
@@ -1017,6 +1113,11 @@ export default {
        * @type {Array}
        */
       confrontationsAll: [],
+      /**
+       * All member
+       * @type {Array}
+       */
+      dataMember: [],
       /**
        * All universities
        * @type {Array}
@@ -1103,6 +1204,10 @@ export default {
     this.loadTable()
   },
   methods: {
+    async selectedRow (data) {
+      let { response } = await this.$services.getData(['teams', data.id, 'competitors'])
+      console.log(response)
+    },
     /**
      * load tables
      */
@@ -1171,6 +1276,16 @@ export default {
      */
     modalConfrontations (data, model) {
       this.addConfrontations = data
+      this.editForm = false
+      this.onReset(model)
+    },
+    /**
+     * Modal the Confrontations
+     * @param  {Boolean} data status events
+     * @param  {Object} model events
+     */
+    modalMembers (data, model) {
+      this.addMember = data
       this.editForm = false
       this.onReset(model)
     },
@@ -1252,6 +1367,22 @@ export default {
         for (let modelEvents in this.events['modelsAddEvents']) {
           if (modelEvents === model) {
             this.events['modelsAddEvents'][model]['value'] = data[model]
+          }
+        }
+      }
+    },
+    /**
+     * Select data to edit
+     * @param  {Object} data events
+     */
+    selectedMember (data) {
+      this.addEvent = true
+      this.editForm = true
+      this.entityId = data['id']
+      for (let model in data) {
+        for (let modelEvents in this.competitors['modelsMembers']) {
+          if (modelEvents === model) {
+            this.competitors['modelsMembers'][model]['value'] = data[model]
           }
         }
       }
