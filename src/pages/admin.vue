@@ -901,7 +901,7 @@
             <div class="col-12">
               <q-select
                 v-model="confrontations['modelsConfrontations']['status']['value']"
-                :options="['TOPLAY', 'PLAYED']"
+                :options="['TOPLAY', 'DEFINITION', 'PLAYED']"
                 ref="status"
                 label="Status"
                 :rules="[ val => val && val.length > 0 || 'Please type something']"

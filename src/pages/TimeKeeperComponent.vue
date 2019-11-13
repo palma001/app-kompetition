@@ -271,34 +271,36 @@ export default {
      */
     async getConfrontationsNextPhase (team, phase) {
       let { response } = await this.$services.getData(['phase', 0, 'confrontation'])
-      if (response['data'] && response['data'].length > 0) {
-        let newTeam = response['data'].filter(function (element) {
-          return element['teamB'] === null
-        })
-        if (newTeam.length <= 0) {
+      if (this.confrontationPlaying.status !== 'DEFINITION') {
+        if (response['data'] && response['data'].length > 0) {
+          let newTeam = response['data'].filter(function (element) {
+            return element['teamB'] === null
+          })
+          if (newTeam.length <= 0) {
+            if (this.confrontationPlaying.semifinale) {
+              await this.addConfrontations(team.loser, phase)
+              await this.addConfrontations(team.winner, phase + 2)
+            } else {
+              await this.addConfrontations(team.winner, phase)
+            }
+          } else {
+            if (this.confrontationPlaying.semifinale) {
+              await this.updateConfrontationsWinner(team.winner, phase + 2, newTeam[1].id)
+              await this.updateConfrontationsWinner(team.loser, phase, newTeam[0].id)
+            } else {
+              let res = await this.updateConfrontationsWinner(team.winner, phase, newTeam[0].id)
+              if (!res.status) {
+                await this.addConfrontations(team.winner, phase)
+              }
+            }
+          }
+        } else {
           if (this.confrontationPlaying.semifinale) {
             await this.addConfrontations(team.loser, phase)
             await this.addConfrontations(team.winner, phase + 2)
           } else {
             await this.addConfrontations(team.winner, phase)
           }
-        } else {
-          if (this.confrontationPlaying.semifinale) {
-            await this.updateConfrontationsWinner(team.winner, phase + 2, newTeam[1].id)
-            await this.updateConfrontationsWinner(team.loser, phase, newTeam[0].id)
-          } else {
-            let res = await this.updateConfrontationsWinner(team.winner, phase, newTeam[0].id)
-            if (!res.status) {
-              await this.addConfrontations(team.winner, phase)
-            }
-          }
-        }
-      } else {
-        if (this.confrontationPlaying.semifinale) {
-          await this.addConfrontations(team.loser, phase)
-          await this.addConfrontations(team.winner, phase + 2)
-        } else {
-          await this.addConfrontations(team.winner, phase)
         }
       }
     },

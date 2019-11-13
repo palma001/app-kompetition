@@ -416,13 +416,25 @@ export default {
      */
     async getConfrontationsPlaying () {
       try {
-        let confrontationsPlaying = await this['confrontations/getConfrontations']({
-          params: this.paramsConfrontationsPlaying,
+        let playDefinition = await this['confrontations/getConfrontations']({
+          params: {
+            query: {
+              status: 'DEFINITION'
+            }
+          },
           vm: this
         })
-        if (!confrontationsPlaying) throw new Error('No rounds playing')
+        if (playDefinition) {
+          this.$socket.emit('confrontationsPlaying', playDefinition)
+        } else {
+          let confrontationsPlaying = await this['confrontations/getConfrontations']({
+            params: this.paramsConfrontationsPlaying,
+            vm: this
+          })
+          if (!confrontationsPlaying) throw new Error('No rounds playing')
+          this.$socket.emit('confrontationsPlaying', confrontationsPlaying)
+        }
         this.getScoreTeam()
-        this.$socket.emit('confrontationsPlaying', confrontationsPlaying)
       } catch (e) {
         this.messageNotify('report_problem', 'negative', 'center', e.message)
       }
