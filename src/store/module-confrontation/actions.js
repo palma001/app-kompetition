@@ -67,7 +67,9 @@ export async function getConfrontations ({ commit, dispatch }, payload) {
 
     if (!res.status) throw new Error('Error in server')
     if (res.response.status === 204) throw new Error('No rounds')
-
+    res['response']['data'].map(element => {
+      element.eventId = events[0]['id']
+    })
     return res['response']['data']
   } catch (e) {
     messageNotify('report_problem', 'negative', 'center', e.message, vm)

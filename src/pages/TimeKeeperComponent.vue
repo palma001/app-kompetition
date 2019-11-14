@@ -199,6 +199,10 @@ export default {
     pointsTeams (point) {
       this.points = point
     },
+    /**
+     * Status semifinal
+     * @type {Boolean}
+     */
     semifinal: false,
     /**
      * Capture event the socket
@@ -399,8 +403,8 @@ export default {
       }
     },
     /**
-     * [updateConfrontations description]
-     * @param  {object} data request
+     * Update status confrontations
+     * @param  {object} data
      */
     async updateConfrontations (data) {
       await this.$services.putData(['phase', this.confrontationPlaying['phaseId'], 'confrontation', this.confrontationPlaying['id']], data)

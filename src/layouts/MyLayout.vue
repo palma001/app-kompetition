@@ -416,16 +416,11 @@ export default {
      */
     async getConfrontationsPlaying () {
       try {
-        let playDefinition = await this['confrontations/getConfrontations']({
-          params: {
-            query: {
-              status: 'DEFINITION'
-            }
-          },
-          vm: this
+        let { response } = await this.$services.getData(['phase', 0, 'confrontation'], {
+          status: 'DEFINITION'
         })
-        if (playDefinition) {
-          this.$socket.emit('confrontationsPlaying', playDefinition)
+        if (response.data.length > 0) {
+          this.$socket.emit('confrontationsPlaying', response['data'])
         } else {
           let confrontationsPlaying = await this['confrontations/getConfrontations']({
             params: this.paramsConfrontationsPlaying,
