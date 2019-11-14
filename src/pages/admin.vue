@@ -968,7 +968,7 @@
             </div>
             <div class="col-12">
               <q-input
-                ref="logo"
+                ref="file"
                 v-model="universities['modelsUniversities']['logo']['value']"
                 type="file"/>
             </div>
@@ -1020,6 +1020,7 @@ import { users, events, teams, confrontations, universities, competitors } from 
 export default {
   data () {
     return {
+      file: '',
       competitors,
       /**
        * Status modal confrontations
@@ -1565,6 +1566,8 @@ export default {
      */
     async addUniversity () {
       try {
+        let formatData = new FormData()
+        formatData.append('file', this.universities['modelsUniversities']['logo']['value'][0])
         this.universities['modelsUniversities'].created_by = {
           value: `${this.$store.state.login.name} ${this.$store.state.login.lastName}`,
           validate: false
@@ -1579,6 +1582,7 @@ export default {
           !this.$refs['sortName'].hasError &&
           !this.$refs['university'].hasError
         ) {
+          await this.$services.postData(['universities'], formatData)
           let response = await this.$services.postData(['universities'], this.modelsObject(this.universities['modelsUniversities']))
           if (!response.status) throw new Error('Error server')
           this.selectUniversity()
