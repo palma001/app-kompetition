@@ -447,7 +447,7 @@ export const competitors = {
         sortable: true
       },
       {
-        name: 'lastName',
+        name: 'lastname',
         align: 'center',
         label: 'Last Name',
         field: 'lastName',
@@ -466,26 +466,34 @@ export const competitors = {
         label: 'Type of competitor',
         field: 'competitorType',
         sortable: true
+      },
+      {
+        name: 'edit',
+        align: 'center',
+        label: 'Edit',
+        field: 'edit',
+        sortable: true
       }
     ],
     visibleColumns: [
       'teamId',
-      'lastName',
       'name',
+      'lastname',
       'email',
-      'competitorType'
+      'competitorType',
+      'edit'
     ]
   },
   modelsMembers: {
     teamId: {
       value: null,
-      validate: true
+      validate: false
     },
     name: {
       value: null,
       validate: true
     },
-    lastName: {
+    lastname: {
       value: null,
       validate: true
     },
@@ -495,7 +503,7 @@ export const competitors = {
     },
     competitorType: {
       value: null,
-      validate: false
+      validate: true
     },
     created_by: {
       value: 'Ramon teran',

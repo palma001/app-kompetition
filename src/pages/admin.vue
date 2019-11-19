@@ -344,9 +344,9 @@
                           {{ props.row.name }}
                         </q-td>
                         <q-td
-                          key="lastName"
+                          key="lastname"
                           :props="props">
-                          {{ props.row.lastName }}
+                          {{ props.row.lastname }}
                         </q-td>
                         <q-td
                           key="email"
@@ -798,14 +798,6 @@
           Add information
           <div class="row">
             <div class="col-12">
-              <q-select
-                v-model="competitors['modelsMembers']['teamId']['value']"
-                :options="eventData"
-                label="Event"
-                ref="teamId"
-                expanded/>
-            </div>
-            <div class="col-12">
               <q-input
                 v-model="competitors['modelsMembers']['name']['value']"
                 label="Name"
@@ -814,9 +806,9 @@
             </div>
             <div class="col-12">
               <q-input
-                v-model="competitors['modelsMembers']['lastName']['value']"
+                v-model="competitors['modelsMembers']['lastname']['value']"
                 label="Last name"
-                ref="lastName"
+                ref="lastname"
                 expanded/>
             </div>
             <div class="col-12">
@@ -846,18 +838,18 @@
             label="delete"
             color="negative"
             v-if="editForm"
-            @click="deleteData('confrontation')"/>
+            @click="deleteData('competitors')"/>
           <q-btn
             label="Edit"
             color="primary"
             v-if="editForm"
-            @click="editConfrontations"/>
+            @click="editCompetitors"/>
           <q-btn
             type="submit"
             label="Add"
             color="primary"
             v-if="!editForm"
-            @click="addConfrontation"/>
+            @click="addCompetitor"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -1192,7 +1184,12 @@ export default {
         },
         pahse: {},
         query: {}
-      }
+      },
+      /**
+       * team id
+       * @type {Number}
+       */
+      teamId: null
     }
   },
   sockets: {
@@ -1204,9 +1201,79 @@ export default {
     this.loadTable()
   },
   methods: {
+    /**
+     * Select row
+     * @param  {Object} data teams
+     */
     async selectedRow (data) {
-      let { response } = await this.$services.getData(['teams', data.id, 'competitors'])
-      console.log(response)
+      this.teamId = data.id
+      this.getAllcompetitors(data.id)
+    },
+    /**
+     * Add competitors
+     */
+    async addCompetitor () {
+      try {
+        this.validateInput(this.competitors['modelsMembers'])
+        this.competitors['modelsMembers'].created_by = {
+          value: 'luis',
+          validate: false
+        }
+        this.competitors['modelsMembers'].updated_by = {
+          value: 'luis',
+          validate: false
+        }
+        this.competitors['modelsMembers'].teamId = {
+          value: this.teamId,
+          validate: false
+        }
+        if (
+          !this.$refs['name'].hasError &&
+          !this.$refs['lastname'].hasError &&
+          !this.$refs['email'].hasError &&
+          !this.$refs['competitorType'].hasError
+        ) {
+          let response = await this.$services.postData(
+            ['teams', this.teamId, 'competitors'],
+            this.modelsObject(this.competitors['modelsMembers'])
+          )
+          if (!response.status) throw new Error('Error server')
+          this.getAllcompetitors(this.teamId)
+          this.messageNotify('', 'positive', 'center', 'Teams add successfull')
+          this.onReset(this.competitors['modelsMembers'])
+        }
+      } catch (e) {
+        this.messageNotify('report_problem', 'negative', 'center', e.message)
+      }
+    },
+    /**
+     * Edit competitors
+     */
+    async editCompetitors () {
+      try {
+        this.validateInput(this.competitors['modelsMembers'])
+        if (
+          !this.$refs['name'].hasError &&
+          !this.$refs['lastname'].hasError &&
+          !this.$refs['email'].hasError &&
+          !this.$refs['competitorType'].hasError
+        ) {
+          let response = await this.$services.putData(
+            [
+              'teams',
+              this.competitors['modelsMembers']['teamId']['value'],
+              'competitors',
+              this.entityId
+            ],
+            this.modelsObject(this.competitors['modelsMembers'])
+          )
+          if (!response.status) throw new Error('Error server')
+          this.getAllcompetitors(this.competitors['modelsMembers']['teamId']['value'])
+          this.messageNotify('', 'positive', 'center', 'Competitors edit successfull')
+        }
+      } catch (e) {
+        this.messageNotify('report_problem', 'negative', 'center', e.message)
+      }
     },
     /**
      * load tables
@@ -1219,6 +1286,23 @@ export default {
       this.selectUniversity()
       this.getAllConfrontations()
       this.getAllPhase()
+      this.getAllcompetitors(this.teamId)
+    },
+    /**
+     * Gets all competitors
+     * @param  {Number} id teams
+     */
+    async getAllcompetitors (id) {
+      try {
+        let res = await this.$services.getData(['teams', id, 'competitors'])
+        if (!res.status) {
+          this.dataMember = []
+          throw new Error('Competitors empty')
+        }
+        this.dataMember = res['response']['data']
+      } catch (e) {
+        this.messageNotify('report_problem', 'negative', 'center', e.message)
+      }
     },
     /**
      * Sets data select events
@@ -1376,7 +1460,7 @@ export default {
      * @param  {Object} data events
      */
     selectedMember (data) {
-      this.addEvent = true
+      this.addMember = true
       this.editForm = true
       this.entityId = data['id']
       for (let model in data) {
@@ -1498,6 +1582,7 @@ export default {
           element.label = element.name
         })
         this.teamsData = res['response']['data']
+        this.getAllcompetitors(res['response']['data'][0]['id'])
         this.modalteams(false, this.teams['modelTeams'])
       } catch (e) {
         this.messageNotify('report_problem', 'negative', 'center', e.message)
@@ -1540,6 +1625,18 @@ export default {
      */
     async addEvents () {
       try {
+        this.events['modelsAddEvents'].created_by = {
+          value: 'luis',
+          validate: false
+        }
+        this.events['modelsAddEvents'].updated_by = {
+          value: 'luis',
+          validate: false
+        }
+        this.events['modelsAddEvents'].done = {
+          value: false,
+          validate: false
+        }
         this.validateInput(this.events['modelsAddEvents'])
         if (
           !this.$refs['name'].hasError &&
@@ -1554,6 +1651,7 @@ export default {
 
           if (!response.status) throw new Error('Error server')
           this.selectUniversity()
+          this.loadTable()
           this.messageNotify('', 'positive', 'center', 'University add successfull')
           this.onReset(this.events['modelsAddEvents'])
         }

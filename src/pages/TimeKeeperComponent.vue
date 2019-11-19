@@ -170,7 +170,12 @@ export default {
        * questions
        * @type {Object}
        */
-      question: {}
+      question: {},
+      /**
+       * Status semifinal
+       * @type {Boolean}
+       */
+      semifinal: false
     }
   },
   computed: {
@@ -199,11 +204,6 @@ export default {
     pointsTeams (point) {
       this.points = point
     },
-    /**
-     * Status semifinal
-     * @type {Boolean}
-     */
-    semifinal: false,
     /**
      * Capture event the socket
      * @param  {Array} question question
@@ -448,8 +448,8 @@ export default {
     restartQuestion () {
       if (this.stopQuestion) {
         this.stopQuestion = false
-        this.$socket.emit('getQuestions', this.question)
         clearInterval(this.setIntervalQuestion)
+        this.$socket.emit('getQuestion', this.question)
       }
     },
     /**
