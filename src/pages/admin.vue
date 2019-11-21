@@ -1339,6 +1339,7 @@ export default {
             value: element['id']
           })
         })
+        this.modalUniversity(false, this.universities['modelsUniversities'])
       } catch (e) {
         this.messageNotify('report_problem', 'negative', 'center', e.message)
       }
@@ -1404,9 +1405,12 @@ export default {
             vm: this
           }
         )
-        if (!confrontations) throw new Error('No rounds')
-        this.confrontationsAll = confrontations
-        this.$socket.emit('confrontations', confrontations)
+        if (!confrontations) {
+          this.confrontationsAll = []
+        } else {
+          this.confrontationsAll = confrontations
+          this.$socket.emit('confrontations', confrontations)
+        }
         this.modalConfrontations(false, this.confrontations['modelsConfrontations'])
       } catch (e) {
         this.messageNotify('report_problem', 'negative', 'center', e.message)
@@ -1541,7 +1545,6 @@ export default {
     async getAllEvents () {
       try {
         let res = await this.$services.getData(['events'])
-        if (!res.status) throw new Error('Error in server')
         if (res.response.status === 204) throw new Error('No events loaded')
         res['response']['data'].map(element => {
           element.dateEvent = `
@@ -1575,14 +1578,15 @@ export default {
       try {
         let res = await this.$services.getData(['teams'])
         if (!res.status) throw new Error('Error in server')
-        if (res.response.status === 204) throw new Error('No events loaded')
-        res['response']['data'].map(element => {
-          element.University = (element.University) ? element.University.name : null
-          element.value = element.id
-          element.label = element.name
-        })
-        this.teamsData = res['response']['data']
-        this.getAllcompetitors(res['response']['data'][0]['id'])
+        if (res.response.data.length > 0) {
+          res['response']['data'].map(element => {
+            element.University = (element.University) ? element.University.name : null
+            element.value = element.id
+            element.label = element.name
+          })
+          this.teamsData = res['response']['data']
+          this.getAllcompetitors(res['response']['data'][0]['id'])
+        }
         this.modalteams(false, this.teams['modelTeams'])
       } catch (e) {
         this.messageNotify('report_problem', 'negative', 'center', e.message)
@@ -1681,6 +1685,7 @@ export default {
           !this.$refs['university'].hasError
         ) {
           await this.$services.postData(['universities'], formatData)
+          this.universities['modelsUniversities']['logo']['value'] = this.universities['modelsUniversities']['logo']['value'][0]['name']
           let response = await this.$services.postData(['universities'], this.modelsObject(this.universities['modelsUniversities']))
           if (!response.status) throw new Error('Error server')
           this.selectUniversity()
@@ -1760,6 +1765,8 @@ export default {
      */
     async editUniversity () {
       try {
+        let formatData = new FormData()
+        formatData.append('file', this.universities['modelsUniversities']['logo']['value'][0])
         this.universities['modelsUniversities'].updated_by = {
           value: `${this.$store.state.login.name} ${this.$store.state.login.lastName}`,
           validate: false
@@ -1770,6 +1777,8 @@ export default {
           !this.$refs['sortName'].hasError &&
           !this.$refs['university'].hasError
         ) {
+          await this.$services.postData(['universities'], formatData)
+          this.universities['modelsUniversities']['logo']['value'] = this.universities['modelsUniversities']['logo']['value'][0]['name']
           let response = await this.$services.putData(
             [
               'universities',

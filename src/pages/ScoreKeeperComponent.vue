@@ -95,7 +95,7 @@
                 placeholder="Bonus"
                 v-model="value.bonus1"
                 color="primary"
-                v-if="question && question.typeQuestion === 'bonus'"
+                v-if="question && question.typeQuestion === 'bonus' && visibleBonus"
                 :disabled="disabled.bonus1"/>
             </div>
           </div>
@@ -168,7 +168,7 @@
                 placeholder="Bonus"
                 v-model="value.bonus2"
                 color="primary"
-                v-if="question && question.typeQuestion === 'bonus'"
+                v-if="question && question.typeQuestion === 'bonus' && visibleBonus2"
                 :disabled="disabled.bonus2"/>
             </div>
           </div>
@@ -221,6 +221,8 @@ export default {
   name: 'ScoreKeeperComponent',
   data () {
     return {
+      visibleBonus: false,
+      visibleBonus2: false,
       /**
        * Loading status
        * @type {Boolean}
@@ -330,7 +332,6 @@ export default {
   },
   created () {
     this.$socket.emit('lastQuestion')
-    this.$socket.emit('lastConfrontation')
   },
   methods: {
     /**
@@ -345,9 +346,16 @@ export default {
           this.disabled[disabled] = !this.disabled[disabled]
           if ((btn === 'add1' || btn === 'sub1') && this.disabled[disabled]) {
             this.pointQuestion.scoreA = point
+            this.visibleBonus = true
+            this.visibleBonus2 = false
           } else if (this.disabled[disabled]) {
             this.pointQuestion.scoreB = point
+            this.visibleBonus2 = true
+            this.visibleBonus = false
           }
+        } else {
+          this.pointQuestion.scoreA = 0
+          this.pointQuestion.scoreB = 0
         }
       }
     },
