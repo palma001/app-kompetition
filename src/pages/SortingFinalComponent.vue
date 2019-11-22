@@ -6,7 +6,7 @@
         <div class="row">
           <div class="col-12 q-mt-md buttonSemifinal2">
             <q-btn
-              style="width: 100%"
+              style="width: 100%;  font-weight: bold;"
               class="q-px-xl "
               align="center"
               color="primary"
@@ -16,7 +16,7 @@
             <q-btn
               class="q-px-xl"
               align="center"
-              style="margin-left: 25%"
+              style="margin-left: 25%; font-weight: bold;"
               outline
               color="primary">
               {{
@@ -26,8 +26,8 @@
           </div>
           <div class="col-12 buttonSemifinal1">
             <q-btn
-              style="width: 100%"
-              class="button2 q-px-xl "
+              style="width: 100%; font-weight: bold;"
+              class="button2 q-px-xl"
               align="center"
               color="primary">
               {{
@@ -39,7 +39,7 @@
             <q-btn
               class="q-px-xl"
               align="center"
-              style="margin-left: 25%"
+              style="margin-left: 25%; font-weight: bold;"
               outline
               color="primary">
               {{
@@ -57,7 +57,7 @@
         <div class="row">
           <div class="col-12 winnerSemifinal">
             <q-btn
-              style="width: 100%;"
+              style="width: 100%; font-weight: bold;"
               class="button3 q-px-xl"
               align="center"
               color="negative">
@@ -70,7 +70,7 @@
             <q-btn
               class="q-mt-xs q-px-xl"
               align="center"
-              style="margin-left: 25%"
+              style="margin-left: 25%; font-weight: bold;"
               outline
               color="negative">
               {{ (confrontationsPhaseFinal[0] && confrontationsPhaseFinal[0]['TeamA']['score']) ? confrontationsPhaseFinal[0]['TeamA']['score'] : 0 }}
@@ -85,7 +85,7 @@
               size="20px"
               class="q-px-xl q-ml-md"
               align="center"
-              style="margin-left: 2%; width: 95%;"
+              style="margin-left: 2%; width: 95%; font-weight: bold;"
               color="primary">
               {{
                 (winner[0] && winner[0]['TeamA']) ? winner[0]['TeamA']['name'] : 'To play'
@@ -102,7 +102,7 @@
           <div class="col-12">
             <q-btn
               class="q-px-xl"
-              style="width: 100%"
+              style="width: 100%; font-weight: bold;"
               color="negative">
               {{
                 (confrontationsPhaseFinal[0] && confrontationsPhaseFinal[0]['TeamB']) ? confrontationsPhaseFinal[0]['TeamB']['name'] : 'To play'
@@ -113,11 +113,11 @@
             <q-btn
               class="q-px-xl q-mt-xs"
               align="center"
-              style="margin-left: 25%"
+              style="margin-left: 25%; font-weight: bold;"
               outline
               color="negative">
               {{
-                (confrontationsPhaseFinal[0] && confrontationsPhaseFinal[0]['TeamB']['score']) ? confrontationsPhaseFinal[0]['TeamB']['score'] : 0
+                (confrontationsPhaseFinal[0] && confrontationsPhaseFinal[0]['TeamB']) ? confrontationsPhaseFinal[0]['TeamB']['score'] : 0
               }}
             </q-btn>
           </div>
@@ -131,7 +131,7 @@
           <div class="col-12 q-ml-sm buttonSemifinal2">
             <q-btn
               class="q-px-xl"
-              style="width: 100%;"
+              style="width: 100%; font-weight: bold;"
               align="center"
               color="primary"
               :label="(confrontations[1] && confrontations[1]['TeamA']) ? confrontations[1]['TeamA']['name'] : 'to play'" />
@@ -140,7 +140,7 @@
             <q-btn
               class="q-px-xl"
               align="center"
-              style="margin-left: 25%"
+              style="margin-left: 25%; font-weight: bold;"
               outline
               color="primary">
               {{
@@ -150,7 +150,7 @@
           </div>
           <div class="col-12 q-ml-sm buttonSemifinalLeft1">
             <q-btn
-              style="width: 100%;"
+              style="width: 100%; font-weight: bold;"
               class="button2 q-px-xl"
               align="center"
               color="primary">
@@ -163,7 +163,7 @@
             <q-btn
               class="q-px-xl"
               align="center"
-              style="margin-left: 25%"
+              style="margin-left: 25%; font-weight: bold;"
               outline
               color="primary">
               {{
@@ -180,7 +180,7 @@
           <div class="col-12 button3">
             <q-btn
               class="q-px-xl"
-              style="width: 100%"
+              style="width: 100%; font-weight: bold;"
               color="negative">
               {{
                 (confrontations3er[0] && confrontations3er[0]['TeamA']) ? confrontations3er[0]['TeamA']['name'] : 'To play'
@@ -191,7 +191,7 @@
             <q-btn
               class="q-px-xl q-mt-sm"
               align="center"
-              style="margin-left: 25%"
+              style="margin-left: 25%; font-weight: bold;"
               outline
               color="negative">
               {{
@@ -208,7 +208,7 @@
               size="20px"
               class="q-px-xl q-ml-md"
               align="center"
-              style="margin-left: 2%; width: 95%;"
+              style="margin-left: 2%; width: 95%; font-weight: bold;"
               color="primary">
               {{
                 (winner3er[0] && winner3er[0]['TeamA']) ? winner3er[0]['TeamA']['name'] : 'To play'
@@ -226,7 +226,7 @@
             <q-btn
               class="q-px-xl"
               align="center"
-              style="width: 100%;"
+              style="width: 100%; font-weight: bold;"
               color="negative">
               {{
                 (confrontations3er[0] && confrontations3er[0]['TeamB']) ? confrontations3er[0]['TeamB']['name'] : 'To play'
@@ -237,7 +237,7 @@
             <q-btn
               class="q-px-xl q-mt-sm"
               align="center"
-              style="margin-left: 25%"
+              style="margin-left: 25%; font-weight: bold;"
               outline
               color="negative">
               {{

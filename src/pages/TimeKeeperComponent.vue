@@ -261,7 +261,7 @@ export default {
     finishConfrontation () {
       let data = {
         timeStop: this.dateFormat(Date()),
-        status: 'played'
+        status: (this.confrontationPlaying.status !== 'DEFINITION') ? 'played' : 'definition_played'
       }
       if (this.points['teamA'] === this.points['teamB']) {
         this.messageNotify('report_problem', 'negative', 'center', 'no puede quedar empatados')
@@ -345,7 +345,6 @@ export default {
       let resp = await this.$services.getData(['phase', 0, 'confrontation'], {
         semifinale: true
       })
-      console.log(response['data'].length, resp['response']['data'].length)
       if (response['data'].length === 2 && resp['response']['data'].length <= 1) {
         let res = await this.$services.getData(['phase', phase, 'confrontation'])
         res.response.data.map(async (element) => {

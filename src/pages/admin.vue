@@ -309,14 +309,14 @@
                     flat
                     :data="dataMember"
                     :columns="competitors['table']['column']"
-                    :filter="filterTeams"
+                    :filter="filterCompetitors"
                     :visible-columns="competitors['table']['visibleColumns']"
                     bordered>
                     <template v-slot:top-left>
                       <q-input
                         borderless
                         dense debounce="300"
-                        v-model="filterTeams"
+                        v-model="filterCompetitors"
                         placeholder="Search">
                         <template v-slot:append>
                           <q-icon name="search" />
@@ -1060,6 +1060,11 @@ export default {
        */
       filterConfrontations: '',
       /**
+       * filter competitors
+       * @type {String}
+       */
+      filterCompetitors: '',
+      /**
        * filter Teams
        * @type {String}
        */
@@ -1152,7 +1157,7 @@ export default {
        * [options4 description]
        * @type {Array}
        */
-      options4: ['Leader', 'Competitor'],
+      options4: ['Captain', 'Competitor'],
       /**
        * Data events
        * @type {Array}
@@ -1286,7 +1291,6 @@ export default {
       this.selectUniversity()
       this.getAllConfrontations()
       this.getAllPhase()
-      this.getAllcompetitors(this.teamId)
     },
     /**
      * Gets all competitors
@@ -1299,6 +1303,7 @@ export default {
           this.dataMember = []
           throw new Error('Competitors empty')
         }
+        this.teamId = id
         this.dataMember = res['response']['data']
       } catch (e) {
         this.messageNotify('report_problem', 'negative', 'center', e.message)
@@ -1327,11 +1332,11 @@ export default {
      * Sets data select university
      */
     async selectUniversity () {
-      this.universityDataSelect = []
       try {
         let res = await this.$services.getData(['universities'])
         if (!res.status) throw new Error('Error in server')
         if (res.response.status === 204) throw new Error('No events loaded')
+        this.universityDataSelect = []
         this.universityData = res['response']['data']
         res['response']['data'].map(element => {
           this.universityDataSelect.push({
@@ -1575,9 +1580,9 @@ export default {
      * Gets all Confrontations
      */
     async getAllteams () {
+      this.modalteams(false, this.teams['modelTeams'])
       try {
         let res = await this.$services.getData(['teams'])
-        if (!res.status) throw new Error('Error in server')
         if (res.response.data.length > 0) {
           res['response']['data'].map(element => {
             element.University = (element.University) ? element.University.name : null
@@ -1586,8 +1591,9 @@ export default {
           })
           this.teamsData = res['response']['data']
           this.getAllcompetitors(res['response']['data'][0]['id'])
+        } else {
+          this.teamsData = []
         }
-        this.modalteams(false, this.teams['modelTeams'])
       } catch (e) {
         this.messageNotify('report_problem', 'negative', 'center', e.message)
       }

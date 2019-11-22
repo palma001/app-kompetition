@@ -6,7 +6,7 @@
         <div class="row phase1"
           v-for="(confrontation, index) in confrontations"
           :key="confrontation.id">
-          <div :class="(index > 0) ? 'col-12 q-ml-xl buttonsTop' : 'col-12 q-ml-xl'" v-if="confrontation.phaseId === 1">
+          <div :class="(index > 0) ? 'col-12 q-ml-xl buttonsTop' : 'col-12 q-ml-xl'" v-if="(confrontation.status !== 'DEFINITION' && confrontation.status !== 'DEFINITION_PLAYED') && confrontation.phaseId === 1">
             <q-btn
               size="20px"
               class="q-px-xl q-ml-xl q-py-xs"
@@ -24,7 +24,7 @@
               color="primary"
               :label="(confrontation['TeamA']) ? confrontation['TeamA']['name'] : 'To play'" />
           </div>
-          <div class="col-12 q-mt-md q-ml-xl" v-if="confrontation.phaseId === 1">
+          <div class="col-12 q-mt-md q-ml-xl" v-if="(confrontation.status !== 'DEFINITION' && confrontation.status !== 'DEFINITION_PLAYED') && confrontation.phaseId === 1">
             <q-btn
               size="20px"
               class="q-px-xl q-ml-xl q-py-xs"
@@ -311,6 +311,7 @@ export default {
             data: confrontationsAll
           }
         )
+        console.log(this.confrontations)
       }
     },
     ...mapActions(
