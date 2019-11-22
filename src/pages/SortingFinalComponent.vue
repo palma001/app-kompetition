@@ -1,26 +1,22 @@
 <template>
   <q-page class="bg-grey-1">
-    <img src="~assets/llaves_final.png"
-      style="position: absolute; width: 100%; height: 100%" />
-    <div class="row q-pa-lg">
+    <div class="row q-pa-lg justify-center">
       <!-- Clasificados lado left -->
-      <div class="col-2 q-ml-xl">
+      <div class="col-2">
         <div class="row">
-          <div class="col-12 q-ml-xl q-mt-xs">
+          <div class="col-12 q-mt-md buttonSemifinal2">
             <q-btn
-              size="20px"
-              class="q-px-xl q-ml-xl q-py-xs"
-              style="width: 180px;"
+              style="width: 100%"
+              class="q-px-xl "
               align="center"
               color="primary"
               :label="(confrontations[0] && confrontations[0]['TeamA']) ? confrontations[0]['TeamA']['name'] : 'to play'" />
           </div>
-          <div
-            class="button1 col-12 q-mt-xs">
-            <q-btn size="20px"
-              class="q-px-xl q-py-xs"
+          <div class="col-12 q-mt-xs">
+            <q-btn
+              class="q-px-xl"
               align="center"
-              style="width: 120px;"
+              style="margin-left: 25%"
               outline
               color="primary">
               {{
@@ -28,10 +24,10 @@
               }}
             </q-btn>
           </div>
-          <div class="col-12 q-ml-xl q-mt-xs">
-            <q-btn size="20px"
-              style="width: 180px;"
-              class="button2 q-px-xl q-ml-xl q-py-xs"
+          <div class="col-12 buttonSemifinal1">
+            <q-btn
+              style="width: 100%"
+              class="button2 q-px-xl "
               align="center"
               color="primary">
               {{
@@ -39,10 +35,11 @@
               }}
             </q-btn>
           </div>
-          <div class="button1 col-12 q-mt-xs">
-            <q-btn size="20px"
-              class="q-px-xl q-py-xs"
+          <div class="col-12 q-mt-xs">
+            <q-btn
+              class="q-px-xl"
               align="center"
+              style="margin-left: 25%"
               outline
               color="primary">
               {{
@@ -52,13 +49,16 @@
           </div>
         </div>
       </div>
+      <div class="col-1">
+        <img src="../statics/final_right.png" class="imgR">
+      </div>
       <!-- Ganador lado left -->
-      <div class="col-2 q-ml-xl">
+      <div class="col-2">
         <div class="row">
-          <div class="col-12 q-mt-xs">
-            <q-btn size="20px"
-              style="width: 166px;"
-              class="button3 q-px-xl q-ml-xl q-py-xs"
+          <div class="col-12 winnerSemifinal">
+            <q-btn
+              style="width: 100%;"
+              class="button3 q-px-xl"
               align="center"
               color="negative">
               {{
@@ -66,132 +66,81 @@
               }}
             </q-btn>
           </div>
-          <div class="button4 col-12 q-mt-xs">
-            <q-btn size="20px"
-              class="q-ml-xl q-px-xl q-py-xs"
+          <div class="col-12">
+            <q-btn
+              class="q-mt-xs q-px-xl"
               align="center"
+              style="margin-left: 25%"
               outline
-              style="width: 120px;"
               color="negative">
-              {{ (confrontationsPhaseFinal[0] && confrontationsPhaseFinal[0]['TeamA']) ? confrontationsPhaseFinal[0]['TeamA']['score'] : 0 }}
-            </q-btn>
-          </div>
-          <div class="col-12 q-mt-xs">
-            <q-btn size="20px"
-              class="button6 q-px-xl q-ml-xl q-py-xs"
-              align="center"
-              style="width: 180px;"
-              color="negative">
-              {{
-                (confrontations3er[0] && confrontations3er[0]['TeamA']) ? confrontations3er[0]['TeamA']['name'] : 'To play'
-              }}
-            </q-btn>
-          </div>
-          <div class="button4 col-12 q-mt-xs">
-            <q-btn size="20px"
-              class="q-ml-xl q-px-xl q-py-xs"
-              align="center"
-              outline
-              style="width: 120px;"
-              color="negative">
-              {{
-                (confrontations3er[0] && confrontations3er[0]['TeamA']) ? confrontations3er[0]['TeamA']['score'] : 0
-              }}
+              {{ (confrontationsPhaseFinal[0] && confrontationsPhaseFinal[0]['TeamA']['score']) ? confrontationsPhaseFinal[0]['TeamA']['score'] : 0 }}
             </q-btn>
           </div>
         </div>
       </div>
-      <!-- GANADOR Y 3er puesto- Center -->
-      <div class="col-2 q-ml-lg">
+      <div class="col-2 imgCenter">
         <div class="row">
-          <div class="col-12 q-mt-xl">
-            <q-btn size="30px"
-              class="q-px-xl q-ml-md q-py-xs"
+          <div class="col-12">
+            <q-btn
+              size="20px"
+              class="q-px-xl q-ml-md"
               align="center"
-              style="width: 180px;"
+              style="margin-left: 2%; width: 95%;"
               color="primary">
               {{
                 (winner[0] && winner[0]['TeamA']) ? winner[0]['TeamA']['name'] : 'To play'
               }}
             </q-btn>
           </div>
-          <div class="button5 col-12 q-mt-xl">
-            <q-btn size="20px"
-              class="q-px-xl  q-ml-md q-py-xs"
-              align="center"
-              style="width: 180px;"
-              color="primary">
-              {{
-                (winner3er[0] && winner3er[0]['TeamA']) ? winner3er[0]['TeamA']['name'] : 'To play'
-              }}
-            </q-btn>
+          <div class="col-12 q-mt-sm">
+            <img src="../statics/final_center.png"/>
           </div>
         </div>
       </div>
-      <!-- Ganador lado right -->
-      <div class="col-2 q-ml-xl">
+      <div class="col-2 winnerSemifinal">
         <div class="row">
-          <div class="col-12 q-mt-xs button3">
-            <q-btn size="20px"
-              class="q-px-xl q-py-xs"
-              style="width: 166px; margin-left: -32px;"
+          <div class="col-12">
+            <q-btn
+              class="q-px-xl"
+              style="width: 100%"
               color="negative">
               {{
                 (confrontationsPhaseFinal[0] && confrontationsPhaseFinal[0]['TeamB']) ? confrontationsPhaseFinal[0]['TeamB']['name'] : 'To play'
               }}
             </q-btn>
           </div>
-          <div class="button8 col-12 q-mt-xs">
-            <q-btn size="20px"
-              class="q-px-xl q-py-xs"
+          <div class="col-12">
+            <q-btn
+              class="q-px-xl q-mt-xs"
               align="center"
-              outline
-              style="width: 120px;"
-              color="negative">
-              {{
-                (confrontationsPhaseFinal[0] && confrontationsPhaseFinal[0]['TeamB']) ? confrontationsPhaseFinal[0]['TeamB']['score'] : 0
-              }}
-            </q-btn>
-          </div>
-          <div class="col-12 q-mt-xs">
-            <q-btn size="20px"
-              class="button6 q-px-xl q-ml-md q-py-xs"
-              align="center"
-              color="negative">
-              {{
-                (confrontations3er[0] && confrontations3er[0]['TeamB']) ? confrontations3er[0]['TeamB']['name'] : 'To play'
-              }}
-            </q-btn>
-          </div>
-          <div class="button8 col-12 q-mt-xs">
-            <q-btn size="20px"
-              class="q-px-xl q-py-xs"
-              align="center"
+              style="margin-left: 25%"
               outline
               color="negative">
               {{
-                (confrontations3er[0] && confrontations3er[0]['TeamB']) ? confrontations3er[0]['TeamB']['score'] : 0
+                (confrontationsPhaseFinal[0] && confrontationsPhaseFinal[0]['TeamB']['score']) ? confrontationsPhaseFinal[0]['TeamB']['score'] : 0
               }}
             </q-btn>
           </div>
         </div>
       </div>
-      <!-- Clasificados lado right -->
-      <div class="col-2 q-ml-xl">
+      <div class="col-1">
+        <img src="../statics/final_left.png" class="imgLeft" />
+      </div>
+      <div class="col-2">
         <div class="row">
-          <div class="col-12 q-mt-xs">
-            <q-btn size="20px"
-              class="q-px-xl q-py-xs"
-              style="width: 180px; margin-left: 15px;"
+          <div class="col-12 q-ml-sm buttonSemifinal2">
+            <q-btn
+              class="q-px-xl"
+              style="width: 100%;"
               align="center"
               color="primary"
               :label="(confrontations[1] && confrontations[1]['TeamA']) ? confrontations[1]['TeamA']['name'] : 'to play'" />
           </div>
-          <div class="col-12 q-mt-xs q-ml-xl">
-            <q-btn size="20px"
-              class="q-px-xl q-py-xs"
+          <div class="col-12 q-mt-sm">
+            <q-btn
+              class="q-px-xl"
               align="center"
-              style="width: 120px;"
+              style="margin-left: 25%"
               outline
               color="primary">
               {{
@@ -199,10 +148,10 @@
               }}
             </q-btn>
           </div>
-          <div class="col-12 q-mt-xs">
-            <q-btn size="20px"
-              style="width: 180px; margin-left: 15px;"
-              class="button2 q-px-xl q-py-xs"
+          <div class="col-12 q-ml-sm buttonSemifinalLeft1">
+            <q-btn
+              style="width: 100%;"
+              class="button2 q-px-xl"
               align="center"
               color="primary">
               {{
@@ -210,10 +159,11 @@
               }}
             </q-btn>
           </div>
-          <div class="col-12 q-mt-xs">
-            <q-btn size="20px"
-              class="q-px-xl q-py-xs q-ml-xl"
+          <div class="col-12 q-mt-sm">
+            <q-btn
+              class="q-px-xl"
               align="center"
+              style="margin-left: 25%"
               outline
               color="primary">
               {{
@@ -224,39 +174,136 @@
         </div>
       </div>
     </div>
+    <div class="row q-pa-lg justify-center">
+      <div class="col-2 button3r">
+        <div class="row">
+          <div class="col-12 button3">
+            <q-btn
+              class="q-px-xl"
+              style="width: 100%"
+              color="negative">
+              {{
+                (confrontations3er[0] && confrontations3er[0]['TeamA']) ? confrontations3er[0]['TeamA']['name'] : 'To play'
+              }}
+            </q-btn>
+          </div>
+          <div class="button8 col-12">
+            <q-btn
+              class="q-px-xl q-mt-sm"
+              align="center"
+              style="margin-left: 25%"
+              outline
+              color="negative">
+              {{
+                (confrontations3er[0] && confrontations3er[0]['TeamA']['score']) ? confrontations3er[0]['TeamA']['score'] : 0
+              }}
+            </q-btn>
+          </div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="row">
+          <div class="col-12">
+            <q-btn
+              size="20px"
+              class="q-px-xl q-ml-md"
+              align="center"
+              style="margin-left: 2%; width: 95%;"
+              color="primary">
+              {{
+                (winner3er[0] && winner3er[0]['TeamA']) ? winner3er[0]['TeamA']['name'] : 'To play'
+              }}
+            </q-btn>
+          </div>
+          <div class="col-12 q-mt-sm">
+            <img src="../statics/final_center.png"/>
+          </div>
+        </div>
+      </div>
+      <div class="col-2 button3r">
+        <div class="row">
+          <div class="col-12">
+            <q-btn
+              class="q-px-xl"
+              align="center"
+              style="width: 100%;"
+              color="negative">
+              {{
+                (confrontations3er[0] && confrontations3er[0]['TeamB']) ? confrontations3er[0]['TeamB']['name'] : 'To play'
+              }}
+            </q-btn>
+          </div>
+          <div class="col-12">
+            <q-btn
+              class="q-px-xl q-mt-sm"
+              align="center"
+              style="margin-left: 25%"
+              outline
+              color="negative">
+              {{
+                (confrontations3er[0] && confrontations3er[0]['TeamB']) ? confrontations3er[0]['TeamB']['score'] : 0
+              }}
+            </q-btn>
+          </div>
+        </div>
+      </div>
+    </div>
   </q-page>
 </template>
 
 <style>
-.button1 {
-  margin-left: 110px;
-}
-.button2 {
-  margin-top: 200px;
-}
-.button3 {
-  margin-top: 150px;
-  margin-left: 50px;
-}
-.button4 {
-  margin-left: 10px;
-}
-.button8 {
-  margin-left: 30px;
-}
-.button5 {
-  margin-left: 15px;
-  margin-top: 430px;
-}
-.button6 {
-  margin-top: 370px;
-}
-.button7 {
-  margin-left: 30px;
-}
-.spe {
-  margin-top: 30px;
-}
+  .buttonSemifinal1 {
+    margin-top: 130px;
+  }
+  .buttonSemifinalPoint {
+    margin-left: 50%;
+    margin-top: 5px;
+  }
+  .winnerSemifinal {
+    margin-top: 150px;
+  }
+  .imgLeft {
+    margin-top: -5px;
+    margin-left: 10px;
+    height: 340px;
+  }
+  .imgR {
+    height: 325px;
+  }
+  @media (min-width: 0px) and (max-width: 1500px)  {
+    .buttonSemifinal1 {
+      margin-top: 90px;
+    }
+    .winnerSemifinal {
+      margin-top: 95px;
+    }
+    .imgCenter {
+      margin-top: 30px;
+    }
+    .imgLeft, .imgR {
+      height: 220px;
+    }
+    .buttonSemifinalLeft1 {
+      margin-top: 100px;
+    }
+    .button3r {
+      margin-top: 65px;
+    }
+  }
+  @media (min-width: 1500px) and (max-width: 3000px)  {
+    .buttonSemifinal1, .buttonSemifinalLeft1 {
+      margin-top: 180px;
+    }
+    .buttonSemifinal2 {
+      margin-top: 30px;
+    }
+    .imgCenter {
+      margin-top: 75px;
+    }
+    .button3r {
+      margin-top: 80px;
+    }
+  }
 </style>
 
 <script>
