@@ -18,7 +18,7 @@
               <div class="col-xs-8 col-sm-5 col-md-3 col-lg-2">
                 <img
                   :src="(confrontationPlaying['TeamA']) ? `${url}/${confrontationPlaying['TeamA']['University']['logo'].toLowerCase()}` : '../statics/no_data.svg'"
-                  style="width: 100%; height: 180px"
+                  style="width: 100%; height: 150px"
                 />
               </div>
               <div class="col-12">
@@ -35,7 +35,7 @@
               <div class="col-xs-8 col-sm-5 col-md-3 col-lg-2">
                 <img
                   :src="(confrontationPlaying['TeamB']) ? `${url}/${confrontationPlaying['TeamB']['University']['logo'].toLowerCase()}` : '../statics/no_data.svg'"
-                  style="width: 100%; height: 180px"
+                  style="width: 100%; height: 150px"
                 />
               </div>
               <div class="col-12">
@@ -52,7 +52,12 @@
         <div class="row">
           <div class="col-12 text-center">
             <label style="font-size: 250px;">
-              {{minutesRound}} : {{secondsRound}}
+              {{
+                (10 > minutesRound) ?  `0${minutesRound}` : minutesRound
+              }} :
+              {{
+                (10 > secondsRound) ?  `0${secondsRound}` : secondsRound
+              }}
             </label>
           </div>
         </div>
@@ -106,7 +111,7 @@ export default {
        * Seconds Round
        * @type {Number}
        */
-      secondsRound: '00',
+      secondsRound: 0,
       /**
        * Minutes Round
        * @type {Number}
@@ -134,7 +139,7 @@ export default {
      * @param  {Object} time [description]
      */
     time (time) {
-      this.secondsRound = (time.secondsRound === 0) ? '00' : time.secondsRound
+      this.secondsRound = time.secondsRound
       this.minutesRound = time.minutesRound
     },
     /**

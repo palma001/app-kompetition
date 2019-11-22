@@ -108,7 +108,6 @@
         color="accent"
         push
         label="next"
-        :disabled="status"
         @click="nextOrbonus('tossup')"/>
       <q-space></q-space>
     </q-toolbar>

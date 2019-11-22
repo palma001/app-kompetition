@@ -51,8 +51,14 @@
             align="center"
             outline
             disable
-            push
-            :label="`${minutesRound}:${secondsRound}`" />
+            push>
+              {{
+                (10 > minutesRound) ?  `0${minutesRound}` : minutesRound
+              }} :
+              {{
+                (10 > secondsRound) ?  `0${secondsRound}` : secondsRound
+              }}
+          </q-btn>
           <q-space></q-space>
           <q-btn class="q-px-xl q-py-xs"
             style="font-size: 35px"
@@ -130,7 +136,7 @@ export default {
        * secons confrontation
        * @type {Number}
        */
-      secondsRound: '00',
+      secondsRound: 0,
       /**
        * secons question
        * @type {Number}
@@ -257,16 +263,20 @@ export default {
         timeStop: this.dateFormat(Date()),
         status: 'played'
       }
-      this.$socket.emit('statusButton', true)
-      this.minutesRound = 10
-      this.secondsRound = '00'
-      this.updateConfrontations(data)
-      this.nextPhase(this.confrontationPlaying)
-      this.stopTimer()
-      this.reloadTemporizator()
-      setTimeout(() => {
-        this.$socket.emit('reloadPoint')
-      }, 200)
+      if (this.points['teamA'] === this.points['teamB']) {
+        this.messageNotify('report_problem', 'negative', 'center', 'no puede quedar empatados')
+      } else {
+        this.$socket.emit('statusButton', true)
+        this.minutesRound = 10
+        this.secondsRound = 0
+        this.updateConfrontations(data)
+        this.nextPhase(this.confrontationPlaying)
+        this.stopTimer()
+        this.reloadTemporizator()
+        setTimeout(() => {
+          this.$socket.emit('reloadPoint')
+        }, 200)
+      }
     },
     /**
      * Sets nex phase
@@ -335,10 +345,11 @@ export default {
       let resp = await this.$services.getData(['phase', 0, 'confrontation'], {
         semifinale: true
       })
-      if (response['data'].length === 2 && resp['response']['data'].length === 0) {
+      console.log(response['data'].length, resp['response']['data'].length)
+      if (response['data'].length === 2 && resp['response']['data'].length <= 1) {
         let res = await this.$services.getData(['phase', phase, 'confrontation'])
         res.response.data.map(async (element) => {
-          await this.$services.putData(['phase', phase, 'confrontation', element.id], { semifinale: true })
+          await this.$services.putData(['phase', phase, 'confrontation', element.id], { semifinale: true, phaseId: 3 })
         })
       }
     },
@@ -383,7 +394,9 @@ export default {
       }
       data.phaseId += 1
       this.getConfrontationsNextPhase(team, data.phaseId)
-      this.getSemifinal(data.phaseId)
+      setTimeout(() => {
+        this.getSemifinal(data.phaseId)
+      }, 200)
     },
     /**
      * Start Temporizator
@@ -458,6 +471,21 @@ export default {
      */
     translateComponent (message) {
       return this.$i18n.t(`template.${message}.label`)
+    },
+    /**
+     * Message notify
+     * @param  {String} icon     icon notify
+     * @param  {String} color    color notify
+     * @param  {String} position postions notify
+     * @param  {String} message  message notify
+     */
+    messageNotify (icon, color, position, message) {
+      this.$q.notify({
+        position: position,
+        color: color,
+        icon: icon,
+        message: message
+      })
     },
     /**
      * Translates the tags in template

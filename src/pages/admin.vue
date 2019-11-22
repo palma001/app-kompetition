@@ -19,7 +19,7 @@
               label="Register events"/>
             <q-tab
               name="datos"
-              label="General data"/>
+              label="Users"/>
             <q-tab name="team"
               label="Registration of team" />
             <q-tab
@@ -135,7 +135,7 @@
                 style="height: 800px">
                 <q-toolbar>
                   <q-toolbar-title class="text-h5 text-primary text-bold">
-                    Genaral data
+                    Users
                   </q-toolbar-title>
                 </q-toolbar>
                 <div>
