@@ -887,7 +887,6 @@
                 label="Team B"
                 emit-value
                 ref="teamB"
-                :rules="[ val => val || 'Please type something']"
                 expanded/>
             </div>
             <div class="col-12">
