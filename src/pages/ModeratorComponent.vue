@@ -220,8 +220,10 @@ export default {
      * @param  {String} typeQuestion type quesrtion
      */
     nextOrbonus (typeQuestion) {
-      this.statusButton = true
-      this.statusButtonNext = true
+      this.$socket.emit('disabledBonus', {
+        bonus: true,
+        next: true
+      })
       setTimeout(() => {
         this.getRandomQuestions(typeQuestion)
       }, 100)
@@ -240,7 +242,7 @@ export default {
         }
         let res = await this.$services.getData(['questions'], params)
         if (!res.status) throw new Error('Error Server')
-        if (res.response.status === 204) throw new Error('Questions Empty')
+        if (res.response.data.length === 0) throw new Error(`Questions ${typeQuestion} Empty`)
         this.$socket.emit('getQuestion', res.response.data[0])
       } catch (e) {
         this.$q.notify({
