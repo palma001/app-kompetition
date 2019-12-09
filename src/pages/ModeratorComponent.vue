@@ -221,6 +221,7 @@ export default {
      */
     nextOrbonus (typeQuestion) {
       this.statusButton = true
+      this.statusButtonNext = true
       setTimeout(() => {
         this.getRandomQuestions(typeQuestion)
       }, 100)
