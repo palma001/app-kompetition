@@ -373,9 +373,15 @@ export default {
      */
     validateQuestions () {
       if ((this.pointQuestion.scoreA > 0 || this.pointQuestion.scoreB > 0) && this.question.typeQuestion !== 'bonus') {
-        this.$socket.emit('disabledBonus', false)
+        this.$socket.emit('disabledBonus', {
+          bonus: false,
+          next: true
+        })
       } else {
-        this.$socket.emit('disabledBonus', true)
+        this.$socket.emit('disabledBonus', {
+          bonus: true,
+          next: false
+        })
       }
     },
     /**

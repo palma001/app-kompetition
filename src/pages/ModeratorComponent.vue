@@ -108,6 +108,7 @@
         color="accent"
         push
         label="next"
+        :disabled="statusButtonNext"
         @click="nextOrbonus('tossup')"/>
       <q-space></q-space>
     </q-toolbar>
@@ -163,6 +164,11 @@ export default {
        */
       statusButton: true,
       /**
+       * Status button bonus
+       * @type {Boolean}
+       */
+      statusButtonNext: true,
+      /**
        * Error messagge
        * @type {String}
        */
@@ -194,7 +200,8 @@ export default {
      * @param {Boolean}
      */
     disabledBonus (status) {
-      this.statusButton = status
+      this.statusButton = status.bonus
+      this.statusButtonNext = status.next
     },
     /**
      * Status buttons
