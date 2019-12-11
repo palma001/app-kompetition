@@ -35,7 +35,7 @@
       </div>
     </div>
     <!-- question section -->
-    <div v-if="question.typeQuestion === 'tossup'">
+    <div v-if="question.typeQuestion === 'TOSSUP'">
       <div class="row q-pa-md justify-center">
         <div class="col-11">
           <q-card dark
@@ -99,7 +99,7 @@
         label="Bonus"
         push
         :disabled="statusButton"
-        @click="nextOrbonus('bonus')"/>
+        @click="nextOrbonus('BONUS')"/>
       <q-space></q-space>
       <q-btn
         class="q-px-xl q-py-xs"
@@ -109,7 +109,7 @@
         push
         label="next"
         :disabled="statusButtonNext"
-        @click="nextOrbonus('tossup')"/>
+        @click="nextOrbonus('TOSSUP')"/>
       <q-space></q-space>
     </q-toolbar>
   </q-page>
@@ -186,6 +186,7 @@ export default {
      * @param  {Array} question question
      */
     getQuestions (question) {
+      console.log(question)
       this.question = question
     },
     /**
@@ -212,7 +213,7 @@ export default {
     }
   },
   created () {
-    this.getRandomQuestions('tossup')
+    this.getRandomQuestions('TOSSUP')
   },
   methods: {
     /**

@@ -1,6 +1,6 @@
 <template>
   <q-page class="bg-grey-1">
-    <img src="~assets/llaves.png" class="imgSorting"/>
+    <img src="~assets/Classified.png" class="imgSorting"/>
     <div class="row q-pa-lg">
       <div class="col-4 q-ml-xl">
         <div class="row phase1"
@@ -9,38 +9,44 @@
           <div :class="(index > 0) ? 'col-12 q-ml-xl buttonsTop' : 'col-12 q-ml-xl'" v-if="(confrontation.status !== 'DEFINITION' && confrontation.status !== 'DEFINITION_PLAYED') && confrontation.phaseId === 1">
             <q-btn
               size="20px"
-              class="q-px-xl q-ml-xl q-py-xs"
-              align="center"
-              style="width: 120px"
+              class="q-px-xl q-ml-xl"
+              style="width: 0px"
               outline
               color="primary">
-                {{ (confrontation['TeamA']) ? confrontation['TeamA']['score'] : 0 }}
-              </q-btn>
+              {{ (confrontation['TeamA']) ? confrontation['TeamA']['score'] : 0 }}
+            </q-btn>
             <q-btn
-              style="width: 150px"
+              style="width: 180px; padding: 5px;"
               size="20px"
-              class="q-px-xl q-ml-md q-py-xs"
-              align="center"
-              color="primary"
-              :label="(confrontation['TeamA']) ? confrontation['TeamA']['name'] : 'To play'" />
+              class="q-px-xl q-ml-md"
+              color="primary">
+              <q-toolbar-title
+                class="text-center"
+                style="font-size: 16px; font-weight: bold;">
+                {{ (confrontation['TeamA']) ? confrontation['TeamA']['name'] : 'To play' }}
+              </q-toolbar-title>
+            </q-btn>
           </div>
           <div class="col-12 q-mt-md q-ml-xl" v-if="(confrontation.status !== 'DEFINITION' && confrontation.status !== 'DEFINITION_PLAYED') && confrontation.phaseId === 1">
             <q-btn
               size="20px"
-              class="q-px-xl q-ml-xl q-py-xs"
-              align="center"
-              style="width: 120px"
+              class="q-px-xl q-ml-xl"
+              style="width: 0px"
               outline
               color="primary">
               {{ (confrontation['TeamB']) ? confrontation['TeamB']['score'] : 0 }}
             </q-btn>
             <q-btn
               size="20px"
-              style="width: 150px"
-              class="q-px-xl q-ml-md q-py-xs"
-              align="center"
-              color="negative"
-              :label="(confrontation['TeamB']) ? confrontation['TeamB']['name'] : 'To play'" />
+              style="width: 180px; padding: 5px;"
+              class="q-px-xl q-ml-md"
+              color="negative">
+              <q-toolbar-title
+                class="text-center text-white"
+                style="font-size: 16px; font-weight: bold;">
+                {{ (confrontation['TeamB']) ? confrontation['TeamB']['name'] : 'To play' }}
+              </q-toolbar-title>
+            </q-btn>
           </div>
         </div>
       </div>
@@ -50,16 +56,21 @@
           :key="confrontation.id">
           <div :class="(index === 7) ? 'col-12 q-mt-lg' : (index === 8) ? 'col-12 q-mt-xl' : 'col-12'" v-if="confrontation.phaseId === 2">
             <q-btn size="20px"
-              style="width: 150px"
+              style="width: 150px; padding: 5px;"
               class="q-px-xl q-ml-md q-py-xs"
               align="center"
-              color="primary"
-              :label="(confrontation['TeamA']) ? confrontation['TeamA']['name'] : 'To play'" />
+              color="primary">
+              <q-toolbar-title
+                class="text-center"
+                style="font-size: 16px; font-weight: bold;">
+                {{ (confrontation['TeamA']) ? confrontation['TeamA']['name'] : 'To play' }}
+              </q-toolbar-title>
+            </q-btn>
           </div>
           <div class="col-12 q-mt-xs" v-if="confrontation.phaseId === 2">
-            <q-btn size="20px"
-              class="q-px-xl q-py-xs button6"
-              align="center"
+            <q-btn
+              size="20px"
+              class="q-px-xl q-py-sm button6"
               style="width: 120px"
               outline
               color="primary">
@@ -68,16 +79,20 @@
           </div>
           <div class="col-12 q-mt-lg" v-if="confrontation.phaseId === 2">
             <q-btn size="20px"
-              style="width: 150px; margin-top: 5px"
-              class="q-px-xl q-ml-md q-py-xs"
-              align="center"
-              color="negative"
-              :label="(confrontation['TeamB']) ? confrontation['TeamB']['name'] : 'To play'" />
+              style="width: 150px; padding: 5px; margin-top: 13px"
+              class="q-px-xl q-ml-md"
+              color="negative">
+              <q-toolbar-title
+                class="text-center"
+                style="font-size: 16px; font-weight: bold;">
+                {{ (confrontation['TeamB']) ? confrontation['TeamB']['name'] : 'To play' }}
+              </q-toolbar-title>
+            </q-btn>
           </div>
           <div class="col-12 q-mt-xs" v-if="confrontation.phaseId === 2">
-            <q-btn size="20px"
-              class="q-px-xl q-py-xs button6"
-              align="center"
+            <q-btn
+              size="20px"
+              class="q-px-xl button6"
               outline
               style="width: 120px"
               color="primary">
@@ -93,20 +108,28 @@
           <div :class="(index === 10) ? 'button9 col-auto bg-pink' : 'button7 col-auto'"
             v-if="confrontation.phaseId === 3">
             <q-btn size="20px"
-              class="q-px-xl q-py-xs"
-              style="width: 150px;"
-              color="primary"
-              align="center"
-              :label="(confrontation['TeamA']) ? confrontation['TeamA']['name'] : 'To play'" />
+              class="q-px-xl"
+              style="width: 180px; padding: 5px;"
+              color="primary">
+              <q-toolbar-title
+                class="text-center"
+                style="font-size: 16px; font-weight: bold;">
+                {{ (confrontation['TeamA']) ? confrontation['TeamA']['name'] : 'To play' }}
+              </q-toolbar-title>
+            </q-btn>
           </div>
           <div :class="(index === 10) ? 'lastnbutton col-auto bg-pink' : 'button8 col-auto'"
             v-if="confrontation.phaseId === 3">
             <q-btn size="20px"
-              class="q-px-xl q-py-xs"
-              style="width: 150px"
-              color="primary"
-              align="center"
-              :label="(confrontation['TeamB']) ? confrontation['TeamB']['name'] : 'To play'" />
+              class="q-px-xl"
+              style="width: 180px; padding: 5px;"
+              color="primary">
+              <q-toolbar-title
+                class="text-center"
+                style="font-size: 16px; font-weight: bold;">
+                {{ (confrontation['TeamB']) ? confrontation['TeamB']['name'] : 'To play' }}
+              </q-toolbar-title>
+            </q-btn>
           </div>
         </div>
       </div>

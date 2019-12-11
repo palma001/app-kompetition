@@ -103,6 +103,7 @@
   </q-page>
 </template>
 <script>
+import config from '../config'
 export default {
   name: 'GeneralScreen',
   data () {
@@ -127,7 +128,7 @@ export default {
        * @type {Object}
        */
       points: {},
-      url: 'http://192.168.10.50:3000'
+      url: config.ipServidor
     }
   },
   created () {
