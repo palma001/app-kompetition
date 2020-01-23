@@ -63,7 +63,7 @@
           <q-btn class="q-px-xl q-py-xs"
             style="font-size: 35px"
             align="center"
-            color="negative"
+            color="info"
             label="Stop"
             push
             @click="stopTimer"/>

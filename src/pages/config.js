@@ -207,7 +207,7 @@ export const teams = {
       {
         name: 'University',
         align: 'center',
-        label: 'University',
+        label: 'Organization',
         field: 'University',
         sortable: true
       },
@@ -381,7 +381,7 @@ export const universities = {
       {
         name: 'university',
         align: 'center',
-        label: 'Universities',
+        label: 'Organization',
         field: 'university',
         sortable: true
       },

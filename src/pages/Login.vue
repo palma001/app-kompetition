@@ -2,8 +2,8 @@
   <q-page class="bg-primary">
     <div class="row justify-center">
       <div class="col-auto">
-        <div class="q-pa-xl bg-login bg-login">
-          <img src="~assets/petro.svg" style="height: 150px; margin-left: 30%">
+        <div class="q-pa-xl bg-login">
+          <img src="~assets/kompetition1-4.png" style="height: 160px; margin-left: 9%">
           <q-input
             filled
             ref="user"
@@ -48,8 +48,8 @@
       </div>
     </div>
     <q-toolbar>
-      <img src="../assets/speTrans.png"
-        style="height: 150px; position: fixed; bottom: 1px; opacity:0.4">
+      <img src="~assets/karanta_1.svg"
+        style="height: 80px; position: fixed; bottom: 1px;">
     </q-toolbar>
   </q-page>
 </template>

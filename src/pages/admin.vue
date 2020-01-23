@@ -26,7 +26,7 @@
               label="Assign confrontations" />
             <q-tab
               name="universities"
-              label="universities" />
+              label="organization" />
           </q-tabs>
         </template>
 
@@ -474,7 +474,7 @@
               name="universities">
               <q-toolbar>
                 <q-toolbar-title class="text-h5 text-primary text-bold">
-                  Universities
+                  Organization
                 </q-toolbar-title>
               </q-toolbar>
                 <div>
@@ -502,7 +502,7 @@
                     <template v-slot:top-right>
                       <div>
                         <q-btn color="primary"
-                          label="Add University"
+                          label="Add Organization"
                           @click="modalUniversity(true, universities['modelsUniversities'])" />
                       </div>
                     </template>

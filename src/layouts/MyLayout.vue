@@ -2,10 +2,8 @@
   <q-layout view="hHh Lpr lff">
     <q-header class="bg-primary" reveal>
       <q-toolbar>
-        <img src="~assets/petro.svg" style="height: 100px">
-        <q-toolbar-title class="text-h2 text-bold">
-          PetroBowl
-        </q-toolbar-title>
+        <img src="~assets/kompetition.png" style="
+        height: 100px">
         <q-space></q-space>
         <div v-if="route">
           <div class="row" @click="logout">
@@ -183,11 +181,11 @@
     </q-drawer>
     <q-page-container>
       <router-view />
+      <q-toolbar>
+        <img src="~assets/karanta.svg"
+          style="height: 80px; position: fixed; bottom: 1px; opacity:.5;">
+      </q-toolbar>
     </q-page-container>
-    <q-toolbar v-if="this.$route.name !== 'sortingScreen'">
-      <img src="statics/speTrans.png"
-        style="height: 150px; position: fixed; bottom: 1px; opacity:.5">
-    </q-toolbar>
   </q-layout>
 </template>
 
