@@ -6,7 +6,7 @@
         <div class="row">
           <div class="col-12 q-mt-md buttonSemifinal2">
             <q-btn
-              style="width: 100%;  font-weight: bold;"
+              style="width: 100%; font-weight: bold;"
               class="q-px-xl "
               align="center"
               color="primary"
@@ -88,7 +88,7 @@
               style="margin-left: 2%; width: 95%; font-weight: bold;"
               color="primary">
               {{
-                (winner[0] && winner[0]['TeamA']) ? winner[0]['TeamA']['name'] : 'To play'
+                (winner[0] && winner[0]['TeamA']) ? winner[0]['TeamA']['name'] : 'Champion'
               }}
             </q-btn>
           </div>

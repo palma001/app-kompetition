@@ -3,7 +3,6 @@
     <div>
       <q-splitter v-model="splitterModel"
         style="height: 92vh">
-
         <template v-slot:before>
           <q-tabs
             v-model="tab"
@@ -248,7 +247,7 @@
                     </template>
                     <template v-slot:body="props">
                       <q-tr
-                        :props="props">
+                        :props="props" v-if="props.row.id !== 1">
                         <q-td
                           key="eventId"
                           :props="props">
@@ -1547,6 +1546,7 @@ export default {
      * Gets all Confrontations
      */
     async getAllEvents () {
+      console.log(this.$services)
       try {
         let res = await this.$services.getData(['events'])
         if (res.response.status === 204) throw new Error('No events loaded')

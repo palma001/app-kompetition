@@ -305,6 +305,8 @@ export default {
               let res = await this.updateConfrontationsWinner(team.winner, phase, newTeam[0].id)
               if (!res.status) {
                 await this.addConfrontations(team.winner, phase)
+                await this.$services.deleteData(['events', this.confrontationPlaying.eventId])
+                await this.$services.patchData(['questions', 1])
               }
             }
           }

@@ -1,11 +1,12 @@
 // import socketio from 'socket.io-client'
 import VueSocketIO from 'vue-socket.io'
 import store from '../store'
+import config from '../config'
 export default async ({ Vue, app }) => {
   Vue.use(new VueSocketIO(
     {
       debug: false,
-      connection: 'http://192.168.10.50:3001',
+      connection: config.ipSocket,
       vuex: {
         store,
         actionPrefix: 'SOCKET_',

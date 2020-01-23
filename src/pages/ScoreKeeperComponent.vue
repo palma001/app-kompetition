@@ -8,13 +8,13 @@
             size="30px"
             color="red-10"
             label="Toss Up"
-            v-if="question && question.typeQuestion === 'tossup'"/>
+            v-if="question && question.typeQuestion === 'TOSSUP'"/>
           <q-btn
             class="buttonQ"
             size="30px"
             color="green"
             label="Bonus"
-            v-if="question && question.typeQuestion === 'bonus'"/>
+            v-if="question && question.typeQuestion === 'BONUS'"/>
         </div>
         <div class="q-ml-sm col-lg-10 col-md-10 col-sm-8 col-xs-8 self-center">
           <div class="title">
@@ -65,7 +65,7 @@
           <div class="row q-pa-md justify-center">
             <div
               class="col-lg-6 col-md-7"
-              v-if="question.typeQuestion === 'tossup'">
+              v-if="question.typeQuestion === 'TOSSUP'">
               <q-btn
                 color="positive"
                 class="buttonF"
@@ -95,7 +95,7 @@
                 placeholder="Bonus"
                 v-model="value.bonus1"
                 color="primary"
-                v-if="question && question.typeQuestion === 'bonus' && visibleBonus"
+                v-if="question && question.typeQuestion === 'BONUS' && visibleBonus"
                 :disabled="disabled.bonus1"/>
             </div>
           </div>
@@ -135,7 +135,7 @@
           </div>
           <div class="row q-pa-md justify-center">
             <div class="col-lg-6 col-md-7"
-              v-if="question && question.typeQuestion === 'tossup'">
+              v-if="question && question.typeQuestion === 'TOSSUP'">
               <q-btn
                 color="positive"
                 class="buttonF"
@@ -168,7 +168,7 @@
                 placeholder="Bonus"
                 v-model="value.bonus2"
                 color="primary"
-                v-if="question && question.typeQuestion === 'bonus' && visibleBonus2"
+                v-if="question && question.typeQuestion === 'BONUS' && visibleBonus2"
                 :disabled="disabled.bonus2"/>
             </div>
           </div>
@@ -372,10 +372,16 @@ export default {
      * Validate ype questions
      */
     validateQuestions () {
-      if ((this.pointQuestion.scoreA > 0 || this.pointQuestion.scoreB > 0) && this.question.typeQuestion !== 'bonus') {
-        this.$socket.emit('disabledBonus', false)
+      if ((this.pointQuestion.scoreA > 0 || this.pointQuestion.scoreB > 0) && this.question.typeQuestion !== 'BONUS') {
+        this.$socket.emit('disabledBonus', {
+          bonus: false,
+          next: true
+        })
       } else {
-        this.$socket.emit('disabledBonus', true)
+        this.$socket.emit('disabledBonus', {
+          bonus: true,
+          next: false
+        })
       }
     },
     /**
@@ -394,7 +400,7 @@ export default {
      * Validate if bonus
      */
     addPointsBonus () {
-      if (this.question.typeQuestion === 'bonus') {
+      if (this.question.typeQuestion === 'BONUS') {
         if (this.value.bonus1) {
           this.pointQuestion.scoreA = this.value.bonus1
         }
