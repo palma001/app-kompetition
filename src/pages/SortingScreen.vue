@@ -59,13 +59,14 @@
       </div>
       <div class="col-3 q-ml-xl phase2">
         <div class="row"
-          v-for="(confrontation, index) in confrontations"
+          v-for="(confrontation, index) in confrontationsPhase2"
           :key="confrontation.id">
           <div class="col-10">
             <div class="row">
-              <div :class="(index === 7) ? 'col-12 q-mt-lg' : (index === 8) ? 'col-12 q-mt-xl' : 'col-12'" v-if="confrontation.phaseId === 2">
+              <div :class="(index === 0) ? 'col-12 q-mt-lg' : (index > 0) ? 'col-12 q-mt-lg' : 'col-12'"
+                v-if="confrontation.phaseId === 2">
                 <q-btn size="20px"
-                  style="width: 150px; padding: 5px;"
+                  style="width: 150px; padding: 5px; margin-top: 13px"
                   class="q-px-xl q-ml-md q-py-xs"
                   align="center"
                   color="primary">
@@ -88,7 +89,7 @@
               </div>
               <div class="col-12 q-mt-lg" v-if="confrontation.phaseId === 2">
                 <q-btn size="20px"
-                  style="width: 150px; padding: 5px; margin-top: 13px"
+                  style="width: 150px; padding: 5px;"
                   class="q-px-xl q-ml-md"
                   color="negative">
                   <q-toolbar-title
@@ -110,13 +111,13 @@
               </div>
             </div>
           </div>
-          <div :class="(index > 0) ? 'col-2 q-mt-lg' : 'col-2'"
+          <div class="col-2"
             v-if="(confrontation.status !== 'DEFINITION' && confrontation.status !== 'DEFINITION_PLAYED') && confrontation.phaseId === 2">
             <img src="~assets/part_2.svg" class="imgPhase2"/>
           </div>
         </div>
       </div>
-      <div class="col-3 col-lg-2 q-ml-lg">
+      <div class="col-3 col-lg-2 q-ml-xl q-mt-lg">
         <div class="row justify-end"
           v-for="(confrontation, index) in confrontations"
           :key="confrontation.id">
@@ -189,13 +190,20 @@
 }
 @media (min-width: 900px) and (max-width: 1300px)  {
   .imgSorting {
-    width: 400px;
+    width: 300px;
     height: 120px;
     position: absolute;
-    left: 369px;
+    left: 359px;
+  }
+  .imgPhase2 {
+    width: 400px;
+    height: 160px;
+    left: 900px;
+    margin-top: 40px;
+    position: absolute;
   }
   .phase2 {
-    margin-left: 5%;
+    margin-left: 22%;
   }
   .phase1 {
     margin-left: -27%;
@@ -203,16 +211,23 @@
 }
 @media (min-width: 1300px) and (max-width: 1500px)  {
   .imgSorting {
-    width: 400px;
+    width: 270px;
     height: 120px;
     position: absolute;
-    left: 325px;
+    left: 335px;
+  }
+  .imgPhase2 {
+    width: 350px;
+    height: 160px;
+    left: 750px;
+    margin-top: 40px;
+    position: absolute;
   }
   .phase1 {
     margin-left: -29%;
   }
   .phase2 {
-    margin-left: 0%;
+    margin-left: 6%;
   }
   .button7 {
     margin-top: 100px;
@@ -224,22 +239,23 @@
 }
 @media (min-width: 1500px) and (max-width: 1800px)  {
   .imgSorting {
-    width: 400px;
+    width: 300px;
     height: 120px;
     position: absolute;
     left: 410px;
   }
-  .imgSorting {
-    width: 300px;
-    height: 120px;
+  .imgPhase2 {
+    width: 500px;
+    height: 160px;
+    left: 960px;
+    margin-top: 40px;
     position: absolute;
-    left: 460px;
   }
   .phase1 {
     margin-left: -10%;
   }
   .phase2 {
-    margin-left: 0%;
+    margin-left: 11%;
   }
   .button7 {
     margin-top: 100px;
@@ -258,11 +274,12 @@
   .imgPhase2 {
     width: 500px;
     height: 160px;
-    left: 897px;
+    left: 950px;
+    margin-top: 40px;
     position: absolute;
   }
   .phase2 {
-    margin-left: 3%;
+    margin-left: 6%;
   }
   .button7 {
     margin-top: 200px;
@@ -311,6 +328,7 @@ export default {
   name: 'SortingScreen',
   data () {
     return {
+      indexPhase: 0,
       /**
        * Confrontations
        * @type {Array}
@@ -321,6 +339,7 @@ export default {
        * @type {Array}
        */
       data: [],
+      confrontationsPhase2: [],
       /**
        * Params confrontations
        * @type {Object}
@@ -359,7 +378,12 @@ export default {
             data: confrontationsAll
           }
         )
-        console.log(this.confrontations)
+        this.confrontationsPhase2 = []
+        this.confrontations.map(element => {
+          if (element.phaseId === 2) {
+            this.confrontationsPhase2.push(element)
+          }
+        })
       }
     },
     ...mapActions(
