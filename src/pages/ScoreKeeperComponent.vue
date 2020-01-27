@@ -6,7 +6,7 @@
           <q-btn
             class="buttonQ"
             size="30px"
-            color="red-10"
+            color="secondary"
             label="Toss Up"
             v-if="question && question.typeQuestion === 'TOSSUP'"/>
           <q-btn
@@ -34,12 +34,12 @@
           <!-- title - Team name -->
           <div class="row q-pa-md">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
-              <q-toolbar-title class="text-h4 text-white text-center bg-accent">
+              <q-toolbar-title class="text-h4 text-white text-center bg-primary">
                 {{ translateLabel('timekeeperEntity', 'teamA') }}:
               </q-toolbar-title>
             </div>
             <div class="col-lg-9 col-md-8 col-sm-8 col-xs-8">
-              <q-toolbar-title class="text-h4 text-left bg-accent text-white text-bold">
+              <q-toolbar-title class="text-h4 text-left bg-primary text-white text-bold">
                 {{
                   (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'].toUpperCase() : ''
                 }}
@@ -77,7 +77,7 @@
                   @click="point(10, confrontationPlaying['TeamA']['id'], 'add1')"/>
               </q-btn>
               <q-btn
-                color="negative"
+                color="red-10"
                 class="buttonF"
                 :push="!disabled.sub1"
                 :disabled="disabled.sub1">
@@ -105,12 +105,13 @@
           <!-- title - Team name -->
           <div class="row q-pa-md">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
-              <q-toolbar-title class="text-h4 text-white text-center bg-secondary">
+              <q-toolbar-title
+                class="text-h4 text-white text-center bg-primary">
                 {{translateLabel('timekeeperEntity', 'teamB')}}:
               </q-toolbar-title>
             </div>
             <div class="col-lg-9 col-md-8 col-sm-8 col-xs-8">
-              <q-toolbar-title class="text-h4 text-left bg-secondary text-white text-bold">
+              <q-toolbar-title class="text-h4 text-left bg-primary text-white text-bold">
                 {{
                   (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'].toUpperCase() : ''
                 }}
@@ -119,7 +120,7 @@
           </div>
           <div class="row q-pa-md justify-center">
             <div class="col-12">
-              <q-toolbar-title class="title1 text-h3 text-center text-secondary text-bold">
+              <q-toolbar-title class="title1 text-h3 text-center text-primary text-bold">
                 Score
               </q-toolbar-title>
             </div>
@@ -128,7 +129,7 @@
                 class="score q-px-xl q-py-xs"
                 align="center"
                 outline
-                text-color="secondary">
+                text-color="primary">
                 {{ (pointData.teamB) ? pointData.teamB : 0 }}
               </q-btn>
             </div>
@@ -148,7 +149,7 @@
                   @click="point(10, confrontationPlaying['TeamB']['id'], 'add2')"/>
               </q-btn>
               <q-btn
-                color="negative"
+                color="red-10"
                 class="buttonF"
                 ref="buttonB"
                 :push="!disabled.sub2"
