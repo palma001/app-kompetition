@@ -33,7 +33,7 @@
               @click="drawer = !drawer"
               icon="menu"
               aria-label="Menu"
-              v-if="route !== 'moderator' && route !== 'generalScreen' && route !== 'admin'"/>
+              v-if="route !== 'moderator' && route !== 'generalScreen'"/>
           </div>
         </div>
       </q-toolbar>
@@ -48,7 +48,7 @@
       :width="600"
       :breakpoint="500"
       :mini-width="20">
-      <div v-if="route === 'scorekeeper'">
+      <div v-if="route === 'scorekeeper' || (route === 'admin' && pathRouter === 'scorekeeper')">
         <div class="row bg-primary text-white text-h6 text-center"
           style="height: 30px">
           <div class="col">Regular round #1</div>
@@ -120,7 +120,7 @@
           </template>
         </q-table>
       </div>
-      <div v-if="route === 'timekeeper'">
+      <div v-if="route === 'timekeeper' || (route === 'admin' && pathRouter === 'timekeeper')">
         <div v-for="(confrontation, index) in confrontations" :key="confrontation.id">
           <div class="row bg-primary text-white text-h5 text-center"
             style="height: 30px">
@@ -350,6 +350,12 @@ export default {
     this.getAllConfrontations()
   },
   computed: {
+    pathRouter () {
+      if (this.$route.path) {
+        return this.$route.path.replace('/', '').toLowerCase()
+      }
+      return null
+    },
     ...mapGetters(['login/dataUser']),
     /**
      * Number edit
