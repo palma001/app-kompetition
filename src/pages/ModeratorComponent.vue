@@ -93,7 +93,7 @@
       <q-space></q-space>
       <q-btn
         class="q-px-xl q-py-xs"
-        style="font-size: 25px"
+        style="font-size: 25px; display: none;"
         align="center"
         color="accent"
         label="Bonus"
