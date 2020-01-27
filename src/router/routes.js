@@ -34,7 +34,7 @@ const routes = [
       {
         path: '',
         name: 'dashboard',
-        component: () => import('pages/dashboardComponent.vue'),
+        component: () => import('pages/DashboardComponent.vue'),
         meta: {
           authenticate: true
         }

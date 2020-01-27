@@ -15,14 +15,23 @@
         <div class="row q-mt-xs justify-center">
           <div class="col-6">
             <div class="row q-pa-sm justify-center">
-              <div class="col-xs-8 col-sm-5 col-md-3 col-lg-2">
+              <div class="col-xs-8 col-sm-5 col-md-3 col-lg-5"
+                v-if="config.configGeneralScreen.img.img">
                 <img
-                  :src="(confrontationPlaying['TeamA']) ? `${url}/${confrontationPlaying['TeamA']['University']['logo'].toLowerCase()}` : '../statics/no_data.svg'"
+                  v-if="config.configGeneralScreen.img.static"
+                  :src="(confrontationPlaying['TeamA']) ? `${config.configGeneralScreen.img.nameFielStatic}/${confrontationPlaying['TeamA']['name'].toLowerCase()}.png` : '../statics/no_data.svg'"
+                  style="width: 100%; height: 200px"
+                />
+                <img
+                  v-else
+                  :src="(confrontationPlaying['TeamA']) ? `${config.ipServidor}/${confrontationPlaying['TeamA']['University']['logo'].toLowerCase()}` : '../statics/no_data.svg'"
                   style="width: 100%; height: 150px"
                 />
               </div>
               <div class="col-12">
-                <q-toolbar-title class="text-h3 text-center text-primary text-bold">
+                <q-toolbar-title
+                  v-if="config.configGeneralScreen.titleTeam"
+                  class="text-h3 text-center text-primary text-bold">
                   {{
                     (confrontationPlaying['TeamA']) ? confrontationPlaying['TeamA']['name'].toUpperCase() : ''
                   }}
@@ -32,14 +41,23 @@
           </div>
           <div class="col-6">
             <div class="row q-pa-sm justify-center">
-              <div class="col-xs-8 col-sm-5 col-md-3 col-lg-2">
+              <div class="col-xs-8 col-sm-5 col-md-3 col-lg-5"
+                v-if="config.configGeneralScreen.img.img">
                 <img
-                  :src="(confrontationPlaying['TeamB']) ? `${url}/${confrontationPlaying['TeamB']['University']['logo'].toLowerCase()}` : '../statics/no_data.svg'"
+                  v-if="config.configGeneralScreen.img.static"
+                  :src="(confrontationPlaying['TeamB']) ? `${config.configGeneralScreen.img.nameFielStatic}/${confrontationPlaying['TeamB']['name'].toLowerCase()}.png` : '../statics/no_data.svg'"
+                  style="width: 100%; height: 200px"
+                />
+                <img
+                  v-else
+                  :src="(confrontationPlaying['TeamA']) ? `${config.ipServidor}/${confrontationPlaying['TeamA']['University']['logo'].toLowerCase()}` : '../statics/no_data.svg'"
                   style="width: 100%; height: 150px"
                 />
               </div>
               <div class="col-12">
-                <q-toolbar-title class="text-h3 text-center text-primary text-bold">
+                <q-toolbar-title
+                  v-if="config.configGeneralScreen.titleTeam"
+                  class="text-h3 text-center text-primary text-bold">
                   {{
                     (confrontationPlaying['TeamB']) ? confrontationPlaying['TeamB']['name'].toUpperCase() : ''
                   }}
@@ -128,7 +146,8 @@ export default {
        * @type {Object}
        */
       points: {},
-      url: config.ipServidor
+      url: 'statics',
+      config
     }
   },
   created () {
