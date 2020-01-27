@@ -134,7 +134,7 @@
               </q-toolbar-title>
             </q-btn>
           </div>
-          <div :class="(index === 10) ? 'lastnbutton col-auto bg-pink' : 'button8 col-auto'"
+          <div class="button8 col-auto"
             v-if="confrontation.phaseId === 3">
             <q-btn size="20px"
               class="q-px-xl"
