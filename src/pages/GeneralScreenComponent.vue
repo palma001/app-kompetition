@@ -15,12 +15,12 @@
         <div class="row q-mt-xs justify-center">
           <div class="col-6">
             <div class="row q-pa-sm justify-center">
-              <div class="col-xs-8 col-sm-5 col-md-3 col-lg-5"
+              <div class="col-xs-8 col-sm-5 col-md-3 col-lg-3"
                 v-if="config.configGeneralScreen.img.img">
                 <img
                   v-if="config.configGeneralScreen.img.static"
                   :src="(confrontationPlaying['TeamA']) ? `${config.configGeneralScreen.img.nameFielStatic}/${confrontationPlaying['TeamA']['name'].toLowerCase()}.png` : '../statics/no_data.svg'"
-                  style="width: 100%; height: 200px"
+                  style="width: 100%; height: 150px"
                 />
                 <img
                   v-else
@@ -41,12 +41,12 @@
           </div>
           <div class="col-6">
             <div class="row q-pa-sm justify-center">
-              <div class="col-xs-8 col-sm-5 col-md-3 col-lg-5"
+              <div class="col-xs-8 col-sm-5 col-md-3 col-lg-3"
                 v-if="config.configGeneralScreen.img.img">
                 <img
                   v-if="config.configGeneralScreen.img.static"
                   :src="(confrontationPlaying['TeamB']) ? `${config.configGeneralScreen.img.nameFielStatic}/${confrontationPlaying['TeamB']['name'].toLowerCase()}.png` : '../statics/no_data.svg'"
-                  style="width: 100%; height: 200px"
+                  style="width: 100%; height: 150px"
                 />
                 <img
                   v-else
