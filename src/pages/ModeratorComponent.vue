@@ -93,7 +93,8 @@
       <q-space></q-space>
       <q-btn
         class="q-px-xl q-py-xs"
-        style="font-size: 25px; display: none;"
+        v-if="config.moderator.bonus"
+        style="font-size: 25px;"
         align="center"
         color="accent"
         label="Bonus"
@@ -144,10 +145,12 @@
 </style>
 
 <script>
+import config from '../config'
 export default {
   name: 'PageIndex',
   data () {
     return {
+      config,
       /**
        * List questions
        * @type {Array}

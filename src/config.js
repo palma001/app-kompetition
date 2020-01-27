@@ -8,6 +8,9 @@ const config = {
       nameFielStatic: 'statics'
     },
     titleTeam: false
+  },
+  moderator: {
+    bonus: false
   }
 }
 export default config
