@@ -218,6 +218,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import config from '../config'
 export default {
   name: 'ScoreKeeperComponent',
   data () {
@@ -286,7 +287,8 @@ export default {
        * Status app
        * @param {Boolean}
        */
-      status: true
+      status: true,
+      config
     }
   },
   sockets: {
@@ -374,15 +376,9 @@ export default {
      */
     validateQuestions () {
       if ((this.pointQuestion.scoreA > 0 || this.pointQuestion.scoreB > 0) && this.question.typeQuestion !== 'BONUS') {
-        this.$socket.emit('disabledBonus', {
-          bonus: false,
-          next: true
-        })
+        this.$socket.emit('disabledBonus', config.moderator.buttonsNext)
       } else {
-        this.$socket.emit('disabledBonus', {
-          bonus: true,
-          next: false
-        })
+        this.$socket.emit('disabledBonus', config.moderator.buttonsBonus)
       }
     },
     /**
