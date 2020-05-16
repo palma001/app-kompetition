@@ -1,6 +1,6 @@
 const config = {
-  ipSocket: 'http://127.0.0.1:5000/',
-  ipServidor: 'http://127.0.0.1:5000/',
+  ipSocket: 'https://kompetitions.herokuapp.com/',
+  ipServidor: 'https://kompetitions.herokuapp.com/',
   /**
    * View General Screen
    */
