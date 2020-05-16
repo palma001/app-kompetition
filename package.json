@@ -7,6 +7,7 @@
   "author": "Ross Caro",
   "private": true,
   "scripts": {
+    "build": "quasar build",
     "start": "node server.js",
     "dev": "quasar dev",
     "lint": "eslint --ext .js,.vue src",
