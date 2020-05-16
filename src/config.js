@@ -1,6 +1,6 @@
 const config = {
-  ipSocket: 'http://192.168.10.27:3001/',
-  ipServidor: 'http://192.168.10.27:3000/',
+  ipSocket: 'http://127.0.0.1:5000/',
+  ipServidor: 'http://127.0.0.1:5000/',
   /**
    * View General Screen
    */

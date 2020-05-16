@@ -189,7 +189,6 @@ export default {
      * @param  {Array} question question
      */
     getQuestions (question) {
-      console.log(question)
       this.question = question
     },
     /**

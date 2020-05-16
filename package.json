@@ -7,7 +7,7 @@
   "author": "Ross Caro",
   "private": true,
   "scripts": {
-    "start": "quasar dev",
+    "start": "node server.js",
     "dev": "quasar dev",
     "lint": "eslint --ext .js,.vue src",
     "test": "echo \"No test specified\" && exit 0"
@@ -21,6 +21,7 @@
     "axios": "^0.18.1",
     "buefy": "^0.8.3",
     "element-ui": "^2.12.0",
+    "express": "^4.17.1",
     "kservices": "git+https://oauth2:QaVQxKdiQpFzjo6fdCoU@gitlab.com/kdevelopers/soom-services.git",
     "kui-library": "git+https://oauth2:PXneCyd2TrMm3NQzVQyY@gitlab.com/kdevelopers/kui-library.git",
     "postcss-import": "^12.0.1",

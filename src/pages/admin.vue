@@ -1546,7 +1546,6 @@ export default {
      * Gets all Confrontations
      */
     async getAllEvents () {
-      console.log(this.$services)
       try {
         let res = await this.$services.getData(['events'])
         if (res.response.status === 204) throw new Error('No events loaded')
